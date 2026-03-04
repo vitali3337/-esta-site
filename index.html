@@ -1,29 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ESTA Недвижимость</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f5f5f5;
+margin:0;
+padding:0;
+}
+
+header{
+background:#111;
+color:white;
+padding:20px;
+text-align:center;
+font-size:24px;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:20px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+gap:20px;
+}
+
+.card{
+background:white;
+border-radius:10px;
+overflow:hidden;
+box-shadow:0 5px 10px rgba(0,0,0,0.1);
+}
+
+.card img{
+width:100%;
+height:200px;
+object-fit:cover;
+}
+
+.body{
+padding:15px;
+}
+
+.price{
+font-size:20px;
+font-weight:bold;
+color:#27ae60;
+}
+
+.title{
+margin:5px 0;
+font-size:16px;
+}
+
+.city{
+color:#777;
+font-size:14px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+ESTA Недвижимость
+</header>
+
+<div class="container">
+
+<div id="listingsGrid" class="grid">
+
+Загрузка объявлений...
+
+</div>
+
+</div>
+
 <script>
 
-/* ================================
-   AIRTABLE НАСТРОЙКИ
-================================ */
-
-const AIRTABLE_TOKEN = "patHlqaizm9Ey7xnF. 886c2e433073a8ef32e3093b0dc3fc3c5416ddaa2d73fbc6c472a09671adea36"; 
-const AIRTABLE_BASE  = "appIQflEcagGQpjXQ";
-const TABLE_LISTINGS = "Listings";
-
-/* ================================
-   ПЕРЕМЕННЫЕ
-================================ */
-
-let allListings = [];
-let currentFilter = "all";
-let currentSort = "date";
-let activeDeal = "all";
-
-/* ================================
-   ЗАГРУЗКА ОБЪЯВЛЕНИЙ
-================================ */
+const AIRTABLE_TOKEN = "patHlqaizm9Ey7xnF. 886c2e433073a8ef32e3093b0dc3fc3c5416ddaa2d73fbc6c472a09671adea36";
+const AIRTABLE_BASE = "appIQflEcagGQpjXQ";
+const TABLE = "Listings";
 
 async function fetchListings(){
 
-const url = `https://api.airtable.com/v0/${AIRTABLE_BASE}/${TABLE_LISTINGS}?pageSize=100&sort[0][field]=Created%20Date&sort[0][direction]=desc`;
+const url = `https://api.airtable.com/v0/${AIRTABLE_BASE}/${TABLE}`;
 
 try{
 
@@ -35,156 +110,55 @@ Authorization:`Bearer ${AIRTABLE_TOKEN}`
 
 const data = await res.json();
 
-allListings = data.records || [];
-
-renderAll();
-updateCounters();
+renderListings(data.records);
 
 }
+
 catch(e){
 
-console.error(e);
-showError();
+document.getElementById("listingsGrid").innerHTML = "Ошибка загрузки данных";
 
 }
 
 }
 
-/* ================================
-   РЕНДЕР
-================================ */
-
-function renderAll(){
-
-let items = [...allListings];
-
-if(activeDeal !== "all"){
-
-items = items.filter(r =>
-r.fields["Deal Type"] === activeDeal
-);
-
-}
-
-if(currentFilter === "vip"){
-
-items = items.filter(r =>
-r.fields["Premium"] === true ||
-r.fields["Featured"] === true
-);
-
-}
-
-else if(currentFilter !== "all"){
-
-items = items.filter(r =>
-r.fields["City"] === currentFilter
-);
-
-}
-
-if(currentSort === "price_asc"){
-
-items.sort((a,b)=>
-(a.fields["Price"]||0)-(b.fields["Price"]||0)
-);
-
-}
-
-else if(currentSort === "price_desc"){
-
-items.sort((a,b)=>
-(b.fields["Price"]||0)-(a.fields["Price"]||0)
-);
-
-}
-
-renderGrid(items);
-
-}
-
-/* ================================
-   КАРТОЧКИ
-================================ */
-
-function renderGrid(items){
+function renderListings(items){
 
 const grid = document.getElementById("listingsGrid");
 
-if(!items.length){
+if(!items || items.length === 0){
 
-grid.innerHTML = `
-<div class="empty-state">
-<div class="empty-icon">🏠</div>
-<div>Объявлений пока нет</div>
-</div>
-`;
+grid.innerHTML="Нет объявлений";
 
 return;
 
 }
 
-grid.innerHTML = items.map(buildCard).join("");
+grid.innerHTML = items.map(i=>{
+
+const f = i.fields;
+
+let img = "";
+
+if(f.Attachments){
+
+img = f.Attachments[0].url;
 
 }
 
-function buildCard(r){
+return`
 
-const f = r.fields;
+<div class="card">
 
-const title = f["Listing Title"] || "Объявление";
+<img src="${img}">
 
-const price = f["Price"]
-? Number(f["Price"]).toLocaleString("ru-RU")+" руб."
-: "Цена по запросу";
+<div class="body">
 
-const city = f["City"]?.name || "";
-const district = f["District"]?.name || "";
+<div class="price">${f.Price || ""} $</div>
 
-const rooms = f["Rooms"] ? f["Rooms"]+" комн." : "";
-const area = f["Area(m)"] ? f["Area(m)"]+" м²" : "";
+<div class="title">${f["Listing Title"] || ""}</div>
 
-const deal = f["Deal Type"]?.name || "";
-
-const isVip = f["Premium"] === true || f["Featured"] === true;
-
-let img = `<div class="prop-img-placeholder">🏠</div>`;
-
-if(f["Attachments"] && f["Attachments"].length>0){
-
-img = `<img src="${f["Attachments"][0].url}">`;
-
-}
-
-return `
-
-<div class="prop-card ${isVip ? "is-vip":""}">
-
-<div class="prop-img">
-
-${img}
-
-<div class="prop-badges">
-${isVip ? '<span class="pb pb-vip">⭐ VIP</span>' : ''}
-</div>
-
-</div>
-
-<div class="prop-body">
-
-<div class="prop-price">${price} <small>${deal}</small></div>
-
-<div class="prop-title">${title}</div>
-
-<div class="prop-loc">📍 ${city} ${district}</div>
-
-<div class="prop-params">
-
-${rooms ? `<span class="pp">🛏 ${rooms}</span>` : ""}
-
-${area ? `<span class="pp">📐 ${area}</span>` : ""}
-
-</div>
+<div class="city">${f.City || ""}</div>
 
 </div>
 
@@ -192,69 +166,13 @@ ${area ? `<span class="pp">📐 ${area}</span>` : ""}
 
 `;
 
-}
-
-/* ================================
-   СЧЕТЧИКИ
-================================ */
-
-function updateCounters(){
-
-const total = allListings.length;
-
-document.getElementById("totalCount").textContent = total;
-
-document.getElementById("totalSide").textContent = total+" объявлений";
+}).join("");
 
 }
-
-/* ================================
-   ФИЛЬТРЫ
-================================ */
-
-function filterListings(val){
-
-currentFilter = val;
-
-renderAll();
-
-}
-
-function sortListings(val){
-
-currentSort = val;
-
-renderAll();
-
-}
-
-function filterByDeal(deal){
-
-activeDeal = deal;
-
-renderAll();
-
-}
-
-/* ================================
-   ОШИБКА
-================================ */
-
-function showError(){
-
-document.getElementById("listingsGrid").innerHTML = `
-<div class="empty-state">
-<div class="empty-icon">⚠️</div>
-<div>Ошибка подключения Airtable</div>
-</div>
-`;
-
-}
-
-/* ================================
-   ЗАПУСК
-================================ */
 
 fetchListings();
 
 </script>
+
+</body>
+</html>
