@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -9,13 +10,13 @@
 <style>
 
 body{
-font-family: Arial, sans-serif;
+font-family: Arial;
 margin:0;
-background:#f2f2f2;
+background:#f4f6fa;
 }
 
 header{
-background:black;
+background:#0D1B2A;
 color:white;
 padding:20px;
 text-align:center;
@@ -23,12 +24,12 @@ font-size:28px;
 }
 
 .container{
-max-width:1100px;
+max-width:1200px;
 margin:auto;
 padding:20px;
 }
 
-.grid{
+.cards-grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
 gap:20px;
@@ -47,21 +48,34 @@ height:200px;
 object-fit:cover;
 }
 
-.card-content{
+.card-body{
 padding:15px;
 }
 
 .price{
 font-size:20px;
 font-weight:bold;
-color:#2e7d32;
+color:#D32F2F;
+}
+
+.title{
+font-size:16px;
+margin-top:5px;
 }
 
 .city{
+font-size:13px;
 color:#666;
+margin-bottom:5px;
+}
+
+.params{
+font-size:13px;
+color:#777;
 }
 
 </style>
+
 </head>
 
 <body>
@@ -72,7 +86,7 @@ ESTA Недвижимость
 
 <div class="container">
 
-<div id="listingsGrid" class="grid">
+<div id="cards" class="cards-grid">
 
 Загрузка объявлений...
 
@@ -83,88 +97,100 @@ ESTA Недвижимость
 
 <script>
 
-const AIRTABLE_TOKEN="patHlqaizm9Ey7xnF.886c2e433073a8ef32e3093b0dc3fc3c5416ddaa2d73fbc6c472a09671adea36";
-const AIRTABLE_BASE="appIQflEcagGQpjXQ";
-const TABLE="Listings";
+const AIRTABLE_TOKEN = "patHlqaizm9Ey7xnF.886c2e433073a8ef32e3093b0dc3fc3c5416ddaa2d73fbc6c472a09671adea36";
 
-async function fetchListings(){
+const AIRTABLE_BASE = "appIQflEcagGQpjXQ";
 
-const url=`https://api.airtable.com/v0/${AIRTABLE_BASE}/${TABLE}`;
+const TABLE = "Listings";
+
+
+async function loadListings(){
+
+const url = `https://api.airtable.com/v0/${AIRTABLE_BASE}/${TABLE}`;
 
 try{
 
-const response=await fetch(url,{
+const response = await fetch(url,{
 headers:{
 Authorization:`Bearer ${AIRTABLE_TOKEN}`
 }
 });
 
-const data=await response.json();
+const data = await response.json();
 
-const grid=document.getElementById("listingsGrid");
+const grid = document.getElementById("cards");
 
-grid.innerHTML="";
+grid.innerHTML = "";
 
 if(!data.records || data.records.length===0){
+
 grid.innerHTML="Нет объявлений";
+
 return;
+
 }
 
 data.records.forEach(record=>{
 
-const f=record.fields;
-
-const title=f["Listing Title"]||"";
-const price=f["Price"]||"";
-const rooms=f["Rooms"]||"";
-const area=f["Area(m)"]||"";
-
-let city="";
-if(f["City"]){
-city=f["City"].name||f["City"];
-}
+const f = record.fields;
 
 let image="";
 
 if(f["Attachments"]){
-image=f["Attachments"][0].url;
+
+image = f["Attachments"][0].url;
+
 }
 
-const card=document.createElement("div");
+let city="";
 
-card.className="card";
+if(f["City"]){
 
-card.innerHTML=`
+city = f["City"].name || f["City"];
 
-<img src="${image}">
+}
 
-<div class="card-content">
+const card = `
 
-<h3>${title}</h3>
+<div class="card">
+
+${image ? `<img src="${image}">` : ""}
+
+<div class="card-body">
+
+<div class="price">$${f.Price || ""}</div>
+
+<div class="title">${f["Listing Title"] || ""}</div>
 
 <div class="city">📍 ${city}</div>
 
-<div class="price">$${price}</div>
+<div class="params">
 
-<div>${rooms} комнат • ${area} м²</div>
+🛏 ${f.Rooms || "-"} ком • 📐 ${f["Area(m)"] || "-"} м²
+
+</div>
+
+</div>
 
 </div>
 
 `;
 
-grid.appendChild(card);
+grid.innerHTML += card;
 
 });
 
-}catch(e){
+}
 
-document.getElementById("listingsGrid").innerHTML="Ошибка подключения Airtable";
+catch(e){
+
+document.getElementById("cards").innerHTML="Ошибка загрузки данных";
 
 }
 
 }
 
-fetchListings();
+loadListings();
 
 </script>
 
