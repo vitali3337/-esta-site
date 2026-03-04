@@ -11,8 +11,8 @@
 <style>
 
 body{
-font-family:Arial;
-background:#f5f5f5;
+font-family:Arial, sans-serif;
+background:#f2f2f2;
 margin:0;
 padding:0;
 }
@@ -41,7 +41,7 @@ gap:20px;
 background:white;
 border-radius:10px;
 overflow:hidden;
-box-shadow:0 5px 10px rgba(0,0,0,0.1);
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
 .card img{
@@ -61,13 +61,13 @@ color:#27ae60;
 }
 
 .title{
-margin:5px 0;
 font-size:16px;
+margin-top:5px;
 }
 
 .city{
-color:#777;
 font-size:14px;
+color:#777;
 }
 
 </style>
@@ -83,16 +83,14 @@ ESTA Недвижимость
 <div class="container">
 
 <div id="listingsGrid" class="grid">
-
 Загрузка объявлений...
-
 </div>
 
 </div>
 
 <script>
 
-const AIRTABLE_TOKEN = "patHlqaizm9Ey7xnF. 886c2e433073a8ef32e3093b0dc3fc3c5416ddaa2d73fbc6c472a09671adea36";
+const AIRTABLE_TOKEN = "patHlqaizm9Ey7xnF886c2e433073a8ef32e3093b0dc3fc3c5416ddaa2d73fbc6c472a09671adea36";
 const AIRTABLE_BASE = "appIQflEcagGQpjXQ";
 const TABLE = "Listings";
 
@@ -100,4 +98,79 @@ async function fetchListings(){
 
 const url = `https://api.airtable.com/v0/${AIRTABLE_BASE}/${TABLE}`;
 
-  
+try{
+
+const response = await fetch(url,{
+headers:{
+Authorization:`Bearer ${AIRTABLE_TOKEN}`
+}
+});
+
+const data = await response.json();
+
+renderListings(data.records);
+
+}
+
+catch(error){
+
+document.getElementById("listingsGrid").innerHTML="Ошибка загрузки данных";
+
+}
+
+}
+
+function renderListings(records){
+
+const grid = document.getElementById("listingsGrid");
+
+if(!records || records.length === 0){
+
+grid.innerHTML="Нет объявлений";
+
+return;
+
+}
+
+grid.innerHTML = records.map(record => {
+
+const f = record.fields;
+
+let image = "";
+
+if(f.Attachments && f.Attachments.length > 0){
+
+image = f.Attachments[0].url;
+
+}
+
+return `
+
+<div class="card">
+
+<img src="${image}">
+
+<div class="body">
+
+<div class="price">${f.Price || ""}</div>
+
+<div class="title">${f["Listing Title"] || ""}</div>
+
+<div class="city">${f.City || ""}</div>
+
+</div>
+
+</div>
+
+`;
+
+}).join("");
+
+}
+
+fetchListings();
+
+</script>
+
+</body>
+</html>
