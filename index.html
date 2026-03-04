@@ -9,9 +9,9 @@
 <style>
 
 body{
-font-family:Arial;
-background:#f2f2f2;
 margin:0;
+font-family:Arial;
+background:#f2f4f8;
 }
 
 header{
@@ -20,25 +20,43 @@ color:white;
 padding:20px;
 text-align:center;
 font-size:28px;
+font-weight:bold;
 }
 
 .container{
-max-width:900px;
+max-width:1100px;
 margin:auto;
 padding:20px;
 }
 
+.search{
+margin-bottom:20px;
+}
+
+.search input{
+width:100%;
+padding:12px;
+font-size:16px;
+border-radius:8px;
+border:1px solid #ccc;
+}
+
 .grid{
 display:grid;
-grid-template-columns:1fr;
+grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
 gap:20px;
 }
 
 .card{
 background:white;
-border-radius:14px;
+border-radius:16px;
 overflow:hidden;
-box-shadow:0 5px 20px rgba(0,0,0,0.1);
+box-shadow:0 10px 25px rgba(0,0,0,0.1);
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-5px);
 }
 
 .card img{
@@ -53,29 +71,29 @@ padding:15px;
 
 .price{
 color:#D32F2F;
-font-size:22px;
+font-size:26px;
 font-weight:bold;
 }
 
 .title{
-font-size:18px;
-margin:6px 0;
+font-size:20px;
+margin-top:6px;
 }
 
 .loc{
 color:#666;
-font-size:14px;
+margin-top:4px;
 }
 
 .params{
-margin-top:8px;
+margin-top:10px;
+color:#444;
 font-size:14px;
-color:#555;
 }
 
 </style>
-</head>
 
+</head>
 <body>
 
 <header>
@@ -84,24 +102,27 @@ ESTA Недвижимость
 
 <div class="container">
 
-<div class="grid" id="cards">
+<div class="search">
+<input id="searchInput" placeholder="Поиск недвижимости...">
+</div>
 
-Загрузка...
-
+<div id="cards" class="grid">
+Загрузка объявлений...
 </div>
 
 </div>
-
 
 <script>
 
-const AIRTABLE_TOKEN = "patHlqaizm9Ey7xnF.886c2e433073a8ef32e3093b0dc3fc3c5416ddaa2d73fbc6c472a09671adea36";
-const BASE_ID = "appIQflEcagGQpjXQ";
-const TABLE = "Listings";
+const AIRTABLE_TOKEN="patHlqaizm9Ey7xnF.886c2e433073a8ef32e3093b0dc3fc3c5416ddaa2d73fbc6c472a09671adea36";
+const BASE_ID="appIQflEcagGQpjXQ";
+const TABLE="Listings";
+
+let DATA=[];
 
 async function load(){
 
-let url=`https://api.airtable.com/v0/${BASE_ID}/${TABLE}`;
+const url=`https://api.airtable.com/v0/${BASE_ID}/${TABLE}`;
 
 const res=await fetch(url,{
 headers:{
@@ -109,9 +130,11 @@ Authorization:`Bearer ${AIRTABLE_TOKEN}`
 }
 });
 
-const data=await res.json();
+const json=await res.json();
 
-render(data.records);
+DATA=json.records;
+
+render(DATA);
 
 }
 
@@ -135,19 +158,19 @@ const card=`
 
 <div class="card">
 
-<img src="${img || 'https://via.placeholder.com/600x300'}">
+<img src="${img || "https://via.placeholder.com/600x300"}">
 
 <div class="card-body">
 
 <div class="price">$${f.Price || ""}</div>
 
-<div class="title">${f["Listing Title"] || "Объявление"}</div>
+<div class="title">${f["Listing Title"] || ""}</div>
 
 <div class="loc">📍 ${f.City || ""}</div>
 
 <div class="params">
 
-🛏 ${f.Rooms || ""} комн  
+🛏 ${f.Rooms || ""} комн
 📐 ${f["Area(m)"] || ""} м²
 
 </div>
@@ -163,6 +186,19 @@ grid.innerHTML+=card;
 });
 
 }
+
+document.getElementById("searchInput").addEventListener("input",function(){
+
+const q=this.value.toLowerCase();
+
+const filtered=DATA.filter(r=>{
+const title=(r.fields["Listing Title"] || "").toLowerCase();
+return title.includes(q);
+});
+
+render(filtered);
+
+});
 
 load();
 
