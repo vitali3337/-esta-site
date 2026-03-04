@@ -1,0 +1,260 @@
+<script>
+
+/* ================================
+   AIRTABLE НАСТРОЙКИ
+================================ */
+
+const AIRTABLE_TOKEN = "PASTE_YOUR_PAT_TOKEN_HERE"; 
+const AIRTABLE_BASE  = "appIQflEcagGQpjXQ";
+const TABLE_LISTINGS = "Listings";
+
+/* ================================
+   ПЕРЕМЕННЫЕ
+================================ */
+
+let allListings = [];
+let currentFilter = "all";
+let currentSort = "date";
+let activeDeal = "all";
+
+/* ================================
+   ЗАГРУЗКА ОБЪЯВЛЕНИЙ
+================================ */
+
+async function fetchListings(){
+
+const url = `https://api.airtable.com/v0/${AIRTABLE_BASE}/${TABLE_LISTINGS}?pageSize=100&sort[0][field]=Created%20Date&sort[0][direction]=desc`;
+
+try{
+
+const res = await fetch(url,{
+headers:{
+Authorization:`Bearer ${AIRTABLE_TOKEN}`
+}
+});
+
+const data = await res.json();
+
+allListings = data.records || [];
+
+renderAll();
+updateCounters();
+
+}
+catch(e){
+
+console.error(e);
+showError();
+
+}
+
+}
+
+/* ================================
+   РЕНДЕР
+================================ */
+
+function renderAll(){
+
+let items = [...allListings];
+
+if(activeDeal !== "all"){
+
+items = items.filter(r =>
+r.fields["Deal Type"] === activeDeal
+);
+
+}
+
+if(currentFilter === "vip"){
+
+items = items.filter(r =>
+r.fields["Premium"] === true ||
+r.fields["Featured"] === true
+);
+
+}
+
+else if(currentFilter !== "all"){
+
+items = items.filter(r =>
+r.fields["City"] === currentFilter
+);
+
+}
+
+if(currentSort === "price_asc"){
+
+items.sort((a,b)=>
+(a.fields["Price"]||0)-(b.fields["Price"]||0)
+);
+
+}
+
+else if(currentSort === "price_desc"){
+
+items.sort((a,b)=>
+(b.fields["Price"]||0)-(a.fields["Price"]||0)
+);
+
+}
+
+renderGrid(items);
+
+}
+
+/* ================================
+   КАРТОЧКИ
+================================ */
+
+function renderGrid(items){
+
+const grid = document.getElementById("listingsGrid");
+
+if(!items.length){
+
+grid.innerHTML = `
+<div class="empty-state">
+<div class="empty-icon">🏠</div>
+<div>Объявлений пока нет</div>
+</div>
+`;
+
+return;
+
+}
+
+grid.innerHTML = items.map(buildCard).join("");
+
+}
+
+function buildCard(r){
+
+const f = r.fields;
+
+const title = f["Listing Title"] || "Объявление";
+
+const price = f["Price"]
+? Number(f["Price"]).toLocaleString("ru-RU")+" руб."
+: "Цена по запросу";
+
+const city = f["City"]?.name || "";
+const district = f["District"]?.name || "";
+
+const rooms = f["Rooms"] ? f["Rooms"]+" комн." : "";
+const area = f["Area(m)"] ? f["Area(m)"]+" м²" : "";
+
+const deal = f["Deal Type"]?.name || "";
+
+const isVip = f["Premium"] === true || f["Featured"] === true;
+
+let img = `<div class="prop-img-placeholder">🏠</div>`;
+
+if(f["Attachments"] && f["Attachments"].length>0){
+
+img = `<img src="${f["Attachments"][0].url}">`;
+
+}
+
+return `
+
+<div class="prop-card ${isVip ? "is-vip":""}">
+
+<div class="prop-img">
+
+${img}
+
+<div class="prop-badges">
+${isVip ? '<span class="pb pb-vip">⭐ VIP</span>' : ''}
+</div>
+
+</div>
+
+<div class="prop-body">
+
+<div class="prop-price">${price} <small>${deal}</small></div>
+
+<div class="prop-title">${title}</div>
+
+<div class="prop-loc">📍 ${city} ${district}</div>
+
+<div class="prop-params">
+
+${rooms ? `<span class="pp">🛏 ${rooms}</span>` : ""}
+
+${area ? `<span class="pp">📐 ${area}</span>` : ""}
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+/* ================================
+   СЧЕТЧИКИ
+================================ */
+
+function updateCounters(){
+
+const total = allListings.length;
+
+document.getElementById("totalCount").textContent = total;
+
+document.getElementById("totalSide").textContent = total+" объявлений";
+
+}
+
+/* ================================
+   ФИЛЬТРЫ
+================================ */
+
+function filterListings(val){
+
+currentFilter = val;
+
+renderAll();
+
+}
+
+function sortListings(val){
+
+currentSort = val;
+
+renderAll();
+
+}
+
+function filterByDeal(deal){
+
+activeDeal = deal;
+
+renderAll();
+
+}
+
+/* ================================
+   ОШИБКА
+================================ */
+
+function showError(){
+
+document.getElementById("listingsGrid").innerHTML = `
+<div class="empty-state">
+<div class="empty-icon">⚠️</div>
+<div>Ошибка подключения Airtable</div>
+</div>
+`;
+
+}
+
+/* ================================
+   ЗАПУСК
+================================ */
+
+fetchListings();
+
+</script>
