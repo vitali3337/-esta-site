@@ -4,54 +4,111 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ESTA Недвижимость</title>
+<title>ESTA — Недвижимость</title>
 
 <style>
 
 body{
 margin:0;
 font-family:Arial;
-background:#f2f4f8;
+background:#f3f5f9;
 }
+
+/* HEADER */
 
 header{
 background:#0D1B2A;
-color:white;
 padding:20px;
-text-align:center;
+color:white;
+}
+
+.header-container{
+max-width:1200px;
+margin:auto;
+display:flex;
+align-items:center;
+justify-content:space-between;
+}
+
+.logo{
 font-size:28px;
 font-weight:bold;
 }
 
-.container{
-max-width:1100px;
-margin:auto;
-padding:20px;
+.add-btn{
+background:#2ecc71;
+padding:10px 20px;
+border-radius:6px;
+color:white;
+font-weight:bold;
 }
 
-.search{
-margin-bottom:20px;
+/* SEARCH */
+
+.search-bar{
+max-width:900px;
+margin:30px auto;
+display:flex;
+gap:10px;
 }
 
-.search input{
-width:100%;
-padding:12px;
+.search-bar input{
+flex:1;
+padding:15px;
 font-size:16px;
 border-radius:8px;
 border:1px solid #ccc;
 }
 
+.search-bar button{
+background:#1565C0;
+color:white;
+border:none;
+padding:15px 25px;
+border-radius:8px;
+}
+
+/* CATEGORIES */
+
+.categories{
+max-width:1200px;
+margin:auto;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+gap:15px;
+padding:20px;
+}
+
+.cat{
+background:white;
+padding:20px;
+border-radius:10px;
+text-align:center;
+box-shadow:0 5px 15px rgba(0,0,0,0.05);
+cursor:pointer;
+}
+
+/* GRID */
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:20px;
+}
+
 .grid{
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
 gap:20px;
 }
 
+/* CARD */
+
 .card{
 background:white;
-border-radius:16px;
+border-radius:12px;
 overflow:hidden;
-box-shadow:0 10px 25px rgba(0,0,0,0.1);
+box-shadow:0 8px 25px rgba(0,0,0,0.08);
 transition:0.3s;
 }
 
@@ -70,23 +127,23 @@ padding:15px;
 }
 
 .price{
+font-size:24px;
 color:#D32F2F;
-font-size:26px;
 font-weight:bold;
 }
 
 .title{
-font-size:20px;
-margin-top:6px;
+font-size:18px;
+margin-top:5px;
 }
 
 .loc{
 color:#666;
-margin-top:4px;
+margin-top:3px;
 }
 
 .params{
-margin-top:10px;
+margin-top:8px;
 color:#444;
 font-size:14px;
 }
@@ -94,20 +151,47 @@ font-size:14px;
 </style>
 
 </head>
+
 <body>
 
 <header>
-ESTA Недвижимость
+
+<div class="header-container">
+
+<div class="logo">ESTA</div>
+
+<div class="add-btn">
++ Подать объявление
+</div>
+
+</div>
+
 </header>
+
+<div class="search-bar">
+
+<input id="searchInput" placeholder="Поиск квартир, домов...">
+
+<button>Найти</button>
+
+</div>
+
+<div class="categories">
+
+<div class="cat">🏢 Квартиры</div>
+<div class="cat">🏠 Дома</div>
+<div class="cat">🌿 Участки</div>
+<div class="cat">🏬 Коммерческая</div>
+<div class="cat">🚗 Гаражи</div>
+
+</div>
 
 <div class="container">
 
-<div class="search">
-<input id="searchInput" placeholder="Поиск недвижимости...">
-</div>
+<div class="grid" id="cards">
 
-<div id="cards" class="grid">
 Загрузка объявлений...
+
 </div>
 
 </div>
