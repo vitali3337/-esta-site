@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>РеалИнвест — Агрегатор объявлений</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700&family=Golos+Text:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:    #0a0c0f;
+  --bg2:   #111418;
+  --bg3:   #181c22;
+  --card:  #1a1f27;
+  --accent:#00d4aa;
+  --accent2:#00ffcc;
+  --amber: #f59e0b;
+  --red:   #ef4444;
+  --text:  #e2e8f0;
+  --muted: #64748b;
+  --border:rgba(0,212,170,0.12);
+  --glow:  0 0 30px rgba(0,212,170,0.15);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Golos Text', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ── SIDEBAR ── */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 240px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 28px 0;
+  position: fixed;
+  height: 100vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  z-index: 50;
+}
+
+.sidebar-logo {
+  padding: 0 24px 28px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 20px;
+}
+
+.logo-mark {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 1px;
+}
+.logo-sub { font-size: 10px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 3px; }
+
+.nav-section-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--muted);
+  padding: 0 24px 10px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 24px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-left: 2px solid transparent;
+  margin: 1px 0;
+}
+.nav-item:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+.nav-item.active { color: var(--accent); border-left-color: var(--accent); background: rgba(0,212,170,0.06); }
+.nav-item .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+.nav-badge {
+  margin-left: auto;
+  background: var(--accent);
+  color: var(--bg);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 10px;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 20px 24px;
+  border-top: 1px solid var(--border);
+}
+.status-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+  margin-right: 6px;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.status-text { font-size: 11px; color: var(--muted); }
+
+/* ── MAIN ── */
+.main { margin-left: 240px; flex: 1; padding: 32px; }
+
+/* ── TOPBAR ── */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.page-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text);
+}
+.page-title span { color: var(--accent); }
+
+.topbar-actions { display: flex; gap: 10px; align-items: center; }
+
+.btn {
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-family: 'Golos Text', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-primary { background: var(--accent); color: var(--bg); }
+.btn-primary:hover { background: var(--accent2); transform: scale(1.02); }
+.btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+.btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+.btn-danger { background: rgba(239,68,68,0.1); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
+
+/* ── STAT CARDS ── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.stat-card:hover { border-color: rgba(0,212,170,0.3); }
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 60px; height: 60px;
+  background: radial-gradient(circle at top right, rgba(0,212,170,0.08), transparent 70%);
+}
+
+.stat-icon { font-size: 22px; margin-bottom: 10px; }
+.stat-value {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+.stat-delta { font-size: 11px; color: #22c55e; margin-top: 6px; }
+.stat-delta.neg { color: var(--red); }
+
+/* ── TOOLBAR ── */
+.toolbar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.search-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+.search-icon {
+  position: absolute;
+  left: 12px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: 14px;
+  pointer-events: none;
+}
+.search-field {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px 14px 10px 36px;
+  border-radius: 8px;
+  font-family: 'Golos Text', sans-serif;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.search-field:focus { border-color: var(--accent); }
+.search-field::placeholder { color: var(--muted); }
+
+.filter-select {
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-family: 'Golos Text', sans-serif;
+  font-size: 13px;
+  outline: none;
+  cursor: pointer;
+}
+.filter-select option { background: var(--bg2); }
+
+/* ── TABLE ── */
+.table-wrap {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.table-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.table-title { font-size: 14px; font-weight: 600; color: var(--text); }
+.table-count { font-size: 12px; color: var(--muted); }
+
+table { width: 100%; border-collapse: collapse; }
+
+thead th {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--muted);
+  background: rgba(255,255,255,0.02);
+  border-bottom: 1px solid var(--border);
+}
+
+tbody tr {
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: background 0.15s;
+  cursor: pointer;
+}
+tbody tr:hover { background: rgba(0,212,170,0.04); }
+tbody tr:last-child { border-bottom: none; }
+
+td { padding: 14px 16px; font-size: 13px; vertical-align: middle; }
+
+.td-thumb {
+  width: 52px; height: 40px;
+  border-radius: 6px;
+  object-fit: cover;
+  background: var(--bg3);
+  flex-shrink: 0;
+}
+
+.td-title { max-width: 220px; }
+.td-title a {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 500;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.td-title a:hover { color: var(--accent); }
+.td-title small { color: var(--muted); font-size: 11px; display: block; margin-top: 2px; }
+
+.source-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.source-makler { background: rgba(139,92,246,0.15); color: #a78bfa; }
+.source-999 { background: rgba(245,158,11,0.15); color: var(--amber); }
+.source-olx  { background: rgba(59,130,246,0.15); color: #60a5fa; }
+.source-manual { background: rgba(0,212,170,0.15); color: var(--accent); }
+
+.price-cell { font-weight: 600; color: var(--accent); white-space: nowrap; }
+.date-cell { color: var(--muted); font-size: 12px; }
+
+.td-actions { display: flex; gap: 6px; white-space: nowrap; }
+.action-btn {
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s;
+}
+.ab-tg { background: rgba(0,212,170,0.1); color: var(--accent); }
+.ab-tg:hover { background: var(--accent); color: var(--bg); }
+.ab-del { background: rgba(239,68,68,0.1); color: var(--red); }
+.ab-del:hover { background: var(--red); color: #fff; }
+
+/* ── EMPTY ── */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--muted);
+}
+.empty-icon { font-size: 48px; margin-bottom: 12px; }
+.empty-state h3 { font-size: 18px; color: var(--text); margin-bottom: 8px; }
+
+/* ── MODAL ── */
+.overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(8px);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.overlay.open { display: flex; }
+
+.modal {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 36px;
+  max-width: 500px;
+  width: 100%;
+  position: relative;
+  animation: mIn 0.28s ease;
+  box-shadow: var(--glow);
+}
+@keyframes mIn { from{opacity:0;transform:scale(0.93) translateY(16px)} to{opacity:1;transform:none} }
+
+.modal-close { position:absolute;top:16px;right:20px;background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer; }
+.modal-close:hover { color:var(--text); }
+
+.modal h2 {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+.modal-sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; line-height: 1.6; }
+
+.form-group { margin-bottom: 16px; }
+.form-label { display:block;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:8px; }
+.form-input, .form-textarea, .form-select2 {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--text);
+  padding: 11px 14px;
+  border-radius: 9px;
+  font-family: 'Golos Text', sans-serif;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.form-input:focus, .form-textarea:focus { border-color: var(--accent); }
+.form-input::placeholder, .form-textarea::placeholder { color: var(--muted); }
+.form-textarea { min-height: 80px; resize: vertical; }
+.form-select2 option { background: var(--bg2); }
+.form-row { display:grid;grid-template-columns:1fr 1fr;gap:12px; }
+
+.submit-btn {
+  width: 100%;
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  padding: 13px;
+  border-radius: 10px;
+  font-family: 'Golos Text', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 6px;
+}
+.submit-btn:hover { background: var(--accent2); }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed;
+  bottom: 24px; right: 24px;
+  background: var(--card);
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  padding: 12px 18px;
+  font-size: 13px;
+  color: var(--text);
+  z-index: 999;
+  transform: translateY(60px);
+  opacity: 0;
+  transition: all 0.3s;
+  pointer-events: none;
+  max-width: 300px;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+
+/* ── PARSER STATUS ── */
+.parser-status {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.ps-info { flex: 1; }
+.ps-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.ps-sub { font-size: 12px; color: var(--muted); }
+.ps-sources { display: flex; gap: 8px; flex-wrap: wrap; }
+.ps-chip {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+.ps-chip.on { border-color: rgba(0,212,170,0.4); color: var(--accent); background: rgba(0,212,170,0.06); }
+
+/* ── INSTRUCTIONS ── */
+.instructions {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+.inst-title { font-family: 'Unbounded', sans-serif; font-size: 14px; margin-bottom: 16px; color: var(--accent); }
+.inst-step {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+.inst-num {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: rgba(0,212,170,0.12);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.inst-text { font-size: 13px; line-height: 1.6; }
+.inst-text strong { color: var(--text); }
+.inst-text code {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 2px 8px;
+  border-radius: 5px;
+  font-size: 12px;
+  color: var(--accent);
+  font-family: monospace;
+}
+.copy-btn {
+  background: rgba(0,212,170,0.08);
+  border: 1px solid var(--border);
+  color: var(--accent);
+  padding: 3px 10px;
+  border-radius: 5px;
+  font-size: 11px;
+  cursor: pointer;
+  font-family: 'Golos Text', sans-serif;
+  margin-left: 6px;
+  transition: all 0.2s;
+}
+.copy-btn:hover { background: var(--accent); color: var(--bg); }
+
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .main { margin-left: 0; padding: 16px; }
+  .stats-row { grid-template-columns: 1fr 1fr; }
+  table thead { display: none; }
+  tbody tr { display: block; padding: 12px; border-bottom: 1px solid var(--border); }
+  td { display: block; padding: 3px 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">РеалИнвест</div>
+    <div class="logo-sub">Агрегатор</div>
+  </div>
+
+  <div class="nav-section-label">Меню</div>
+  <div class="nav-item active" onclick="switchTab('listings', this)">
+    <span class="nav-icon">🏠</span> Объявления
+    <span class="nav-badge" id="navCount">0</span>
+  </div>
+  <div class="nav-item" onclick="switchTab('add', this)">
+    <span class="nav-icon">➕</span> Добавить
+  </div>
+  <div class="nav-item" onclick="switchTab('setup', this)">
+    <span class="nav-icon">⚙️</span> Настройка
+  </div>
+  <div class="nav-item" onclick="switchTab('telegram', this)">
+    <span class="nav-icon">✈️</span> Telegram
+  </div>
+
+  <div class="sidebar-footer">
+    <div><span class="status-dot"></span><span class="status-text">Парсер активен</span></div>
+    <div style="font-size:11px;color:var(--muted);margin-top:6px" id="lastUpdate">Обновлено: только что</div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- TAB: LISTINGS -->
+  <div id="tab-listings">
+    <div class="topbar">
+      <div class="page-title">Объявления <span>/ база</span></div>
+      <div class="topbar-actions">
+        <button class="btn btn-ghost" onclick="exportCSV()">⬇️ CSV</button>
+        <button class="btn btn-primary" onclick="simulateParse()">🔄 Обновить</button>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon">📦</div>
+        <div class="stat-value" id="statTotal">0</div>
+        <div class="stat-label">Всего объявлений</div>
+        <div class="stat-delta" id="statDelta">+0 сегодня</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">✈️</div>
+        <div class="stat-value" id="statSent">0</div>
+        <div class="stat-label">Отправлено в TG</div>
+        <div class="stat-delta">охват канала</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🌐</div>
+        <div class="stat-value" id="statSources">3</div>
+        <div class="stat-label">Источников</div>
+        <div class="stat-delta">активных</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">⏱️</div>
+        <div class="stat-value">2ч</div>
+        <div class="stat-label">Интервал</div>
+        <div class="stat-delta">автообновление</div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input class="search-field" type="text" id="searchQ" placeholder="Поиск по названию, цене, источнику..." oninput="renderTable()">
+      </div>
+      <select class="filter-select" id="filterSource" onchange="renderTable()">
+        <option value="">Все источники</option>
+        <option value="Makler.md">Makler.md</option>
+        <option value="999.md">999.md</option>
+        <option value="Olx.md">Olx.md</option>
+        <option value="Вручную">Вручную</option>
+      </select>
+      <select class="filter-select" id="filterNew" onchange="renderTable()">
+        <option value="">Все</option>
+        <option value="new">Только новые</option>
+        <option value="sent">Отправлено в TG</option>
+      </select>
+    </div>
+
+    <div class="table-wrap">
+      <div class="table-header">
+        <span class="table-title">База объявлений</span>
+        <span class="table-count" id="tableCount">0 объектов</span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Объявление</th>
+            <th>Источник</th>
+            <th>Цена</th>
+            <th>Добавлено</th>
+            <th>Действия</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+        </tbody>
+      </table>
+      <div class="empty-state" id="emptyState" style="display:none">
+        <div class="empty-icon">🏚️</div>
+        <h3>Объявлений пока нет</h3>
+        <p>Нажмите «Обновить» или добавьте вручную</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: ADD -->
+  <div id="tab-add" style="display:none">
+    <div class="topbar">
+      <div class="page-title">Добавить <span>/ вручную</span></div>
+    </div>
+    <div class="instructions" style="max-width:600px">
+      <div class="inst-title">➕ Добавить объявление вручную</div>
+      <div class="form-group">
+        <label class="form-label">Заголовок *</label>
+        <input class="form-input" id="addTitle" type="text" placeholder="Дом в центре Тирасполя, 120 м²">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Цена *</label>
+          <input class="form-input" id="addPrice" type="text" placeholder="$85 000">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Площадь</label>
+          <input class="form-input" id="addArea" type="text" placeholder="120 м²">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Ссылка на объявление</label>
+        <input class="form-input" id="addLink" type="text" placeholder="https://makler.md/...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Ссылка на фото</label>
+        <input class="form-input" id="addImg" type="text" placeholder="https://...jpg">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Описание для Telegram</label>
+        <textarea class="form-textarea" id="addDesc" placeholder="Отличный дом в центре Тирасполя..."></textarea>
+      </div>
+      <button class="submit-btn" onclick="addManual()">💾 Сохранить объявление</button>
+    </div>
+  </div>
+
+  <!-- TAB: SETUP -->
+  <div id="tab-setup" style="display:none">
+    <div class="topbar">
+      <div class="page-title">Настройка <span>/ парсер</span></div>
+    </div>
+
+    <div class="parser-status">
+      <div class="ps-info">
+        <div class="ps-title">🤖 Парсер Python</div>
+        <div class="ps-sub">Файл: <code style="color:var(--accent);font-size:12px">parser.py</code> — запускается локально или на сервере</div>
+      </div>
+      <div class="ps-sources">
+        <span class="ps-chip on">✅ Makler.md</span>
+        <span class="ps-chip on">✅ 999.md</span>
+        <span class="ps-chip on">✅ Olx.md</span>
+      </div>
+    </div>
+
+    <div class="instructions">
+      <div class="inst-title">🚀 Как запустить парсер</div>
+
+      <div class="inst-step">
+        <div class="inst-num">1</div>
+        <div class="inst-text"><strong>Установи Python</strong> если ещё нет: <a href="https://python.org" target="_blank" style="color:var(--accent)">python.org</a></div>
+      </div>
+
+     
