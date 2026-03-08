@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ESTA — AI Поиск недвижимости</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:   #0b0d10;
+  --ink2:  #13161b;
+  --ink3:  #1a1e26;
+  --card:  #1e232c;
+  --sand:  #c8b89a;
+  --sand2: #e8d9c4;
+  --text:  #ece8e1;
+  --muted: #6b6860;
+  --ai:    #7c6dfa;
+  --ai2:   #a99dfd;
+  --green: #4ade80;
+  --red:   #f87171;
+  --border:rgba(200,184,154,0.12);
+}
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'DM Sans',sans-serif; background:var(--ink); color:var(--text); min-height:100vh; }
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:var(--ink2); }
+::-webkit-scrollbar-thumb { background:var(--ink3); border-radius:3px; }
+
+.page { max-width: 920px; margin: 0 auto; padding: 60px 24px 80px; }
+
+/* ── HEADER ── */
+.hd { text-align:center; margin-bottom:52px; }
+.hd-badge {
+  display:inline-flex; align-items:center; gap:8px;
+  border:1px solid rgba(124,109,250,.3); background:rgba(124,109,250,.07);
+  color:var(--ai2); font-size:11px; letter-spacing:2px; text-transform:uppercase;
+  padding:5px 16px; border-radius:20px; margin-bottom:22px;
+}
+.hd-badge .dot { width:7px;height:7px;border-radius:50%;background:var(--ai);box-shadow:0 0 8px var(--ai);animation:pulse 2s infinite; }
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.hd h1 { font-family:'Cormorant Garamond',serif; font-size:clamp(38px,6vw,62px); font-weight:400; line-height:1.08; color:#fff; margin-bottom:16px; }
+.hd h1 em { font-style:italic; color:var(--sand); }
+.hd p { font-size:15px; color:var(--muted); max-width:480px; margin:0 auto; line-height:1.75; }
+
+/* ── HOW IT WORKS ── */
+.how { display:flex; gap:0; margin-bottom:44px; background:var(--ink2); border:1px solid var(--border); border-radius:14px; overflow:hidden; }
+.how-step { flex:1; padding:16px 20px; display:flex; align-items:center; gap:10px; font-size:12px; color:var(--muted); border-right:1px solid var(--border); }
+.how-step:last-child { border-right:none; }
+.how-num { width:24px;height:24px;border-radius:50%;background:rgba(124,109,250,.15);color:var(--ai);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+.how-arrow { color:rgba(124,109,250,.3); padding:0 4px; }
+
+/* ── AI BOX ── */
+.ai-box {
+  background:var(--ink2); border:1px solid rgba(124,109,250,.25); border-radius:18px;
+  padding:6px 6px 6px 20px; display:flex; align-items:flex-end; gap:10px;
+  box-shadow:0 0 60px rgba(124,109,250,.08); margin-bottom:16px;
+  transition:border-color .25s,box-shadow .25s;
+}
+.ai-box:focus-within { border-color:rgba(124,109,250,.55); box-shadow:0 0 60px rgba(124,109,250,.16); }
+.ai-icon { font-size:22px; padding-bottom:14px; flex-shrink:0; }
+.ai-ta {
+  flex:1; background:transparent; border:none; outline:none;
+  color:var(--text); font-family:'DM Sans',sans-serif; font-size:15px;
+  line-height:1.6; resize:none; min-height:54px; max-height:140px; padding:14px 0;
+}
+.ai-ta::placeholder { color:var(--muted); }
+.send-btn {
+  background:linear-gradient(135deg,var(--ai),#9b8dfc); color:#fff; border:none;
+  padding:12px 22px; border-radius:12px; font-family:'DM Sans',sans-serif;
+  font-size:14px; font-weight:600; cursor:pointer; transition:all .2s;
+  display:flex; align-items:center; gap:7px; align-self:flex-end; margin-bottom:6px; flex-shrink:0;
+}
+.send-btn:hover:not(:disabled) { transform:scale(1.03); box-shadow:0 4px 20px rgba(124,109,250,.4); }
+.send-btn:disabled { opacity:.5; cursor:not-allowed; }
+.spin { width:15px;height:15px;border-radius:50%;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;animation:spin .6s linear infinite;display:none; }
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── API URL NOTICE ── */
+.api-notice {
+  background:rgba(248,113,113,.08); border:1px solid rgba(248,113,113,.2);
+  border-radius:10px; padding:12px 16px; font-size:12px; color:var(--red);
+  margin-bottom:16px; display:flex; align-items:center; gap:8px;
+}
+.api-notice a { color:var(--sand); }
+.api-notice.ok { background:rgba(74,222,128,.08); border-color:rgba(74,222,128,.2); color:var(--green); }
+
+/* ── EXAMPLES ── */
+.examples { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:40px; }
+.ex { padding:7px 15px; border-radius:20px; border:1px solid var(--border);
+  background:transparent; color:var(--muted); font-family:'DM Sans',sans-serif;
+  font-size:12px; cursor:pointer; transition:all .2s; }
+.ex:hover { border-color:rgba(124,109,250,.4); color:var(--ai2); background:rgba(124,109,250,.06); }
+
+/* ── THINKING ── */
+.thinking {
+  display:none; align-items:center; gap:14px;
+  background:var(--ink2); border:1px solid rgba(124,109,250,.2);
+  border-radius:12px; padding:16px 20px; margin-bottom:24px;
+}
+.thinking.show { display:flex; }
+.dots span { display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ai);margin:0 2px;animation:bou .9s ease infinite; }
+.dots span:nth-child(2){animation-delay:.15s}.dots span:nth-child(3){animation-delay:.3s}
+@keyframes bou{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-8px)}}
+.think-msg { font-size:13px; color:var(--muted); }
+.think-msg strong { color:var(--ai2); }
+
+/* ── FILTER PILLS (shown after AI parse) ── */
+.filter-pills {
+  display:none; gap:6px; flex-wrap:wrap; margin-bottom:18px; align-items:center;
+}
+.filter-pills.show { display:flex; }
+.filter-pills-label { font-size:10px; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); }
+.fpill {
+  padding:4px 12px; border-radius:20px; font-size:11px; font-weight:600;
+  background:rgba(124,109,250,.12); border:1px solid rgba(124,109,250,.25); color:var(--ai2);
+}
+
+/* ── ANSWER ── */
+.answer { display:none; margin-bottom:32px; }
+.answer.show { display:block; }
+
+.ai-msg {
+  background:linear-gradient(135deg,rgba(124,109,250,.07),rgba(124,109,250,.03));
+  border:1px solid rgba(124,109,250,.18); border-radius:14px;
+  padding:18px 20px; margin-bottom:22px; display:flex; gap:14px; align-items:flex-start;
+}
+.ai-ava { width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--ai),#9b8dfc);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0; }
+.ai-txt { font-size:14px; color:var(--text); line-height:1.75; }
+.ai-txt strong { color:var(--sand); }
+
+.res-label { font-size:11px; text-transform:uppercase; letter-spacing:2px; color:var(--muted); margin-bottom:14px; }
+.res-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(265px,1fr)); gap:16px; }
+
+/* ── CARD ── */
+.rc {
+  background:var(--card); border:1px solid rgba(255,255,255,.05); border-radius:14px;
+  overflow:hidden; transition:transform .22s,border-color .22s,box-shadow .22s;
+  animation:fu .35s ease both; position:relative;
+}
+.rc:hover { transform:translateY(-4px); border-color:var(--border); box-shadow:0 16px 40px rgba(0,0,0,.5); }
+@keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+.rc-score {
+  position:absolute;top:10px;right:10px;
+  font-size:10px;font-weight:700;padding:3px 9px;border-radius:5px;
+  backdrop-filter:blur(4px);letter-spacing:.5px;
+}
+.score-high { background:rgba(74,222,128,.85); color:#0b0d10; }
+.score-mid  { background:rgba(200,184,154,.85); color:#0b0d10; }
+.score-low  { background:rgba(124,109,250,.75); color:#fff; }
+
+.rc-img { height:168px; overflow:hidden; background:var(--ink3); }
+.rc-img img { width:100%;height:100%;object-fit:cover;transition:transform .35s; }
+.rc:hover .rc-img img { transform:scale(1.05); }
+
+.rc-body { padding:14px 16px 16px; }
+.rc-title { font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:#fff;margin-bottom:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+.rc-meta { display:flex;gap:11px;font-size:11px;color:var(--muted);margin-bottom:10px;flex-wrap:wrap; }
+.rc-price { font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--sand);font-weight:600; }
+.rc-rub { font-size:11px;color:var(--muted);margin-top:1px; }
+.rc-why {
+  font-size:12px;color:var(--ai2);margin-top:9px;line-height:1.55;
+  background:rgba(124,109,250,.07);border-radius:7px;padding:8px 10px;
+  border-left:2px solid rgba(124,109,250,.4);
+}
+.rc-btn {
+  margin-top:12px;width:100%;background:transparent;border:1px solid var(--border);
+  color:var(--sand);padding:9px;border-radius:8px;font-family:'DM Sans',sans-serif;
+  font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;
+}
+.rc-btn:hover { background:var(--sand);color:var(--ink);border-color:var(--sand); }
+
+/* ── NO RESULTS ── */
+.no-res { display:none;text-align:center;padding:48px 20px; background:var(--ink2);border:1px dashed rgba(255,255,255,.07);border-radius:14px; }
+.no-res.show { display:block; }
+.no-res .icon { font-size:44px;margin-bottom:12px; }
+.no-res h3 { font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--text);margin-bottom:8px; }
+.no-res p { color:var(--muted);font-size:13px; }
+
+/* ── HISTORY ── */
+.hist { margin-top:40px; }
+.hist-title { font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:10px; }
+.hist-list { display:flex;flex-direction:column;gap:5px; }
+.hi {
+  display:flex;align-items:center;gap:10px;padding:9px 14px;
+  background:var(--ink2);border:1px solid var(--border);border-radius:9px;
+  cursor:pointer;transition:all .18s;font-size:13px;
+}
+.hi:hover { border-color:rgba(124,109,250,.35); }
+.hi-q { flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--muted); }
+.hi:hover .hi-q { color:var(--ai2); }
+.hi-del { color:var(--muted);font-size:16px;flex-shrink:0;transition:color .15s; }
+.hi-del:hover { color:var(--text); }
+
+/* ── MODAL ── */
+.ov { display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(10px);z-index:200;align-items:center;justify-content:center;padding:20px; }
+.ov.open { display:flex; }
+.modal { background:var(--ink2);border:1px solid var(--border);border-radius:18px;padding:36px;max-width:460px;width:100%;position:relative;animation:mi .26s ease; }
+@keyframes mi{from{opacity:0;transform:scale(.93) translateY(12px)}to{opacity:1;transform:none}}
+.mc { position:absolute;top:14px;right:18px;background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer; }
+.modal h2 { font-family:'Cormorant Garamond',serif;font-size:26px;margin-bottom:6px; }
+.modal-sub { font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.6; }
+.mprop { background:rgba(200,184,154,.07);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--sand);font-weight:500;margin-bottom:18px; }
+.fg { margin-bottom:13px; }
+.fl { display:block;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:6px; }
+.fi,.fs { width:100%;background:var(--ink3);border:1px solid rgba(255,255,255,.07);color:var(--text);padding:11px 14px;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:border-color .2s; }
+.fi:focus,.fs:focus { border-color:var(--sand); }
+.fi::placeholder { color:var(--muted); }
+.fs option { background:var(--ink2); }
+.fr2 { display:grid;grid-template-columns:1fr 1fr;gap:10px; }
+.msub { width:100%;background:var(--sand);color:var(--ink);border:none;padding:13px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:background .2s;margin-top:6px; }
+.msub:hover { background:var(--sand2); }
+.succ { display:none;text-align:center;padding:16px 0; }
+.succ.show { display:block; }
+.succ .si { font-size:52px;margin-bottom:14px; }
+.succ h3 { font-family:'Cormorant Garamond',serif;font-size:24px;margin-bottom:8px; }
+.succ p { color:var(--muted);font-size:13px;line-height:1.7; }
+
+/* ── TOAST ── */
+.toast { position:fixed;bottom:22px;right:22px;background:var(--card);border:1px solid var(--sand);border-radius:9px;padding:11px 16px;font-size:13px;z-index:999;transform:translateY(50px);opacity:0;pointer-events:none;transition:all .3s; }
+.toast.show { transform:translateY(0);opacity:1; }
+
+@media(max-width:600px) {
+  .page { padding:36px 16px 60px; }
+  .how { flex-direction:column; }
+  .how-step { border-right:none; border-bottom:1px solid var(--border); }
+  .how-step:last-child { border-bottom:none; }
+  .ai-box { flex-direction:column; padding:14px; }
+  .send-btn { width:100%; justify-content:center; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="hd">
+    <div class="hd-badge"><span class="dot"></span>Первый в ПМР · AI поиск</div>
+    <h1>Опиши что ищешь —<br><em>AI подберёт сам.</em></h1>
+    <p>Никаких фильтров. Просто напиши запрос своими словами — как другу. AI поймёт и найдёт лучшие варианты.</p>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="how">
+    <div class="how-step"><span class="how-num">1</span>Пишешь запрос</div>
+    <div class="how-arrow">→</div>
+    <div class="how-step"><span class="how-num">2</span>AI разбирает параметры</div>
+    <div class="how-arrow">→</div>
+    <div class="how-step"><span class="how-num">3</span>Фильтруем базу</div>
+    <div class="how-arrow">→</div>
+    <div class="how-step"><span class="how-num">4</span>Объясняем каждый вариант</div>
+  </div>
+
+  <!-- API NOTICE -->
+  <div class="api-notice" id="apiNotice">
+    ⚙️ <span>Укажите URL Railway API: замените <code style="background:rgba(255,255,255,.08);padding:1px 6px;border-radius:4px">https://web-production-e24bc.up.railway.app</code> в коде. <a href="#" onclick="testApi()">Проверить подключение</a></span>
+  </div>
+
+  <!-- AI INPUT -->
+  <div class="ai-box">
+    <span class="ai-icon">✨</span>
+    <textarea class="ai-ta" id="ta" rows="1"
+      placeholder="Хочу дом до $90 000 на Балке, 3–4 комнаты, желательно с участком..."
+      onkeydown="onKey(event)" oninput="resize(this)"></textarea>
+    <button class="send-btn" id="sendBtn" onclick="search()">
+      <span class="spin" id="spin"></span>
+      <span id="sendTxt">Найти ✦</span>
+    </button>
+  </div>
+
+  <!-- EXAMPLES -->
+  <div class="examples">
+    <button class="ex" onclick="set(this.textContent)">🏠 Дом до $80к, тихий район</button>
+    <button class="ex" onclick="set(this.textContent)">🏢 2-комн. квартира в центре</button>
+    <button class="ex" onclick="set(this.textContent)">🌿 Участок под строительство</button>
+    <button class="ex" onclick="set(this.textContent)">👨‍👩‍👧 Дом для семьи с детьми</button>
+    <button class="ex" onclick="set(this.textContent)">💼 Офис или коммерция в центре</button>
+    <button class="ex" onclick="set(this.textContent)">📈 Инвестиция до $50к</button>
+    <button class="ex" onclick="set(this.textContent)">🏡 Дача с садом до $25к</button>
+  </div>
+
+  <!-- THINKING -->
+  <div class="thinking" id="thinking">
+    <div class="dots"><span></span><span></span><span></span></div>
+    <div class="think-msg">AI анализирует запрос<strong id="thinkStep"></strong></div>
+  </div>
+
+  <!-- FILTER PILLS -->
+  <div class="filter-pills" id="pills">
+    <span class="filter-pills-label">Распознано:</span>
+  </div>
+
+  <!-- ANSWER -->
+  <div class="answer" id="answer">
+    <div class="ai-msg">
+      <div class="ai-ava">✦</div>
+      <div class="ai-txt" id="aiTxt"></div>
+    </div>
+    <div class="res-label" id="resLabel"></div>
+    <div class="res-grid" id="resGrid"></div>
+    <div class="no-res" id="noRes">
+      <div class="icon">🏚️</div>
+      <h3>Ничего не найдено</h3>
+      <p>Попробуй расширить бюджет или изменить район</p>
+    </div>
+  </div>
+
+  <!-- HISTORY -->
+  <div class="hist" id="hist" style="display:none">
+    <div class="hist-title">🕓 Последние запросы</div>
+    <div class="hist-list" id="histList"></div>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="ov" id="ov" onclick="cov(event)">
+  <div class="modal">
+    <button class="mc" onclick="cm()">×</button>
+    <div id="fb">
+      <h2>Записаться на просмотр</h2>
+      <p class="modal-sub">Брокер свяжется в течение <strong style="color:var(--sand)">30 минут</strong></p>
+      <div class="mprop" id="mprop"></div>
+      <div class="fg"><label class="fl">Имя *</label><input class="fi" id="fn" placeholder="Ваше имя"></div>
+      <div class="fg"><label class="fl">Телефон *</label><input class="fi" id="fp" placeholder="+373 777 00 000"></div>
+      <div class="fr2">
+        <div class="fg"><label class="fl">Время</label><select class="fs" id="ft"><option>Утром</option><option>Днём</option><option>Вечером</option><option>Любое</option></select></div>
+        <div class="fg"><label class="fl">Связь</label><select class="fs" id="fc"><option>Звонок</option><option>WhatsApp</option><option>Telegram</option></select></div>
+      </div>
+      <button class="msub" onclick="sub()">📤 Отправить заявку</button>
+    </div>
+    <div class="succ" id="sc">
+      <div class="si">✅</div>
+      <h3>Заявка принята!</h3>
+      <p>Скоро с вами свяжутся.<br><span style="color:var(--sand)">📞 +373 777 72 473</span></p>
+      <br>
+      <a href="https://t.me/solei3337" target="_blank" style="display:inline-block;background:var(--sand);color:var(--ink);padding:11px 24px;border-radius:9px;font-weight:700;font-size:14px;text-decoration:none">✈️ Telegram</a>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════
+//  CONFIG — замени после деплоя на Railway
+// ══════════════════════════════════════════
+const API_URL = 'https://web-production-e24bc.up.railway.app';
+// Например: 'https://realinvest-api-xxxx.up.railway.app'
+
+// ══════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════
+let history_ = JSON.parse(localStorage.getItem('ai_hist') || '[]');
+let curProp  = '';
+let thinkTmr;
+
+// ══════════════════════════════════════════
+//  CHECK API
+// ══════════════════════════════════════════
+async function testApi() {
+  try {
+    const r = await fetch(`${API_URL}/`);
+    const d = await r.json();
+    if (d.status === 'ok') {
+      document.getElementById('apiNotice').className = 'api-notice ok';
+      document.getElementById('apiNotice').innerHTML = '✅ API подключён: ' + d.service;
+    }
+  } catch {
+    toast('❌ API недоступен. Проверь URL и деплой Railway.');
+  }
+}
+
+// ══════════════════════════════════════════
+//  SEARCH
+// ══════════════════════════════════════════
+async function search() {
+  const query = document.getElementById('ta').value.trim();
+  if (!query) { toast('✏️ Напиши запрос'); return; }
+  if (API_URL === 'https://web-production-e24bc.up.railway.app') { toast('⚙️ Сначала укажи Railway URL в коде'); return; }
+
+  setLoading(true);
+  saveHist(query);
+  renderHist();
+
+  try {
+    const r = await fetch(`${API_URL}/ai-search`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query, limit: 4 }),
+    });
+
+    if (!r.ok) {
+      const err = await r.json();
+      throw new Error(err.detail || `HTTP ${r.status}`);
+    }
+
+    const data = await r.json();
+    showFilters(data.filters_applied);
+    renderResults(data);
+
+  } catch (e) {
+    console.error(e);
+    toast('⚠️ Ошибка: ' + e.message);
+  }
+
+  setLoading(false);
+}
+
+// ══════════════════════════════════════════
+//  RENDER
+// ══════════════════════════════════════════
+function showFilters(f) {
+  if (!f) return;
+  const pills = document.getElementById('pills');
+  const items = [];
+  if (f.type)      items.push('🏠 ' + f.type);
+  if (f.district)  items.push('📍 ' + f.district);
+  if (f.price_max) items.push('💰 до $' + f.price_max.toLocaleString());
+  if (f.price_min) items.push('💰 от $' + f.price_min.toLocaleString());
+  if (f.rooms_min) items.push('🚪 ' + f.rooms_min + '+ комн.');
+  if (f.area_min)  items.push('📐 ' + f.area_min + '+ м²');
+  if (f.intent && f.intent !== 'покупка') items.push('🎯 ' + f.intent);
+
+  if (!items.length) { pills.
