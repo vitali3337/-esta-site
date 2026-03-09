@@ -4,954 +4,303 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ESTA — Недвижимость Молдовы и Приднестровья</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<meta name="description" content="Купить, продать, снять недвижимость в Тирасполе, Кишинёве, Бельцах, Бендерах. Первый AI-портал Молдовы и ПМР.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
 :root {
-  --bg:     #f5f2ee;
-  --bg2:    #ede9e3;
-  --white:  #ffffff;
-  --ink:    #1a1810;
-  --ink2:   #2d2a24;
-  --muted:  #8a857c;
-  --sand:   #b5956a;
-  --sand2:  #d4b896;
-  --sand3:  #f0e6d8;
-  --green:  #2d6a4f;
-  --red:    #c1440e;
-  --ai:     #4a3f8c;
-  --ai2:    #7c6dfa;
-  --border: rgba(181,149,106,0.2);
-  --shadow: 0 4px 24px rgba(26,24,16,0.08);
-  --r:      12px;
+  --bg:      #f7f5f2;
+  --bg2:     #eeebe6;
+  --white:   #ffffff;
+  --ink:     #181510;
+  --ink2:    #2c2820;
+  --muted:   #8c8780;
+  --sand:    #b5956a;
+  --sand2:   #d4b896;
+  --sand3:   #f2e8d9;
+  --green:   #1a7a4a;
+  --green2:  #e8f5ee;
+  --red:     #c0400c;
+  --red2:    #fdf0eb;
+  --blue:    #1a5fa8;
+  --blue2:   #e8f0fb;
+  --ai:      #3d2fa0;
+  --ai2:     #6c5ce7;
+  --ai3:     #ede9ff;
+  --gold:    #d4a017;
+  --border:  rgba(181,149,106,.18);
+  --shadow:  0 2px 16px rgba(24,21,16,.07);
+  --shadow2: 0 8px 40px rgba(24,21,16,.12);
+  --r:       12px;
+  --r2:      20px;
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
-body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;}
-img{max-width:100%;display:block;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;font-size:14px;}
 a{text-decoration:none;color:inherit;}
-button{cursor:pointer;font-family:'Nunito',sans-serif;}
+button,input,select,textarea{font-family:'Inter',sans-serif;}
 ::-webkit-scrollbar{width:5px;}
-::-webkit-scrollbar-track{background:var(--bg2);}
 ::-webkit-scrollbar-thumb{background:var(--sand2);border-radius:3px;}
 
-/* ══ NAV ══ */
-.nav {
-  position:sticky;top:0;z-index:100;
-  background:rgba(245,242,238,.95);backdrop-filter:blur(12px);
+/* ═══════════════ NAV ═══════════════ */
+.nav{
+  position:sticky;top:0;z-index:200;
+  background:rgba(247,245,242,.96);backdrop-filter:blur(16px);
   border-bottom:1px solid var(--border);
-  padding:0 32px; display:flex;align-items:center;gap:24px;height:64px;
+  height:60px;display:flex;align-items:center;padding:0 24px;gap:16px;
 }
-.nav-logo {
-  font-family:'Playfair Display',serif;font-size:22px;font-weight:700;
-  color:var(--ink);letter-spacing:.5px;margin-right:8px;
-}
+.nav-logo{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--ink);letter-spacing:.5px;flex-shrink:0;}
 .nav-logo span{color:var(--sand);}
-.nav-region {
-  display:flex;gap:4px;background:var(--bg2);border-radius:8px;padding:3px;
-}
-.nr-btn {
-  padding:5px 14px;border-radius:6px;border:none;background:transparent;
-  font-size:12px;font-weight:600;color:var(--muted);transition:all .18s;
-}
-.nr-btn.active{background:var(--white);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.1);}
-.nav-links{display:flex;gap:4px;margin-left:auto;}
-.nav-link{padding:7px 14px;border-radius:8px;font-size:13px;font-weight:600;color:var(--muted);border:none;background:transparent;transition:all .18s;}
-.nav-link:hover{background:var(--bg2);color:var(--ink);}
-.nav-link.primary{background:var(--ink);color:#fff;}
-.nav-link.primary:hover{background:var(--ink2);}
-.nav-ai{background:linear-gradient(135deg,var(--ai),var(--ai2));color:#fff!important;}
-.nav-ai:hover{opacity:.9;}
-.nav-lang{display:flex;gap:2px;margin-left:8px;}
-.lang-btn{padding:5px 10px;border-radius:6px;border:none;font-size:11px;font-weight:700;color:var(--muted);background:transparent;transition:all .15s;letter-spacing:.5px;}
-.lang-btn.active{background:var(--sand3);color:var(--sand);}
+.nav-tabs{display:flex;gap:2px;margin:0 8px;}
+.nt{padding:6px 14px;border-radius:7px;border:none;background:transparent;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .15s;}
+.nt.active,.nt:hover{background:var(--sand3);color:var(--sand);}
+.nav-search{flex:1;max-width:320px;position:relative;}
+.nav-search input{width:100%;background:var(--bg2);border:1.5px solid transparent;border-radius:9px;padding:7px 14px 7px 36px;font-size:13px;color:var(--ink);outline:none;transition:border-color .18s;}
+.nav-search input:focus{border-color:var(--sand);background:var(--white);}
+.nav-search input::placeholder{color:var(--muted);}
+.nav-search .si{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:15px;}
+.nav-right{display:flex;align-items:center;gap:8px;margin-left:auto;}
+.nav-lang{display:flex;gap:2px;background:var(--bg2);border-radius:7px;padding:2px;}
+.nl{padding:4px 9px;border-radius:5px;border:none;font-size:11px;font-weight:700;color:var(--muted);background:transparent;cursor:pointer;letter-spacing:.5px;transition:all .15s;}
+.nl.active{background:var(--white);color:var(--sand);box-shadow:0 1px 3px rgba(0,0,0,.08);}
+.nav-btn{padding:7px 16px;border-radius:8px;border:none;font-size:13px;font-weight:600;cursor:pointer;transition:all .18s;}
+.nb-outline{background:transparent;border:1.5px solid var(--border);color:var(--ink);}
+.nb-outline:hover{border-color:var(--sand);color:var(--sand);}
+.nb-solid{background:var(--ink);color:#fff;}
+.nb-solid:hover{background:var(--sand);}
+.nb-ai{background:linear-gradient(135deg,var(--ai),var(--ai2));color:#fff;}
+.nb-ai:hover{opacity:.88;}
 
-/* ══ HERO ══ */
-.hero {
-  background:linear-gradient(160deg,var(--ink) 0%,var(--ink2) 60%,#3d2f1a 100%);
-  padding:64px 32px 0; position:relative;
+/* ═══════════════ HERO ═══════════════ */
+.hero{
+  background:var(--ink2);
+  padding:52px 24px 0;
+  position:relative;
+  overflow:hidden;
 }
-.hero::before {
-  content:''; position:absolute; inset:0;
-  background:url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1400&q=60') center/cover;
-  opacity:.12;
+.hero-bg{
+  position:absolute;inset:0;
+  background:url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1600&q=50') center/cover no-repeat;
+  opacity:.1;
 }
-.hero-inner { max-width:1100px; margin:0 auto; position:relative; }
-.hero-tag {
-  display:inline-flex;align-items:center;gap:8px;
+.hero-inner{max-width:1140px;margin:0 auto;position:relative;z-index:1;}
+.hero-label{
+  display:inline-flex;align-items:center;gap:7px;
   background:rgba(181,149,106,.15);border:1px solid rgba(181,149,106,.3);
-  color:var(--sand2);font-size:11px;font-weight:700;letter-spacing:2px;
-  padding:5px 14px;border-radius:20px;margin-bottom:20px;text-transform:uppercase;
+  color:var(--sand2);font-size:10px;font-weight:700;letter-spacing:2.5px;
+  padding:5px 14px;border-radius:20px;margin-bottom:18px;text-transform:uppercase;
 }
-.hero-tag .dot{width:6px;height:6px;border-radius:50%;background:var(--sand);animation:pulse 2s infinite;}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.hero h1 {
+.pulse{width:5px;height:5px;border-radius:50%;background:var(--sand);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.hero h1{
   font-family:'Playfair Display',serif;
-  font-size:clamp(36px,5vw,64px);font-weight:700;color:#fff;
-  line-height:1.1;margin-bottom:16px;
+  font-size:clamp(32px,4.5vw,60px);font-weight:700;color:#fff;
+  line-height:1.1;margin-bottom:14px;
 }
 .hero h1 em{font-style:italic;color:var(--sand2);}
-.hero-sub{font-size:16px;color:rgba(255,255,255,.6);max-width:520px;margin-bottom:40px;}
+.hero-sub{font-size:15px;color:rgba(255,255,255,.55);max-width:500px;margin-bottom:36px;line-height:1.7;}
+.hero-stats{display:flex;gap:28px;margin-bottom:32px;}
+.hs{text-align:center;}
+.hs-num{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:#fff;}
+.hs-label{font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1.5px;margin-top:1px;}
 
-/* ══ SEARCH BOX ══ */
-.search-box {
-  background:var(--white);border-radius:16px 16px 0 0;
-  padding:24px 28px 24px; box-shadow:0 -8px 40px rgba(0,0,0,.3);
-  position:relative; z-index:10;
+/* ═══════════════ SEARCH PANEL ═══════════════ */
+.search-panel{
+  background:var(--white);
+  border-radius:var(--r2) var(--r2) 0 0;
+  padding:24px 28px 28px;
+  box-shadow:0 -12px 48px rgba(0,0,0,.25);
+  position:relative;z-index:5;
 }
-.search-tabs{display:flex;gap:0;margin-bottom:20px;border-bottom:2px solid var(--bg2);}
-.st{padding:10px 20px;border:none;background:transparent;font-family:'Nunito',sans-serif;font-size:14px;font-weight:600;color:var(--muted);transition:all .18s;border-bottom:2px solid transparent;margin-bottom:-2px;}
-.st.active{color:var(--sand);border-bottom-color:var(--sand);}
-.search-row{display:grid;grid-template-columns:1fr 1fr 140px 140px auto;gap:12px;align-items:end;padding-bottom:24px;}
-.sf{display:flex;flex-direction:column;gap:5px;}
-.sf label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
-.sf select,.sf input{
-  background:var(--bg2);border:1.5px solid transparent;color:var(--ink);
-  padding:10px 14px;border-radius:9px;font-family:'Nunito',sans-serif;
-  font-size:13px;font-weight:500;outline:none;transition:border-color .18s;
+.sp-tabs{display:flex;gap:0;border-bottom:2px solid var(--bg2);margin-bottom:20px;}
+.spt{padding:9px 18px;border:none;background:transparent;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .18s;}
+.spt.active{color:var(--sand);border-bottom-color:var(--sand);}
+.sp-grid{display:grid;grid-template-columns:1.2fr 1fr 130px 130px 130px auto;gap:10px;align-items:end;}
+.spf{display:flex;flex-direction:column;gap:5px;}
+.spf label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+.spf select,.spf input{
+  background:var(--bg2);border:1.5px solid transparent;
+  border-radius:9px;padding:10px 13px;font-size:13px;color:var(--ink);
+  outline:none;transition:border-color .18s;
 }
-.sf select:focus,.sf input:focus{border-color:var(--sand);}
-.sf input::placeholder{color:var(--muted);}
-.search-btn{
+.spf select:focus,.spf input:focus{border-color:var(--sand);background:#fff;}
+.spf input::placeholder{color:var(--muted);}
+.sp-btn{
   background:var(--ink);color:#fff;border:none;
-  padding:11px 28px;border-radius:9px;font-family:'Nunito',sans-serif;
-  font-size:14px;font-weight:700;transition:all .2s;white-space:nowrap;
+  padding:10px 24px;border-radius:9px;font-size:14px;font-weight:700;
+  cursor:pointer;transition:all .2s;white-space:nowrap;
 }
-.search-btn:hover{background:var(--sand);}
-.ai-search-hint{
-  background:linear-gradient(135deg,rgba(74,63,140,.08),rgba(124,109,250,.05));
-  border:1px solid rgba(74,63,140,.15);border-radius:0 0 10px 10px;
-  padding:12px 28px;display:flex;align-items:center;gap:12px;
-  cursor:pointer;transition:all .2s;
+.sp-btn:hover{background:var(--sand);}
+.sp-ai{
+  margin-top:14px;background:var(--ai3);border:1px solid rgba(108,92,231,.2);
+  border-radius:10px;padding:11px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:all .18s;
 }
-.ai-search-hint:hover{background:linear-gradient(135deg,rgba(74,63,140,.14),rgba(124,109,250,.08));}
-.ai-hint-text{font-size:13px;color:var(--ai);}
-.ai-hint-text strong{font-weight:700;}
+.sp-ai:hover{background:rgba(108,92,231,.1);}
+.sp-ai-text{font-size:12px;color:var(--ai);font-weight:500;}
+.sp-ai-text strong{font-weight:700;}
 
-/* ══ STATS BAR ══ */
-.stats-bar{background:var(--white);border-bottom:1px solid var(--border);padding:14px 32px;}
-.stats-inner{max-width:1100px;margin:0 auto;display:flex;gap:32px;align-items:center;}
-.stat-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);}
-.stat-item strong{font-size:18px;font-weight:700;color:var(--ink);font-family:'Playfair Display',serif;}
-.stats-bar .divider{width:1px;height:24px;background:var(--border);}
+/* ═══════════════ LAYOUT ═══════════════ */
+.layout{max-width:1140px;margin:24px auto;padding:0 24px;display:grid;grid-template-columns:260px 1fr;gap:22px;align-items:start;}
 
-/* ══ MAIN LAYOUT ══ */
-.main-layout{max-width:1100px;margin:0 auto;padding:28px 32px;display:grid;grid-template-columns:260px 1fr;gap:24px;align-items:start;}
+/* ═══════════════ SIDEBAR ═══════════════ */
+.sidebar{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:18px;position:sticky;top:72px;}
+.sb-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.sb-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);}
+.sb-reset{font-size:11px;color:var(--sand);font-weight:600;background:none;border:none;cursor:pointer;}
+.fg{margin-bottom:13px;}
+.fg label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:6px;}
+.fg select,.fg input{width:100%;background:var(--bg2);border:1.5px solid transparent;border-radius:8px;padding:9px 12px;font-size:12px;color:var(--ink);outline:none;transition:border-color .18s;}
+.fg select:focus,.fg input:focus{border-color:var(--sand);}
+.price-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.checkbox-group{display:flex;flex-direction:column;gap:6px;}
+.cb-item{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--ink);cursor:pointer;}
+.cb-item input{width:14px;height:14px;accent-color:var(--sand);}
+.sb-apply{width:100%;background:var(--ink);color:#fff;border:none;padding:10px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;margin-top:6px;transition:background .2s;}
+.sb-apply:hover{background:var(--sand);}
+.sb-divider{height:1px;background:var(--border);margin:14px 0;}
 
-/* ══ FILTERS SIDEBAR ══ */
-.filters{background:var(--white);border-radius:var(--r);border:1px solid var(--border);padding:20px;position:sticky;top:80px;}
-.filters-title{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;}
-.filters-reset{font-size:11px;color:var(--sand);font-weight:600;background:none;border:none;cursor:pointer;}
-.filter-group{margin-bottom:18px;}
-.filter-group label{display:block;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
-.filter-group select,.filter-group input{width:100%;background:var(--bg2);border:1.5px solid transparent;color:var(--ink);padding:9px 12px;border-radius:8px;font-family:'Nunito',sans-serif;font-size:13px;outline:none;transition:border-color .18s;}
-.filter-group select:focus,.filter-group input:focus{border-color:var(--sand);}
-.price-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.filter-apply{width:100%;background:var(--ink);color:#fff;border:none;padding:11px;border-radius:8px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;transition:background .2s;margin-top:4px;}
-.filter-apply:hover{background:var(--sand);}
+/* ═══════════════ LISTINGS ═══════════════ */
+.listings-wrap{}
+.listings-top{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+.lt-count{font-size:13px;color:var(--muted);margin-right:auto;}
+.lt-count strong{color:var(--ink);font-weight:700;}
+.sort-sel{background:var(--bg2);border:1.5px solid var(--border);color:var(--ink);padding:7px 12px;border-radius:8px;font-size:12px;outline:none;cursor:pointer;}
+.view-btns{display:flex;gap:3px;}
+.vb{width:32px;height:32px;border-radius:7px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;}
+.vb.active,.vb:hover{border-color:var(--sand);color:var(--sand);background:var(--sand3);}
 
-/* ══ LISTINGS AREA ══ */
-.listings-area{}
-.listings-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
-.listings-count{font-size:14px;color:var(--muted);}
-.listings-count strong{color:var(--ink);font-weight:700;}
-.view-toggle{display:flex;gap:4px;}
-.vt-btn{padding:7px 10px;border-radius:7px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-size:14px;transition:all .18s;}
-.vt-btn.active,.vt-btn:hover{border-color:var(--sand);color:var(--sand);}
-.sort-select{background:var(--bg2);border:1.5px solid var(--border);color:var(--ink);padding:7px 12px;border-radius:8px;font-family:'Nunito',sans-serif;font-size:12px;outline:none;}
+/* ═══════════════ GRID/LIST ═══════════════ */
+.grid-view{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:16px;}
+.list-view{display:flex;flex-direction:column;gap:12px;}
 
-/* ══ GRID VIEW ══ */
-.listings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:18px;}
-.listings-list-view{display:flex;flex-direction:column;gap:14px;}
-
-/* ══ CARD ══ */
-.card{
-  background:var(--white);border:1px solid var(--border);border-radius:var(--r);
-  overflow:hidden;transition:transform .22s,box-shadow .22s,border-color .22s;
-  animation:cardIn .3s ease both;
-}
-.card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(26,24,16,.12);border-color:var(--sand2);}
-@keyframes cardIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-.card-img{height:180px;overflow:hidden;background:var(--bg2);position:relative;}
-.card-img img{width:100%;height:100%;object-fit:cover;transition:transform .35s;}
+/* CARD */
+.card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:all .22s;animation:fadeUp .3s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.card:hover{transform:translateY(-3px);box-shadow:var(--shadow2);border-color:var(--sand2);}
+.card-img{height:185px;overflow:hidden;background:var(--bg2);position:relative;flex-shrink:0;}
+.card-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s;}
 .card:hover .card-img img{transform:scale(1.06);}
-.card-badges{position:absolute;top:10px;left:10px;display:flex;gap:6px;flex-wrap:wrap;}
-.badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:5px;backdrop-filter:blur(4px);}
-.badge-vip{background:rgba(181,149,106,.9);color:#fff;}
-.badge-new{background:rgba(45,106,79,.9);color:#fff;}
-.badge-type{background:rgba(26,24,16,.75);color:#fff;}
-.card-fav{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.9);border:none;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .18s;}
-.card-fav:hover,.card-fav.active{background:#fff;color:#e53;transform:scale(1.1);}
-.card-body{padding:14px 16px 16px;}
-.card-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--ink);margin-bottom:6px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.card-meta{display:flex;gap:10px;font-size:11px;color:var(--muted);margin-bottom:10px;flex-wrap:wrap;}
-.card-meta span{display:flex;align-items:center;gap:3px;}
-.card-price{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--ink);margin-bottom:3px;}
-.card-price-rub{font-size:11px;color:var(--muted);}
-.card-footer{display:flex;gap:8px;margin-top:12px;}
-.card-btn{flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-family:'Nunito',sans-serif;font-size:12px;font-weight:600;transition:all .18s;}
-.card-btn:hover{border-color:var(--sand);color:var(--sand);}
-.card-btn.primary{background:var(--ink);color:#fff;border-color:var(--ink);}
-.card-btn.primary:hover{background:var(--sand);border-color:var(--sand);}
+.card-badges{position:absolute;top:9px;left:9px;display:flex;gap:5px;flex-wrap:wrap;}
+.badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:5px;}
+.bvip{background:rgba(212,160,23,.9);color:#fff;}
+.bnew{background:rgba(26,122,74,.9);color:#fff;}
+.btype{background:rgba(24,21,16,.7);color:#fff;}
+.card-fav{position:absolute;top:9px;right:9px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.9);border:none;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .18s;cursor:pointer;}
+.card-fav:hover,.card-fav.on{background:#fff;color:#e53;}
+.card-body{padding:13px 15px 15px;}
+.card-title{font-family:'Playfair Display',serif;font-size:14px;font-weight:600;color:var(--ink);margin-bottom:6px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.card-meta{display:flex;flex-wrap:wrap;gap:8px;font-size:11px;color:var(--muted);margin-bottom:9px;}
+.card-price{font-family:'Playfair Display',serif;font-size:21px;font-weight:700;color:var(--ink);}
+.card-price-rub{font-size:10px;color:var(--muted);margin-top:1px;}
+.card-actions{display:flex;gap:7px;margin-top:11px;}
+.ca-btn{flex:1;padding:7px;border-radius:7px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;transition:all .18s;}
+.ca-btn:hover{border-color:var(--sand);color:var(--sand);}
+.ca-btn.prim{background:var(--ink);color:#fff;border-color:var(--ink);}
+.ca-btn.prim:hover{background:var(--sand);border-color:var(--sand);}
 
-/* ══ LIST CARD ══ */
-.list-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;display:grid;grid-template-columns:220px 1fr;transition:all .22s;}
-.list-card:hover{box-shadow:var(--shadow);border-color:var(--sand2);}
-.list-card .card-img{height:100%;min-height:140px;border-radius:0;}
-.list-card .card-body{padding:16px 20px;display:flex;flex-direction:column;justify-content:space-between;}
-.list-card .card-title{font-size:17px;-webkit-line-clamp:1;}
-.list-card .card-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.list-card .card-footer{margin-top:0;}
+/* LIST CARD */
+.lcard{background:var(--white);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;display:flex;cursor:pointer;transition:all .22s;animation:fadeUp .3s ease both;}
+.lcard:hover{box-shadow:var(--shadow2);border-color:var(--sand2);}
+.lcard .card-img{width:220px;height:auto;min-height:150px;border-radius:0;flex-shrink:0;}
+.lcard .card-body{flex:1;padding:16px 20px;display:flex;flex-direction:column;justify-content:space-between;}
+.lcard .card-title{font-size:16px;-webkit-line-clamp:1;}
+.lcard-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.lcard .card-actions{margin-top:0;}
 
-/* ══ EMPTY STATE ══ */
-.empty{text-align:center;padding:64px 20px;color:var(--muted);}
-.empty-icon{font-size:56px;margin-bottom:16px;}
-.empty h3{font-family:'Playfair Display',serif;font-size:22px;color:var(--ink);margin-bottom:8px;}
-
-/* ══ LOADING ══ */
-.skeleton{background:linear-gradient(90deg,var(--bg2) 25%,var(--bg) 50%,var(--bg2) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;}
-@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-.skel-card{height:300px;border-radius:var(--r);}
-
-/* ══ AI PANEL ══ */
+/* ═══════════════ AI PANEL ═══════════════ */
+.ai-wrap{max-width:1140px;margin:0 auto 0;padding:0 24px;}
 .ai-panel{
-  display:none;background:linear-gradient(135deg,#1a1535,#2d2460);
-  border-radius:20px;padding:32px;margin-bottom:28px;
-  border:1px solid rgba(124,109,250,.3);
+  background:linear-gradient(135deg,#16103a 0%,#1f1854 50%,#2d1f6e 100%);
+  border-radius:var(--r2);border:1px solid rgba(108,92,231,.3);
+  padding:28px 32px;display:none;
 }
-.ai-panel.show{display:block;animation:cardIn .3s ease;}
-.ai-panel-header{display:flex;align-items:center;gap:14px;margin-bottom:20px;}
-.ai-logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--ai),var(--ai2));display:flex;align-items:center;justify-content:center;font-size:20px;}
+.ai-panel.open{display:block;animation:fadeUp .25s ease;}
+.ai-top{display:flex;align-items:center;gap:14px;margin-bottom:20px;}
+.ai-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--ai),var(--ai2));display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
 .ai-title{font-family:'Playfair Display',serif;font-size:20px;color:#fff;}
-.ai-sub{font-size:12px;color:rgba(255,255,255,.5);}
-.ai-input-row{display:flex;gap:10px;margin-bottom:14px;}
-.ai-ta{flex:1;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;padding:12px 16px;border-radius:10px;font-family:'Nunito',sans-serif;font-size:14px;outline:none;resize:none;min-height:48px;}
-.ai-ta::placeholder{color:rgba(255,255,255,.3);}
-.ai-ta:focus{border-color:rgba(124,109,250,.6);}
-.ai-send{background:linear-gradient(135deg,var(--ai),var(--ai2));color:#fff;border:none;padding:12px 22px;border-radius:10px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;transition:all .2s;white-space:nowrap;}
-.ai-send:hover{opacity:.85;transform:scale(1.02);}
+.ai-sub{font-size:12px;color:rgba(255,255,255,.45);margin-top:1px;}
+.ai-close{margin-left:auto;background:rgba(255,255,255,.1);border:none;color:rgba(255,255,255,.6);width:30px;height:30px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;}
+.ai-close:hover{background:rgba(255,255,255,.2);color:#fff;}
+.ai-row{display:flex;gap:10px;margin-bottom:14px;}
+.ai-input{flex:1;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;padding:12px 16px;border-radius:10px;font-size:14px;outline:none;transition:border-color .18s;}
+.ai-input:focus{border-color:rgba(108,92,231,.7);}
+.ai-input::placeholder{color:rgba(255,255,255,.3);}
+.ai-go{background:linear-gradient(135deg,var(--ai),var(--ai2));color:#fff;border:none;padding:11px 22px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:opacity .18s;}
+.ai-go:hover{opacity:.85;}
 .ai-chips{display:flex;flex-wrap:wrap;gap:7px;}
-.ai-chip{padding:5px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);font-size:11px;font-weight:600;cursor:pointer;transition:all .18s;}
-.ai-chip:hover{border-color:rgba(124,109,250,.5);color:#fff;background:rgba(124,109,250,.15);}
+.aic{padding:5px 13px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:rgba(255,255,255,.65);font-size:11px;font-weight:600;cursor:pointer;transition:all .18s;}
+.aic:hover{border-color:rgba(108,92,231,.5);color:#fff;background:rgba(108,92,231,.2);}
 .ai-results{margin-top:20px;display:none;}
 .ai-results.show{display:block;}
-.ai-comment{background:rgba(255,255,255,.07);border-radius:10px;padding:12px 16px;font-size:13px;color:rgba(255,255,255,.8);margin-bottom:16px;border-left:3px solid var(--ai2);}
-.ai-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;}
+.ai-comment{background:rgba(255,255,255,.07);border-left:3px solid var(--ai2);border-radius:8px;padding:12px 16px;font-size:13px;color:rgba(255,255,255,.75);margin-bottom:16px;line-height:1.6;}
+.ai-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;}
+.ai-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:10px;overflow:hidden;transition:border-color .18s;cursor:pointer;}
+.ai-card:hover{border-color:rgba(108,92,231,.5);}
+.ai-card img{width:100%;height:110px;object-fit:cover;}
+.ai-card-body{padding:10px 12px;}
+.ai-card-title{font-size:12px;font-weight:600;color:#fff;margin-bottom:3px;line-height:1.3;}
+.ai-card-price{font-size:16px;font-weight:700;color:var(--sand2);font-family:'Playfair Display',serif;margin-bottom:4px;}
+.ai-card-reason{font-size:10px;color:rgba(255,255,255,.4);line-height:1.5;}
+.ai-card-btn{width:100%;margin-top:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:#fff;padding:6px;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;transition:all .18s;}
+.ai-card-btn:hover{background:rgba(108,92,231,.3);}
 
-/* ══ MAP SECTION ══ */
-.map-section{padding:0 32px 40px;}
-.map-section-inner{max-width:1100px;margin:0 auto;}
-.section-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:20px;}
-.section-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;}
-.section-title em{font-style:italic;color:var(--sand);}
-#map{height:400px;border-radius:16px;border:1px solid var(--border);overflow:hidden;}
-
-/* ══ CITIES ══ */
-.cities-section{background:var(--white);padding:40px 32px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
-.cities-inner{max-width:1100px;margin:0 auto;}
-.cities-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-top:20px;}
-.city-card{
-  background:var(--bg2);border-radius:var(--r);padding:18px 16px;
-  border:1.5px solid transparent;cursor:pointer;transition:all .2s;text-align:center;
+/* ═══════════════ CITIES ═══════════════ */
+.cities-section{background:var(--white);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:32px 24px;}
+.cities-inner{max-width:1140px;margin:0 auto;}
+.section-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:4px;}
+.section-sub{font-size:13px;color:var(--muted);margin-bottom:20px;}
+.cities-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;}
+.city-btn{
+  background:var(--bg2);border:1.5px solid transparent;border-radius:var(--r);
+  padding:16px 14px;text-align:center;cursor:pointer;transition:all .2s;
 }
-.city-card:hover,.city-card.active{border-color:var(--sand);background:var(--sand3);}
-.city-icon{font-size:28px;margin-bottom:8px;}
-.city-name{font-weight:700;font-size:14px;margin-bottom:2px;}
-.city-count{font-size:11px;color:var(--muted);}
+.city-btn:hover,.city-btn.active{border-color:var(--sand);background:var(--sand3);}
+.city-btn .ci{font-size:26px;margin-bottom:7px;}
+.city-btn .cn{font-size:13px;font-weight:700;margin-bottom:2px;}
+.city-btn .cc{font-size:10px;color:var(--muted);}
 
-/* ══ WHY US ══ */
-.why-section{padding:40px 32px;max-width:1100px;margin:0 auto;}
-.why-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-top:24px;}
-.why-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:24px;}
-.why-icon{font-size:32px;margin-bottom:12px;}
-.why-title{font-weight:700;font-size:15px;margin-bottom:6px;}
-.why-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+/* ═══════════════ MAP ═══════════════ */
+.map-section{padding:32px 24px;max-width:1140px;margin:0 auto;}
+.map-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+#map{height:380px;border-radius:var(--r2);border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow);}
 
-/* ══ FOOTER ══ */
-.footer{background:var(--ink);color:rgba(255,255,255,.6);padding:40px 32px 24px;}
-.footer-inner{max-width:1100px;margin:0 auto;}
-.footer-top{display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px;margin-bottom:32px;}
-.footer-logo{font-family:'Playfair Display',serif;font-size:24px;color:#fff;margin-bottom:8px;}
-.footer-desc{font-size:13px;line-height:1.7;}
-.footer-links h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,.4);margin-bottom:12px;}
-.footer-links a{display:block;font-size:13px;margin-bottom:7px;transition:color .18s;}
-.footer-links a:hover{color:#fff;}
-.footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding-top:20px;display:flex;justify-content:space-between;font-size:12px;}
+/* ═══════════════ WHY ═══════════════ */
+.why-section{background:var(--ink);padding:48px 24px;}
+.why-inner{max-width:1140px;margin:0 auto;}
+.why-title{font-family:'Playfair Display',serif;font-size:28px;color:#fff;margin-bottom:6px;}
+.why-sub{font-size:13px;color:rgba(255,255,255,.4);margin-bottom:28px;}
+.why-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;}
+.why-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:var(--r);padding:22px;}
+.wci{font-size:30px;margin-bottom:10px;}
+.wct{font-size:14px;font-weight:700;color:#fff;margin-bottom:5px;}
+.wcd{font-size:12px;color:rgba(255,255,255,.45);line-height:1.7;}
 
-/* ══ MODAL ══ */
-.ov{display:none;position:fixed;inset:0;background:rgba(26,24,16,.75);backdrop-filter:blur(8px);z-index:200;align-items:center;justify-content:center;padding:20px;}
+/* ═══════════════ PRICING ═══════════════ */
+.pricing-section{padding:48px 24px;max-width:1140px;margin:0 auto;}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px;}
+.price-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r2);padding:28px;text-align:center;position:relative;transition:all .2s;}
+.price-card:hover{border-color:var(--sand);box-shadow:var(--shadow2);}
+.price-card.featured{border-color:var(--sand);background:var(--sand3);}
+.pc-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--sand);color:#fff;font-size:10px;font-weight:700;padding:3px 12px;border-radius:10px;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;}
+.pc-icon{font-size:36px;margin-bottom:12px;}
+.pc-name{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:8px;}
+.pc-price{font-family:'Playfair Display',serif;font-size:36px;font-weight:700;color:var(--ink);}
+.pc-price sup{font-size:16px;}
+.pc-price sub{font-size:13px;font-weight:400;color:var(--muted);}
+.pc-desc{font-size:12px;color:var(--muted);margin:8px 0 18px;line-height:1.7;}
+.pc-features{text-align:left;margin-bottom:20px;}
+.pc-feature{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--ink);margin-bottom:6px;}
+.pc-feature .ck{color:var(--green);font-size:13px;}
+.pc-feature .nx{color:var(--muted);}
+.pc-btn{width:100%;padding:11px;border-radius:10px;border:none;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;}
+.pc-btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--ink);}
+.pc-btn-outline:hover{border-color:var(--sand);color:var(--sand);}
+.pc-btn-solid{background:var(--ink);color:#fff;}
+.pc-btn-solid:hover{background:var(--sand);}
+
+/* ═══════════════ REGISTER MODAL ═══════════════ */
+.ov{display:none;position:fixed;inset:0;background:rgba(24,21,16,.8);backdrop-filter:blur(10px);z-index:500;align-items:center;justify-content:center;padding:16px;}
 .ov.open{display:flex;}
-.modal{background:var(--white);border-radius:20px;padding:36px;max-width:500px;width:100%;position:relative;max-height:90vh;overflow-y:auto;animation:mIn .25s ease;}
-@keyframes mIn{from{opacity:0;transform:scale(.93)}to{opacity:1;transform:none}}
-.mc{position:absolute;top:14px;right:18px;background:var(--bg2);border:none;color:var(--muted);width:30px;height:30px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-.modal-title{font-family:'Playfair Display',serif;font-size:24px;margin-bottom:4px;}
-.modal-sub{font-size:13px;color:var(--muted);margin-bottom:22px;line-height:1.6;}
-.modal-prop{background:var(--sand3);border-radius:9px;padding:10px 14px;font-size:13px;color:var(--sand);font-weight:600;margin-bottom:18px;}
-.fg{margin-bottom:13px;}
-.fg label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:6px;}
-.fg input,.fg select{width:100%;background:var(--bg2);border:1.5px solid transparent;color:var(--ink);padding:11px 14px;border-radius:9px;font-family:'Nunito',sans-serif;font-size:13px;outline:none;transition:border-color .2s;}
-.fg input:focus,.fg select:focus{border-color:var(--sand);}
-.fr2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.modal-submit{width:100%;background:var(--ink);color:#fff;border:none;padding:13px;border-radius:10px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:background .2s;margin-top:6px;}
-.modal-submit:hover{background:var(--sand);}
-.modal-success{display:none;text-align:center;padding:20px 0;}
-.modal-success.show{display:block;}
-.ms-icon{font-size:56px;margin-bottom:14px;}
-.ms-title{font-family:'Playfair Display',serif;font-size:22px;margin-bottom:8px;}
-.ms-desc{font-size:13px;color:var(--muted);line-height:1.7;}
-
-/* ══ TOAST ══ */
-.toast{position:fixed;bottom:20px;right:20px;background:var(--ink);color:#fff;border-radius:10px;padding:11px 18px;font-size:13px;z-index:999;transform:translateY(50px);opacity:0;transition:all .3s;pointer-events:none;}
-.toast.show{transform:translateY(0);opacity:1;}
-
-/* ══ MOBILE ══ */
-@media(max-width:900px){
-  .nav{padding:0 16px;gap:12px;}
-  .nav-region{display:none;}
-  .nav-links .nav-link:not(.primary):not(.nav-ai){display:none;}
-  .hero{padding:40px 16px 0;}
-  .search-row{grid-template-columns:1fr 1fr;gap:10px;}
-  .search-row .sf:nth-child(3),.search-row .sf:nth-child(4){display:none;}
-  .search-btn{grid-column:1/-1;}
-  .stats-bar{padding:12px 16px;}
-  .stats-inner{gap:16px;overflow-x:auto;}
-  .main-layout{grid-template-columns:1fr;padding:16px;}
-  .filters{display:none;}
-  .cities-grid{grid-template-columns:repeat(3,1fr);}
-  .footer-top{grid-template-columns:1fr;}
-  .list-card{grid-template-columns:140px 1fr;}
-}
-</style>
-</head>
-<body>
-
-<!-- NAV -->
-<nav class="nav">
-  <div class="nav-logo">ESTA<span>.</span></div>
-  <div class="nav-region">
-    <button class="nr-btn active" onclick="setRegion('all',this)" data-ru="Все регионы" data-ro="Toate regiunile">Все регионы</button>
-    <button class="nr-btn" onclick="setRegion('pmr',this)" data-ru="ПМР" data-ro="RMN">ПМР</button>
-    <button class="nr-btn" onclick="setRegion('md',this)" data-ru="Молдова" data-ro="Moldova">Молдова</button>
-  </div>
-  <div class="nav-links">
-    <button class="nav-link" onclick="showPage('listings')" data-ru="Объявления" data-ro="Anunțuri">Объявления</button>
-    <button class="nav-link" onclick="showPage('map-section')" data-ru="Карта" data-ro="Hartă">Карта</button>
-    <button class="nav-link nav-ai" onclick="toggleAI()" data-ru="✦ AI Поиск" data-ro="✦ Căutare AI">✦ AI Поиск</button>
-    <button class="nav-link" onclick="window.open('agent.html','_blank')" data-ru="Кабинет агента" data-ro="Cabinet agent">Кабинет агента</button>
-    <button class="nav-link primary" onclick="openModal()" data-ru="Разместить" data-ro="Adaugă">Разместить</button>
-  </div>
-  <div class="nav-lang">
-    <button class="lang-btn active" onclick="setLang('ru',this)">RU</button>
-    <button class="lang-btn" onclick="setLang('ro',this)">RO</button>
-  </div>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-inner">
-    <div class="hero-tag"><span class="dot"></span> <span data-ru="Молдова · ПМР · Первый AI-портал" data-ro="Moldova · RMN · Primul portal AI">Молдова · ПМР · Первый AI-портал</span></div>
-    <h1><span data-ru="Найди дом, который" data-ro="Găsește casa care">Найди дом, который</span><br><em><span data-ru="ждёт тебя" data-ro="te aşteaptă">ждёт тебя</span></em></h1>
-    <p class="hero-sub" data-ru="Лучшие объекты Тирасполя, Кишинёва и всего региона. Честные цены, проверенные агенты." data-ro="Cele mai bune proprietăți din Tiraspol, Chișinău și întreaga regiune.">Лучшие объекты Тирасполя, Кишинёва и всего региона. Честные цены, проверенные агенты.</p>
-
-    <div class="search-box">
-      <div class="search-tabs">
-        <button class="st active" data-ru="Купить" data-ro="Cumpără">Купить</button>
-        <button class="st" data-ru="Снять" data-ro="Chiriază">Снять</button>
-        <button class="st" data-ru="Коммерция" data-ro="Comercial">Коммерция</button>
-        <button class="st" data-ru="Участки" data-ro="Terenuri">Участки</button>
-      </div>
-      <div class="search-row">
-        <div class="sf">
-          <label data-ru="Город" data-ro="Oraș">Город</label>
-          <select id="s-city" onchange="applyFilters()">
-            <option value="" data-ru="Все города" data-ro="Toate orașele">Все города</option>
-            <option value="тирасполь" data-ru="Тирасполь" data-ro="Tiraspol">Тирасполь</option>
-            <option value="кишинёв" data-ru="Кишинёв" data-ro="Chișinău">Кишинёв</option>
-            <option value="бендеры" data-ru="Бендеры" data-ro="Bender">Бендеры</option>
-            <option value="рыбница" data-ru="Рыбница" data-ro="Râbnița">Рыбница</option>
-            <option value="бельцы" data-ru="Бельцы" data-ro="Bălți">Бельцы</option>
-            <option value="дубоссары" data-ru="Дубоссары" data-ro="Dubăsari">Дубоссары</option>
-          </select>
-        </div>
-        <div class="sf">
-          <label data-ru="Тип" data-ro="Tip">Тип</label>
-          <select id="s-type" onchange="applyFilters()">
-            <option value="" data-ru="Все типы" data-ro="Toate tipurile">Все типы</option>
-            <option value="дом" data-ru="Дом / Дача" data-ro="Casă">Дом / Дача</option>
-            <option value="квартира" data-ru="Квартира" data-ro="Apartament">Квартира</option>
-            <option value="участок" data-ru="Участок" data-ro="Teren">Участок</option>
-            <option value="коммерция" data-ru="Коммерция" data-ro="Comercial">Коммерция</option>
-          </select>
-        </div>
-        <div class="sf">
-          <label data-ru="Цена до ($)" data-ro="Preț până la ($)">Цена до ($)</label>
-          <input id="s-price" type="number" placeholder="150 000" onchange="applyFilters()">
-        </div>
-        <div class="sf">
-          <label data-ru="Комнат" data-ro="Camere">Комнат</label>
-          <select id="s-rooms" onchange="applyFilters()">
-            <option value="">Любое</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4+</option>
-          </select>
-        </div>
-        <button class="search-btn" onclick="applyFilters()" data-ru="Найти" data-ro="Caută">Найти</button>
-      </div>
-      <div class="ai-search-hint" onclick="toggleAI()">
-        <span style="font-size:20px">✦</span>
-        <span class="ai-hint-text"><strong data-ru="AI поиск:" data-ro="Căutare AI:">AI поиск:</strong> <span data-ru='напиши "дом для семьи до $90к на Балке"' data-ro='scrie "casă pentru familie până la $90k"'>напиши "дом для семьи до $90к на Балке" — AI подберёт сам</span></span>
-        <span style="margin-left:auto;font-size:12px;color:var(--ai);font-weight:700" data-ru="Попробовать →" data-ro="Încearcă →">Попробовать →</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- STATS -->
-<div class="stats-bar">
-  <div class="stats-inner">
-    <div class="stat-item"><strong id="total-count">—</strong> <span data-ru="объявлений" data-ro="anunțuri">объявлений</span></div>
-    <div class="divider"></div>
-    <div class="stat-item"><strong id="city-count">6</strong> <span data-ru="городов" data-ro="orașe">городов</span></div>
-    <div class="divider"></div>
-    <div class="stat-item"><strong id="vip-count">—</strong> <span data-ru="VIP объектов" data-ro="proprietăți VIP">VIP объектов</span></div>
-    <div class="divider"></div>
-    <div class="stat-item" style="margin-left:auto;color:var(--green);">● <span data-ru="Данные обновляются в реальном времени" data-ro="Date actualizate în timp real">Данные обновляются в реальном времени</span></div>
-  </div>
-</div>
-
-<!-- AI PANEL -->
-<div style="max-width:1100px;margin:24px auto 0;padding:0 32px">
-  <div class="ai-panel" id="aiPanel">
-    <div class="ai-panel-header">
-      <div class="ai-logo">✦</div>
-      <div>
-        <div class="ai-title" data-ru="AI поиск недвижимости" data-ro="Căutare AI imobiliară">AI поиск недвижимости</div>
-        <div class="ai-sub" data-ru="Первый в Молдове и ПМР — опиши что хочешь своими словами" data-ro="Primul în Moldova și RMN">Первый в Молдове и ПМР — опиши что хочешь своими словами</div>
-      </div>
-      <button onclick="toggleAI()" style="margin-left:auto;background:rgba(255,255,255,.1);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;">×</button>
-    </div>
-    <div class="ai-input-row">
-      <textarea class="ai-ta" id="aiQuery" rows="1" placeholder="Дом для семьи до $90 000 на Балке, 3-4 комнаты..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();aiSearch()}"></textarea>
-      <button class="ai-send" onclick="aiSearch()" id="aiSendBtn">Найти ✦</button>
-    </div>
-    <div class="ai-chips">
-      <span class="ai-chip" onclick="setAI(this.textContent)">🏠 Дом до $80к, тихий район</span>
-      <span class="ai-chip" onclick="setAI(this.textContent)">🏢 2-комн. квартира в центре</span>
-      <span class="ai-chip" onclick="setAI(this.textContent)">👨‍👩‍👧 Дом для семьи с детьми</span>
-      <span class="ai-chip" onclick="setAI(this.textContent)">📈 Инвестиция до $50к</span>
-      <span class="ai-chip" onclick="setAI(this.textContent)">🌿 Участок под строительство</span>
-    </div>
-    <div class="ai-results" id="aiResults">
-      <div class="ai-comment" id="aiComment"></div>
-      <div class="ai-cards" id="aiCards"></div>
-    </div>
-  </div>
-</div>
-
-<!-- CITIES -->
-<section class="cities-section">
-  <div class="cities-inner">
-    <div class="section-header">
-      <h2 class="section-title"><em data-ru="Города" data-ro="Orașe">Города</em> <span data-ru="региона" data-ro="regiunii">региона</span></h2>
-    </div>
-    <div class="cities-grid" id="citiesGrid">
-      <div class="city-card active" onclick="filterCity('',this)"><div class="city-icon">🗺️</div><div class="city-name" data-ru="Все города" data-ro="Toate">Все города</div><div class="city-count" id="cc-all">— объявлений</div></div>
-      <div class="city-card" onclick="filterCity('тирасполь',this)"><div class="city-icon">🏙️</div><div class="city-name">Тирасполь</div><div class="city-count" id="cc-tir">—</div></div>
-      <div class="city-card" onclick="filterCity('кишинёв',this)"><div class="city-icon">🌆</div><div class="city-name" data-ru="Кишинёв" data-ro="Chișinău">Кишинёв</div><div class="city-count" id="cc-kish">—</div></div>
-      <div class="city-card" onclick="filterCity('бендеры',this)"><div class="city-icon">🏛️</div><div class="city-name" data-ru="Бендеры" data-ro="Bender">Бендеры</div><div class="city-count" id="cc-bend">—</div></div>
-      <div class="city-card" onclick="filterCity('рыбница',this)"><div class="city-icon">🏘️</div><div class="city-name" data-ru="Рыбница" data-ro="Râbnița">Рыбница</div><div class="city-count" id="cc-ryb">—</div></div>
-      <div class="city-card" onclick="filterCity('бельцы',this)"><div class="city-icon">🏗️</div><div class="city-name" data-ru="Бельцы" data-ro="Bălți">Бельцы</div><div class="city-count" id="cc-bel">—</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- MAIN -->
-<div class="main-layout" id="listings">
-  <!-- FILTERS -->
-  <aside class="filters">
-    <div class="filters-title">
-      <span data-ru="Фильтры" data-ro="Filtre">Фильтры</span>
-      <button class="filters-reset" onclick="resetFilters()" data-ru="Сбросить" data-ro="Resetează">Сбросить</button>
-    </div>
-    <div class="filter-group">
-      <label data-ru="Тип объекта" data-ro="Tip proprietate">Тип объекта</label>
-      <select id="f-type" onchange="applyFilters()">
-        <option value="" data-ru="Все типы" data-ro="Toate">Все типы</option>
-        <option value="дом">🏠 Дом</option>
-        <option value="квартира">🏢 Квартира</option>
-        <option value="участок">🌿 Участок</option>
-        <option value="коммерция">🏪 Коммерция</option>
-      </select>
-    </div>
-    <div class="filter-group">
-      <label data-ru="Город" data-ro="Oraș">Город</label>
-      <select id="f-city" onchange="applyFilters()">
-        <option value="">Все города</option>
-        <option value="тирасполь">Тирасполь</option>
-        <option value="кишинёв">Кишинёв</option>
-        <option value="бендеры">Бендеры</option>
-        <option value="рыбница">Рыбница</option>
-        <option value="бельцы">Бельцы</option>
-      </select>
-    </div>
-    <div class="filter-group">
-      <label data-ru="Район" data-ro="Cartier">Район</label>
-      <select id="f-district" onchange="applyFilters()">
-        <option value="">Все районы</option>
-        <option value="центр">Центр</option>
-        <option value="балка">Балка</option>
-        <option value="западный">Западный</option>
-        <option value="хутор">Хутор</option>
-        <option value="суклея">Суклея</option>
-      </select>
-    </div>
-    <div class="filter-group">
-      <label data-ru="Цена ($)" data-ro="Preț ($)">Цена ($)</label>
-      <div class="price-row">
-        <input id="f-pmin" type="number" placeholder="От">
-        <input id="f-pmax" type="number" placeholder="До">
-      </div>
-    </div>
-    <div class="filter-group">
-      <label data-ru="Комнат" data-ro="Camere">Комнат</label>
-      <select id="f-rooms" onchange="applyFilters()">
-        <option value="">Любое</option>
-        <option value="1">1</option><option value="2">2</option>
-        <option value="3">3</option><option value="4">4+</option>
-      </select>
-    </div>
-    <div class="filter-group">
-      <label data-ru="Площадь от (м²)" data-ro="Suprafață de la (m²)">Площадь от (м²)</label>
-      <input id="f-area" type="number" placeholder="50">
-    </div>
-    <div class="filter-group">
-      <label><input type="checkbox" id="f-vip" onchange="applyFilters()" style="margin-right:6px">
-      <span data-ru="Только VIP объекты" data-ro="Doar VIP">Только VIP объекты</span></label>
-    </div>
-    <button class="filter-apply" onclick="applyFilters()" data-ru="Применить фильтры" data-ro="Aplică filtre">Применить фильтры</button>
-  </aside>
-
-  <!-- LISTINGS -->
-  <div class="listings-area">
-    <div class="listings-header">
-      <div class="listings-count"><strong id="shown-count">0</strong> <span data-ru="объявлений" data-ro="anunțuri">объявлений</span></div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <select class="sort-select" id="sort-sel" onchange="applyFilters()">
-          <option value="date_desc" data-ru="Новые первые" data-ro="Noi primul">Новые первые</option>
-          <option value="price_asc" data-ru="Цена: дешевле" data-ro="Preț: mai mic">Цена: дешевле</option>
-          <option value="price_desc" data-ru="Цена: дороже" data-ro="Preț: mai mare">Цена: дороже</option>
-          <option value="area_desc" data-ru="Площадь: больше" data-ro="Suprafață: mai mare">Площадь: больше</option>
-        </select>
-        <div class="view-toggle">
-          <button class="vt-btn active" id="vt-grid" onclick="setView('grid')">⊞</button>
-          <button class="vt-btn" id="vt-list" onclick="setView('list')">☰</button>
-        </div>
-      </div>
-    </div>
-    <div id="listings-container" class="listings-grid"></div>
-    <div id="load-more-wrap" style="text-align:center;margin-top:24px;display:none">
-      <button onclick="loadMore()" style="background:var(--bg2);border:1.5px solid var(--border);color:var(--ink);padding:11px 32px;border-radius:10px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;" data-ru="Загрузить ещё" data-ro="Mai multe">Загрузить ещё</button>
-    </div>
-  </div>
-</div>
-
-<!-- MAP -->
-<section class="map-section" id="map-section">
-  <div class="map-section-inner">
-    <div class="section-header">
-      <h2 class="section-title"><em data-ru="Карта" data-ro="Harta">Карта</em> <span data-ru="объявлений" data-ro="anunțurilor">объявлений</span></h2>
-    </div>
-    <div id="map"></div>
-  </div>
-</section>
-
-<!-- WHY -->
-<section class="why-section">
-  <div class="section-header">
-    <h2 class="section-title"><span data-ru="Почему" data-ro="De ce">Почему</span> <em>ESTA</em></h2>
-  </div>
-  <div class="why-grid">
-    <div class="why-card"><div class="why-icon">✦</div><div class="why-title" data-ru="AI поиск" data-ro="Căutare AI">AI поиск</div><div class="why-desc" data-ru="Первый в регионе. Пишешь запрос своими словами — AI подбирает варианты." data-ro="Primul în regiune.">Первый в регионе. Пишешь запрос своими словами — AI подбирает варианты.</div></div>
-    <div class="why-card"><div class="why-icon">🌍</div><div class="why-title" data-ru="Молдова + ПМР" data-ro="Moldova + RMN">Молдова + ПМР</div><div class="why-desc" data-ru="Единая база объявлений двух регионов — Кишинёв, Тирасполь, Бельцы и другие." data-ro="Baza unică a două regiuni.">Единая база объявлений двух регионов.</div></div>
-    <div class="why-card"><div class="why-icon">🔒</div><div class="why-title" data-ru="Проверенные агенты" data-ro="Agenți verificați">Проверенные агенты</div><div class="why-desc" data-ru="Каждый агент проходит верификацию. Только реальные объявления." data-ro="Fiecare agent este verificat.">Каждый агент проходит верификацию.</div></div>
-    <div class="why-card"><div class="why-icon">⚡</div><div class="why-title" data-ru="Быстро и просто" data-ro="Rapid și simplu">Быстро и просто</div><div class="why-desc" data-ru="Разместить объявление за 2 минуты. Кабинет агента, Telegram уведомления." data-ro="Publicați un anunț în 2 minute.">Разместить объявление за 2 минуты.</div></div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer class="footer">
-  <div class="footer-inner">
-    <div class="footer-top">
-      <div>
-        <div class="footer-logo">ESTA.</div>
-        <p class="footer-desc" data-ru="Первый AI-портал недвижимости Молдовы и Приднестровья. Тирасполь · Кишинёв · Бельцы · Бендеры · Рыбница" data-ro="Primul portal AI imobiliar din Moldova și Transnistria.">Первый AI-портал недвижимости Молдовы и Приднестровья.</p>
-        <div style="margin-top:14px;display:flex;gap:10px">
-          <a href="https://t.me/solei3337" style="background:rgba(255,255,255,.1);padding:8px 14px;border-radius:8px;font-size:12px;font-weight:600;color:#fff;transition:background .2s" onmouseover="this.style.background='rgba(255,255,255,.2)'" onmouseout="this.style.background='rgba(255,255,255,.1)'">✈️ Telegram</a>
-          <a href="tel:+37377772473" style="background:rgba(255,255,255,.1);padding:8px 14px;border-radius:8px;font-size:12px;font-weight:600;color:#fff;transition:background .2s" onmouseover="this.style.background='rgba(255,255,255,.2)'" onmouseout="this.style.background='rgba(255,255,255,.1)'">📞 +373 777 72 473</a>
-        </div>
-      </div>
-      <div class="footer-links">
-        <h4 data-ru="Недвижимость" data-ro="Imobiliare">Недвижимость</h4>
-        <a href="#" onclick="filterType('дом')" data-ru="Дома и дачи" data-ro="Case și vile">Дома и дачи</a>
-        <a href="#" onclick="filterType('квартира')" data-ru="Квартиры" data-ro="Apartamente">Квартиры</a>
-        <a href="#" onclick="filterType('участок')" data-ru="Участки" data-ro="Terenuri">Участки</a>
-        <a href="#" onclick="filterType('коммерция')" data-ru="Коммерция" data-ro="Comercial">Коммерческая</a>
-      </div>
-      <div class="footer-links">
-        <h4 data-ru="Агентам" data-ro="Agenților">Агентам</h4>
-        <a href="agent.html" data-ru="Кабинет агента" data-ro="Cabinet agent">Кабинет агента</a>
-        <a href="agent.html" data-ru="Разместить объявление" data-ro="Publicați anunț">Разместить объявление</a>
-        <a href="agent.html" data-ru="VIP размещение — $15" data-ro="Plasare VIP — $15">VIP размещение — $15</a>
-        <a href="dashboard.html" data-ru="Панель управления" data-ro="Panou de control">Панель управления</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2025 ESTA · <span data-ru="Недвижимость Молдовы и ПМР" data-ro="Imobiliare Moldova și RMN">Недвижимость Молдовы и ПМР</span></span>
-      <span data-ru="Тирасполь · +373 777 72 473" data-ro="Tiraspol · +373 777 72 473">Тирасполь · +373 777 72 473</span>
-    </div>
-  </div>
-</footer>
-
-<!-- MODAL -->
-<div class="ov" id="ov" onclick="if(event.target===this)this.classList.remove('open')">
-  <div class="modal">
-    <button class="mc" onclick="document.getElementById('ov').classList.remove('open')">×</button>
-    <div id="modal-form">
-      <h2 class="modal-title" data-ru="Оставить заявку" data-ro="Lasă o cerere">Оставить заявку</h2>
-      <p class="modal-sub" data-ru="Брокер свяжется в течение 30 минут." data-ro="Brokerul vă va contacta în 30 de minute.">Брокер свяжется в течение 30 минут.</p>
-      <div class="modal-prop" id="modal-prop-name"></div>
-      <div class="fg"><label data-ru="Имя" data-ro="Nume">Имя</label><input id="m-name" placeholder="Иван"></div>
-      <div class="fg"><label data-ru="Телефон" data-ro="Telefon">Телефон</label><input id="m-phone" placeholder="+373 777 00 000"></div>
-      <div class="fr2">
-        <div class="fg"><label data-ru="Время" data-ro="Timp">Время</label><select id="m-time"><option>Утром</option><option>Днём</option><option>Вечером</option><option>Любое</option></select></div>
-        <div class="fg"><label data-ru="Связь" data-ro="Contact">Связь</label><select id="m-contact"><option>Звонок</option><option>WhatsApp</option><option>Telegram</option></select></div>
-      </div>
-      <button class="modal-submit" onclick="submitLead()" data-ru="📤 Отправить заявку" data-ro="📤 Trimite cererea">📤 Отправить заявку</button>
-    </div>
-    <div class="modal-success" id="modal-success">
-      <div class="ms-icon">✅</div>
-      <h3 class="ms-title" data-ru="Заявка принята!" data-ro="Cerere acceptată!">Заявка принята!</h3>
-      <p class="ms-desc" data-ru="Свяжемся в течение 30 минут." data-ro="Vă vom contacta în 30 de minute.">Свяжемся в течение 30 минут.<br><a href="https://t.me/solei3337" style="color:var(--sand);font-weight:700">✈️ @solei3337</a></p>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-const API = 'https://web-production-e24bc.up.railway.app';
-const DEMO = [
-  {id:'d1',title:'Дом 130м² в Центре, 4 комнаты',type:'дом',district:'центр',city:'тирасполь',price:92000,area:130,rooms:4,desc:'Кирпичный дом 2008г. Евроремонт, гараж, двор 6 соток.',img:'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=600',is_vip:true,lat:46.843,lng:29.600},
-  {id:'d2',title:'2-комн. квартира, ул. Ленина, 3/5эт',type:'квартира',district:'центр',city:'тирасполь',price:38000,area:54,rooms:2,floor:'3/5',desc:'Светлая квартира с ремонтом. Рядом парк Победы.',img:'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600',is_vip:false,lat:46.845,lng:29.607},
-  {id:'d3',title:'Дом 180м² на Балке, 10 соток',type:'дом',district:'балка',city:'тирасполь',price:115000,area:180,rooms:5,desc:'Двухэтажный дом, сад, беседка, летняя кухня.',img:'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=600',is_vip:true,lat:46.858,lng:29.620},
-  {id:'d4',title:'3-комн. квартира, Западный район',type:'квартира',district:'западный',city:'тирасполь',price:52000,area:72,rooms:3,floor:'4/9',desc:'После капремонта, застеклённая лоджия.',img:'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=600',is_vip:false,lat:46.840,lng:29.591},
-  {id:'d5',title:'Участок 8 соток под строительство',type:'участок',district:'суклея',city:'тирасполь',price:18000,area:null,rooms:null,desc:'Ровный участок, все коммуникации. Документы готовы.',img:'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600',is_vip:false,lat:46.830,lng:29.615},
-  {id:'d6',title:'Студия 32м², центр Тирасполя',type:'квартира',district:'центр',city:'тирасполь',price:24000,area:32,rooms:1,floor:'2/5',desc:'Дизайнерский ремонт, встроенная кухня.',img:'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600',is_vip:false,lat:46.842,lng:29.603},
-  {id:'d7',title:'Коммерческое помещение 85м², центр',type:'коммерция',district:'центр',city:'тирасполь',price:78000,area:85,rooms:null,desc:'Первый этаж, отдельный вход, витринные окна.',img:'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600',is_vip:false,lat:46.846,lng:29.598},
-  {id:'d8',title:'Дом 95м², Кировское, участок 12 соток',type:'дом',district:'кировское',city:'тирасполь',price:58000,area:95,rooms:3,desc:'Газ, вода, свет. Сад 12 соток.',img:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600',is_vip:false,lat:46.862,lng:29.627},
-  {id:'d9',title:'4-комн. квартира, вид на город',type:'квартира',district:'центр',city:'тирасполь',price:67000,area:95,rooms:4,floor:'7/9',desc:'Панорамный вид, два санузла, подземный паркинг.',img:'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600',is_vip:true,lat:46.844,lng:29.605},
-  {id:'d10',title:'Дача с садом, 15 соток, Хутор',type:'дом',district:'хутор',city:'тирасполь',price:22000,area:45,rooms:2,desc:'Плодовый сад, колодец, летний душ, баня.',img:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600',is_vip:false,lat:46.835,lng:29.612},
-];
-
-let allListings = [];
-let filtered = [];
-let currentView = 'grid';
-let offset = 0;
-const PAGE = 12;
-let currentLang = 'ru';
-let map, markers = [];
-let favs = JSON.parse(localStorage.getItem('esta_favs')||'[]');
-let currentProp = '';
-
-// ── INIT ──
-window.onload = async () => {
-  await loadListings();
-  initMap();
-  updateCityCounts();
-};
-
-async function loadListings() {
-  showSkeletons();
-  try {
-    const r = await fetch(`${API}/listings?limit=200`);
-    const d = await r.json();
-    allListings = (d.listings||[]).length > 0 ? d.listings : DEMO;
-  } catch {
-    allListings = DEMO;
-  }
-  document.getElementById('total-count').textContent = allListings.length;
-  document.getElementById('vip-count').textContent = allListings.filter(l=>l.is_vip).length;
-  applyFilters();
-}
-
-function showSkeletons() {
-  const c = document.getElementById('listings-container');
-  c.innerHTML = Array(6).fill('<div class="skeleton skel-card"></div>').join('');
-}
-
-// ── FILTERS ──
-function applyFilters() {
-  const type   = document.getElementById('f-type')?.value || document.getElementById('s-type')?.value || '';
-  const city   = document.getElementById('f-city')?.value || document.getElementById('s-city')?.value || '';
-  const dist   = document.getElementById('f-district')?.value || '';
-  const pmin   = parseInt(document.getElementById('f-pmin')?.value||document.getElementById('s-price')?.value||0)||0;
-  const pmax   = parseInt(document.getElementById('f-pmax')?.value||document.getElementById('s-price')?.value||0)||0;
-  const rooms  = document.getElementById('f-rooms')?.value || document.getElementById('s-rooms')?.value || '';
-  const area   = parseInt(document.getElementById('f-area')?.value||0)||0;
-  const vip    = document.getElementById('f-vip')?.checked || false;
-  const sort   = document.getElementById('sort-sel')?.value || 'date_desc';
-
-  filtered = allListings.filter(l => {
-    if (type && l.type !== type) return false;
-    if (city && !(l.city||l.district||'').toLowerCase().includes(city)) return false;
-    if (dist && !(l.district||'').toLowerCase().includes(dist)) return false;
-    if (pmax && l.price > pmax) return false;
-    if (pmin && l.price < pmin) return false;
-    if (rooms) { const r=parseInt(rooms); if(rooms==='4') { if((l.rooms||0)<4) return false; } else if(l.rooms!==r) return false; }
-    if (area && (l.area||0) < area) return false;
-    if (vip && !l.is_vip) return false;
-    return true;
-  });
-
-  const sm = {price_asc:a=>a.price, price_desc:a=>-a.price, area_desc:a=>-(a.area||0)};
-  if (sm[sort]) filtered.sort((a,b)=>sm[sort](a)-sm[sort](b));
-  filtered.sort((a,b)=>(b.is_vip?1:0)-(a.is_vip?1:0));
-
-  offset = 0;
-  document.getElementById('shown-count').textContent = filtered.length;
-  renderListings(true);
-  updateMapMarkers();
-}
-
-function resetFilters() {
-  ['f-type','f-city','f-district','f-rooms'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  ['f-pmin','f-pmax','f-area'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  const vip=document.getElementById('f-vip');if(vip)vip.checked=false;
-  applyFilters();
-}
-
-function filterCity(city, el) {
-  document.querySelectorAll('.city-card').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-  const fc = document.getElementById('f-city');
-  if(fc) fc.value = city;
-  applyFilters();
-}
-
-function filterType(type) {
-  const ft = document.getElementById('f-type');
-  if(ft) ft.value = type;
-  applyFilters();
-  document.getElementById('listings').scrollIntoView({behavior:'smooth'});
-}
-
-function setRegion(r) { applyFilters(); }
-
-// ── RENDER ──
-function renderListings(reset=false) {
-  const c = document.getElementById('listings-container');
-  const slice = filtered.slice(offset, offset + PAGE);
-  const isGrid = currentView === 'grid';
-
-  if (reset) {
-    c.className = isGrid ? 'listings-grid' : 'listings-list-view';
-    c.innerHTML = '';
-  }
-
-  if (filtered.length === 0) {
-    c.innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="empty-icon">🏚️</div><h3>Ничего не найдено</h3><p>Попробуй изменить фильтры</p></div>`;
-    document.getElementById('load-more-wrap').style.display = 'none';
-    return;
-  }
-
-  slice.forEach((l,i) => {
-    const isFav = favs.includes(l.id);
-    const delay = (i%PAGE)*0.04;
-    if (isGrid) {
-      c.innerHTML += `
-      <div class="card" style="animation-delay:${delay}s">
-        <div class="card-img">
-          <img src="${l.img||''}" alt="${l.title}" loading="lazy" onerror="this.style.display='none'">
-          <div class="card-badges">
-            ${l.is_vip?'<span class="badge badge-vip">⭐ VIP</span>':''}
-            <span class="badge badge-type">${l.type||'объект'}</span>
-          </div>
-          <button class="card-fav ${isFav?'active':''}" onclick="toggleFav('${l.id}',this)">${isFav?'❤️':'🤍'}</button>
-        </div>
-        <div class="card-body">
-          <div class="card-title">${l.title}</div>
-          <div class="card-meta">
-            <span>📍 ${l.district||l.city||'—'}</span>
-            ${l.area?`<span>📐 ${l.area}м²</span>`:''}
-            ${l.rooms?`<span>🚪 ${l.rooms}к</span>`:''}
-            ${l.floor?`<span>↑ ${l.floor}</span>`:''}
-          </div>
-          <div class="card-price">$${Number(l.price).toLocaleString('ru')}</div>
-          <div class="card-price-rub">≈ ${Math.round(l.price*18).toLocaleString('ru')} руб.</div>
-          <div class="card-footer">
-            <button class="card-btn" onclick="openModal('${l.title} · $${l.price.toLocaleString()}')">Заявка</button>
-            ${l.link?`<button class="card-btn primary" onclick="window.open('${l.link}')">Смотреть</button>`:'<button class="card-btn primary" onclick="openModal(\''+l.title+'\')">Подробнее</button>'}
-          </div>
-        </div>
-      </div>`;
-    } else {
-      c.innerHTML += `
-      <div class="list-card" style="animation-delay:${delay}s">
-        <div class="card-img">
-          <img src="${l.img||''}" alt="${l.title}" loading="lazy" onerror="this.style.display='none'">
-          <div class="card-badges">${l.is_vip?'<span class="badge badge-vip">⭐ VIP</span>':''}</div>
-          <button class="card-fav ${isFav?'active':''}" onclick="toggleFav('${l.id}',this)">${isFav?'❤️':'🤍'}</button>
-        </div>
-        <div class="card-body">
-          <div>
-            <div class="card-title">${l.title}</div>
-            <div class="card-meta">
-              <span>📍 ${l.district||l.city||'—'}</span>
-              ${l.area?`<span>📐 ${l.area}м²</span>`:''}
-              ${l.rooms?`<span>🚪 ${l.rooms}к</span>`:''}
-              ${l.floor?`<span>↑ ${l.floor}</span>`:''}
-            </div>
-            <div class="card-desc">${l.desc||''}</div>
-          </div>
-          <div style="display:flex;align-items:flex-end;justify-content:space-between">
-            <div><div class="card-price">$${Number(l.price).toLocaleString('ru')}</div><div class="card-price-rub">≈ ${Math.round(l.price*18).toLocaleString('ru')} руб.</div></div>
-            <div class="card-footer" style="margin-top:0">
-              <button class="card-btn" onclick="openModal('${l.title} · $${l.price.toLocaleString()}')">Заявка</button>
-              <button class="card-btn primary" onclick="openModal('${l.title}')">Подробнее</button>
-            </div>
-          </div>
-        </div>
-      </div>`;
-    }
-  });
-
-  offset += PAGE;
-  document.getElementById('load-more-wrap').style.display = offset < filtered.length ? 'block' : 'none';
-}
-
-function loadMore() { renderListings(false); }
-
-function setView(v) {
-  currentView = v;
-  document.getElementById('vt-grid').classList.toggle('active', v==='grid');
-  document.getElementById('vt-list').classList.toggle('active', v==='list');
-  renderListings(true);
-}
-
-// ── FAVOURITES ──
-function toggleFav(id, btn) {
-  const i = favs.indexOf(id);
-  if (i>=0) { favs.splice(i,1); btn.textContent='🤍'; btn.classList.remove('active'); }
-  else { favs.push(id); btn.textContent='❤️'; btn.classList.add('active'); }
-  localStorage.setItem('esta_favs', JSON.stringify(favs));
-  toast(i>=0 ? 'Убрано из избранного' : '❤️ Добавлено в избранное');
-}
-
-// ── MAP ──
-function initMap() {
-  map = L.map('map').setView([46.843,29.620],11);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'© CartoDB'}).addTo(map);
-  updateMapMarkers();
-}
-
-function updateMapMarkers() {
-  if (!map) return;
-  markers.forEach(m=>map.removeLayer(m));
-  markers=[];
-  const icon = L.divIcon({className:'',html:`<div style="width:12px;height:12px;border-radius:50%;background:#b5956a;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.3)"></div>`,iconSize:[12,12]});
-  const vipIcon = L.divIcon({className:'',html:`<div style="width:16px;height:16px;border-radius:50%;background:#b5956a;border:3px solid #fff;box-shadow:0 2px 8px rgba(181,149,106,.6)"></div>`,iconSize:[16,16]});
-  filtered.forEach(l=>{
-    const lat = l.lat || (46.843+(Math.random()-.5)*.06);
-    const lng = l.lng || (29.620+(Math.random()-.5)*.08);
-    const m = L.marker([lat,lng],{icon:l.is_vip?vipIcon:icon}).addTo(map);
-    m.bindPopup(`<b style="font-size:13px">${l.title}</b><br><span style="color:#b5956a;font-weight:700;font-size:15px">$${Number(l.price).toLocaleString()}</span><br><small>${l.district||''}</small>`);
-    markers.push(m);
-  });
-}
-
-// ── CITY COUNTS ──
-function updateCityCounts() {
-  const total = allListings.length;
-  const tir = allListings.filter(l=>(l.city||l.district||'').includes('ирасполь')||!l.city).length;
-  document.getElementById('cc-all').textContent = total + ' объявлений';
-  document.getElementById('cc-tir').textContent = tir + ' объявлений';
-  ['кишинёв','бендеры','рыбница','бельцы'].forEach((c,i)=>{
-    const ids=['cc-kish','cc-bend','cc-ryb','cc-bel'];
-    const n = allListings.filter(l=>(l.city||'').includes(c)).length;
-    document.getElementById(ids[i]).textContent = n ? n+' объявлений' : 'скоро';
-  });
-}
-
-// ── AI SEARCH ──
-function toggleAI() {
-  const p = document.getElementById('aiPanel');
-  p.classList.toggle('show');
-  if(p.classList.contains('show')) { p.scrollIntoView({behavior:'smooth',block:'nearest'}); document.getElementById('aiQuery').focus(); }
-}
-function setAI(t){ document.getElementById('aiQuery').value=t; document.getElementById('aiPanel').classList.add('show'); }
-
-async function aiSearch() {
-  const query = document.getElementById('aiQuery').value.trim();
-  if (!query) { toast('Напиши запрос'); return; }
-  const btn = document.getElementById('aiSendBtn');
-  btn.textContent='Думаю...'; btn.disabled=true;
-  try {
-    const r = await fetch(`${API}/ai-search`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query,limit:4})});
-    const d = await r.json();
-    const res = document.getElementById('aiResults');
-    res.classList.add('show');
-    document.getElementById('aiComment').textContent = d.comment||'';
-    const matches = d.matches||[];
-    document.getElementById('aiCards').innerHTML = matches.length
-      ? matches.map(m=>{const l=m.listing||{};return `
-        <div style="background:rgba(255,255,255,.08);border-radius:10px;padding:14px;border:1px solid rgba(255,255,255,.12)">
-          <img src="${l.img||''}" style="width:100%;height:110px;object-fit:cover;border-radius:7px;margin-bottom:10px" onerror="this.style.display='none'">
-          <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:4px">${l.title||''}</div>
-          <div style="font-size:18px;font-weight:700;color:var(--sand2);margin-bottom:6px">$${Number(l.price||0).toLocaleString('ru')}</div>
-          <div style="font-size:11px;color:rgba(255,255,255,.5);margin-bottom:10px">${m.reason||''}</div>
-          <button onclick="openModal('${(l.title||'').replace(/'/g,"\\'")}·$${l.price}')" style="width:100%;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;padding:7px;border-radius:7px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;cursor:pointer;">Оставить заявку</button>
-        </div>`}).join('')
-      : '<div style="color:rgba(255,255,255,.5);font-size:13px">Ничего не найдено по этому запросу</div>';
-  } catch(e) { toast('Ошибка AI: '+e.message); }
-  btn.textContent='Найти ✦'; btn.disabled=false;
-}
-
-// ── MODAL / LEADS ──
-function openModal(prop='') {
-  currentProp = prop;
-  document.getElementById('modal-prop-name').textContent = prop || 'Общий вопрос';
-  document.getElementById('modal-form').style.display='';
-  document.getElementById('modal-success').classList.remove('show');
-  document.getElementById('ov').classList.add('open');
-}
-
-async function submitLead() {
-  const name = document.getElementById('m-name').value.trim();
-  const phone = document.getElementById('m-phone').value.trim();
-  if (!name||!phone) { toast('⚠️ Заполни имя и телефон'); return; }
-  try {
-    await fetch(`${API}/leads`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,phone,time:document.getElementById('m-time').value,contact:document.getElementById('m-contact').value,listing:currentProp})});
-  } catch {}
-  document.getElementById('modal-form').style.display='none';
-  document.getElementById('modal-success').classList.add('show');
-}
-
-// ── LANG ──
-function setLang(lang, btn) {
-  currentLang = lang;
-  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  document.querySelectorAll('[data-ru]').forEach(el => {
-    el.textContent = lang==='ro' ? (el.dataset.ro||el.dataset.ru) : el.dataset.ru;
-  });
-}
-
-// ── UTILS ──
-function showPage(id) { document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); }
-function toast(m){const el=document.getElementById('toast');el.textContent=m;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2800);}
-</script>
-</body>
-</html>
+.modal{background:var(--white);border-radius:var(--r2);padding:36px;width:100%;max-width:460px;position:relative;max-height:92vh;overflow-y:auto;animation:scaleIn .22s ease;}
+@keyframes scaleIn{from{opacity:0;transform:scale(.93)}to{opacity:1;transform:none}}
+.mc{position:absolute;top:14px;right:16px;background:var(--bg2);border:none;color:var(--muted);width:28px;height:28px;border-radiu
