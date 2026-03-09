@@ -69,7 +69,7 @@ button{cursor:pointer;font-family:'Nunito',sans-serif;}
 /* ══ HERO ══ */
 .hero {
   background:linear-gradient(160deg,var(--ink) 0%,var(--ink2) 60%,#3d2f1a 100%);
-  padding:64px 32px 0; position:relative; overflow:hidden;
+  padding:64px 32px 0; position:relative;
 }
 .hero::before {
   content:''; position:absolute; inset:0;
@@ -96,7 +96,8 @@ button{cursor:pointer;font-family:'Nunito',sans-serif;}
 /* ══ SEARCH BOX ══ */
 .search-box {
   background:var(--white);border-radius:16px 16px 0 0;
-  padding:24px 28px 0; box-shadow:0 -8px 40px rgba(0,0,0,.3);
+  padding:24px 28px 24px; box-shadow:0 -8px 40px rgba(0,0,0,.3);
+  position:relative; z-index:10;
 }
 .search-tabs{display:flex;gap:0;margin-bottom:20px;border-bottom:2px solid var(--bg2);}
 .st{padding:10px 20px;border:none;background:transparent;font-family:'Nunito',sans-serif;font-size:14px;font-weight:600;color:var(--muted);transition:all .18s;border-bottom:2px solid transparent;margin-bottom:-2px;}
@@ -119,7 +120,7 @@ button{cursor:pointer;font-family:'Nunito',sans-serif;}
 .search-btn:hover{background:var(--sand);}
 .ai-search-hint{
   background:linear-gradient(135deg,rgba(74,63,140,.08),rgba(124,109,250,.05));
-  border:1px solid rgba(74,63,140,.15);border-radius:0 0 12px 12px;
+  border:1px solid rgba(74,63,140,.15);border-radius:0 0 10px 10px;
   padding:12px 28px;display:flex;align-items:center;gap:12px;
   cursor:pointer;transition:all .2s;
 }
@@ -329,4 +330,628 @@ button{cursor:pointer;font-family:'Nunito',sans-serif;}
   <div class="nav-logo">ESTA<span>.</span></div>
   <div class="nav-region">
     <button class="nr-btn active" onclick="setRegion('all',this)" data-ru="Все регионы" data-ro="Toate regiunile">Все регионы</button>
-    <button class="nr-btn" onclick="setRegion('pmr',this)" data-ru="ПМР" data-ro="RMN">ПМР</b
+    <button class="nr-btn" onclick="setRegion('pmr',this)" data-ru="ПМР" data-ro="RMN">ПМР</button>
+    <button class="nr-btn" onclick="setRegion('md',this)" data-ru="Молдова" data-ro="Moldova">Молдова</button>
+  </div>
+  <div class="nav-links">
+    <button class="nav-link" onclick="showPage('listings')" data-ru="Объявления" data-ro="Anunțuri">Объявления</button>
+    <button class="nav-link" onclick="showPage('map-section')" data-ru="Карта" data-ro="Hartă">Карта</button>
+    <button class="nav-link nav-ai" onclick="toggleAI()" data-ru="✦ AI Поиск" data-ro="✦ Căutare AI">✦ AI Поиск</button>
+    <button class="nav-link" onclick="window.open('agent.html','_blank')" data-ru="Кабинет агента" data-ro="Cabinet agent">Кабинет агента</button>
+    <button class="nav-link primary" onclick="openModal()" data-ru="Разместить" data-ro="Adaugă">Разместить</button>
+  </div>
+  <div class="nav-lang">
+    <button class="lang-btn active" onclick="setLang('ru',this)">RU</button>
+    <button class="lang-btn" onclick="setLang('ro',this)">RO</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag"><span class="dot"></span> <span data-ru="Молдова · ПМР · Первый AI-портал" data-ro="Moldova · RMN · Primul portal AI">Молдова · ПМР · Первый AI-портал</span></div>
+    <h1><span data-ru="Найди дом, который" data-ro="Găsește casa care">Найди дом, который</span><br><em><span data-ru="ждёт тебя" data-ro="te aşteaptă">ждёт тебя</span></em></h1>
+    <p class="hero-sub" data-ru="Лучшие объекты Тирасполя, Кишинёва и всего региона. Честные цены, проверенные агенты." data-ro="Cele mai bune proprietăți din Tiraspol, Chișinău și întreaga regiune.">Лучшие объекты Тирасполя, Кишинёва и всего региона. Честные цены, проверенные агенты.</p>
+
+    <div class="search-box">
+      <div class="search-tabs">
+        <button class="st active" data-ru="Купить" data-ro="Cumpără">Купить</button>
+        <button class="st" data-ru="Снять" data-ro="Chiriază">Снять</button>
+        <button class="st" data-ru="Коммерция" data-ro="Comercial">Коммерция</button>
+        <button class="st" data-ru="Участки" data-ro="Terenuri">Участки</button>
+      </div>
+      <div class="search-row">
+        <div class="sf">
+          <label data-ru="Город" data-ro="Oraș">Город</label>
+          <select id="s-city" onchange="applyFilters()">
+            <option value="" data-ru="Все города" data-ro="Toate orașele">Все города</option>
+            <option value="тирасполь" data-ru="Тирасполь" data-ro="Tiraspol">Тирасполь</option>
+            <option value="кишинёв" data-ru="Кишинёв" data-ro="Chișinău">Кишинёв</option>
+            <option value="бендеры" data-ru="Бендеры" data-ro="Bender">Бендеры</option>
+            <option value="рыбница" data-ru="Рыбница" data-ro="Râbnița">Рыбница</option>
+            <option value="бельцы" data-ru="Бельцы" data-ro="Bălți">Бельцы</option>
+            <option value="дубоссары" data-ru="Дубоссары" data-ro="Dubăsari">Дубоссары</option>
+          </select>
+        </div>
+        <div class="sf">
+          <label data-ru="Тип" data-ro="Tip">Тип</label>
+          <select id="s-type" onchange="applyFilters()">
+            <option value="" data-ru="Все типы" data-ro="Toate tipurile">Все типы</option>
+            <option value="дом" data-ru="Дом / Дача" data-ro="Casă">Дом / Дача</option>
+            <option value="квартира" data-ru="Квартира" data-ro="Apartament">Квартира</option>
+            <option value="участок" data-ru="Участок" data-ro="Teren">Участок</option>
+            <option value="коммерция" data-ru="Коммерция" data-ro="Comercial">Коммерция</option>
+          </select>
+        </div>
+        <div class="sf">
+          <label data-ru="Цена до ($)" data-ro="Preț până la ($)">Цена до ($)</label>
+          <input id="s-price" type="number" placeholder="150 000" onchange="applyFilters()">
+        </div>
+        <div class="sf">
+          <label data-ru="Комнат" data-ro="Camere">Комнат</label>
+          <select id="s-rooms" onchange="applyFilters()">
+            <option value="">Любое</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4+</option>
+          </select>
+        </div>
+        <button class="search-btn" onclick="applyFilters()" data-ru="Найти" data-ro="Caută">Найти</button>
+      </div>
+      <div class="ai-search-hint" onclick="toggleAI()">
+        <span style="font-size:20px">✦</span>
+        <span class="ai-hint-text"><strong data-ru="AI поиск:" data-ro="Căutare AI:">AI поиск:</strong> <span data-ru='напиши "дом для семьи до $90к на Балке"' data-ro='scrie "casă pentru familie până la $90k"'>напиши "дом для семьи до $90к на Балке" — AI подберёт сам</span></span>
+        <span style="margin-left:auto;font-size:12px;color:var(--ai);font-weight:700" data-ru="Попробовать →" data-ro="Încearcă →">Попробовать →</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item"><strong id="total-count">—</strong> <span data-ru="объявлений" data-ro="anunțuri">объявлений</span></div>
+    <div class="divider"></div>
+    <div class="stat-item"><strong id="city-count">6</strong> <span data-ru="городов" data-ro="orașe">городов</span></div>
+    <div class="divider"></div>
+    <div class="stat-item"><strong id="vip-count">—</strong> <span data-ru="VIP объектов" data-ro="proprietăți VIP">VIP объектов</span></div>
+    <div class="divider"></div>
+    <div class="stat-item" style="margin-left:auto;color:var(--green);">● <span data-ru="Данные обновляются в реальном времени" data-ro="Date actualizate în timp real">Данные обновляются в реальном времени</span></div>
+  </div>
+</div>
+
+<!-- AI PANEL -->
+<div style="max-width:1100px;margin:24px auto 0;padding:0 32px">
+  <div class="ai-panel" id="aiPanel">
+    <div class="ai-panel-header">
+      <div class="ai-logo">✦</div>
+      <div>
+        <div class="ai-title" data-ru="AI поиск недвижимости" data-ro="Căutare AI imobiliară">AI поиск недвижимости</div>
+        <div class="ai-sub" data-ru="Первый в Молдове и ПМР — опиши что хочешь своими словами" data-ro="Primul în Moldova și RMN">Первый в Молдове и ПМР — опиши что хочешь своими словами</div>
+      </div>
+      <button onclick="toggleAI()" style="margin-left:auto;background:rgba(255,255,255,.1);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;">×</button>
+    </div>
+    <div class="ai-input-row">
+      <textarea class="ai-ta" id="aiQuery" rows="1" placeholder="Дом для семьи до $90 000 на Балке, 3-4 комнаты..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();aiSearch()}"></textarea>
+      <button class="ai-send" onclick="aiSearch()" id="aiSendBtn">Найти ✦</button>
+    </div>
+    <div class="ai-chips">
+      <span class="ai-chip" onclick="setAI(this.textContent)">🏠 Дом до $80к, тихий район</span>
+      <span class="ai-chip" onclick="setAI(this.textContent)">🏢 2-комн. квартира в центре</span>
+      <span class="ai-chip" onclick="setAI(this.textContent)">👨‍👩‍👧 Дом для семьи с детьми</span>
+      <span class="ai-chip" onclick="setAI(this.textContent)">📈 Инвестиция до $50к</span>
+      <span class="ai-chip" onclick="setAI(this.textContent)">🌿 Участок под строительство</span>
+    </div>
+    <div class="ai-results" id="aiResults">
+      <div class="ai-comment" id="aiComment"></div>
+      <div class="ai-cards" id="aiCards"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CITIES -->
+<section class="cities-section">
+  <div class="cities-inner">
+    <div class="section-header">
+      <h2 class="section-title"><em data-ru="Города" data-ro="Orașe">Города</em> <span data-ru="региона" data-ro="regiunii">региона</span></h2>
+    </div>
+    <div class="cities-grid" id="citiesGrid">
+      <div class="city-card active" onclick="filterCity('',this)"><div class="city-icon">🗺️</div><div class="city-name" data-ru="Все города" data-ro="Toate">Все города</div><div class="city-count" id="cc-all">— объявлений</div></div>
+      <div class="city-card" onclick="filterCity('тирасполь',this)"><div class="city-icon">🏙️</div><div class="city-name">Тирасполь</div><div class="city-count" id="cc-tir">—</div></div>
+      <div class="city-card" onclick="filterCity('кишинёв',this)"><div class="city-icon">🌆</div><div class="city-name" data-ru="Кишинёв" data-ro="Chișinău">Кишинёв</div><div class="city-count" id="cc-kish">—</div></div>
+      <div class="city-card" onclick="filterCity('бендеры',this)"><div class="city-icon">🏛️</div><div class="city-name" data-ru="Бендеры" data-ro="Bender">Бендеры</div><div class="city-count" id="cc-bend">—</div></div>
+      <div class="city-card" onclick="filterCity('рыбница',this)"><div class="city-icon">🏘️</div><div class="city-name" data-ru="Рыбница" data-ro="Râbnița">Рыбница</div><div class="city-count" id="cc-ryb">—</div></div>
+      <div class="city-card" onclick="filterCity('бельцы',this)"><div class="city-icon">🏗️</div><div class="city-name" data-ru="Бельцы" data-ro="Bălți">Бельцы</div><div class="city-count" id="cc-bel">—</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN -->
+<div class="main-layout" id="listings">
+  <!-- FILTERS -->
+  <aside class="filters">
+    <div class="filters-title">
+      <span data-ru="Фильтры" data-ro="Filtre">Фильтры</span>
+      <button class="filters-reset" onclick="resetFilters()" data-ru="Сбросить" data-ro="Resetează">Сбросить</button>
+    </div>
+    <div class="filter-group">
+      <label data-ru="Тип объекта" data-ro="Tip proprietate">Тип объекта</label>
+      <select id="f-type" onchange="applyFilters()">
+        <option value="" data-ru="Все типы" data-ro="Toate">Все типы</option>
+        <option value="дом">🏠 Дом</option>
+        <option value="квартира">🏢 Квартира</option>
+        <option value="участок">🌿 Участок</option>
+        <option value="коммерция">🏪 Коммерция</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label data-ru="Город" data-ro="Oraș">Город</label>
+      <select id="f-city" onchange="applyFilters()">
+        <option value="">Все города</option>
+        <option value="тирасполь">Тирасполь</option>
+        <option value="кишинёв">Кишинёв</option>
+        <option value="бендеры">Бендеры</option>
+        <option value="рыбница">Рыбница</option>
+        <option value="бельцы">Бельцы</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label data-ru="Район" data-ro="Cartier">Район</label>
+      <select id="f-district" onchange="applyFilters()">
+        <option value="">Все районы</option>
+        <option value="центр">Центр</option>
+        <option value="балка">Балка</option>
+        <option value="западный">Западный</option>
+        <option value="хутор">Хутор</option>
+        <option value="суклея">Суклея</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label data-ru="Цена ($)" data-ro="Preț ($)">Цена ($)</label>
+      <div class="price-row">
+        <input id="f-pmin" type="number" placeholder="От">
+        <input id="f-pmax" type="number" placeholder="До">
+      </div>
+    </div>
+    <div class="filter-group">
+      <label data-ru="Комнат" data-ro="Camere">Комнат</label>
+      <select id="f-rooms" onchange="applyFilters()">
+        <option value="">Любое</option>
+        <option value="1">1</option><option value="2">2</option>
+        <option value="3">3</option><option value="4">4+</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label data-ru="Площадь от (м²)" data-ro="Suprafață de la (m²)">Площадь от (м²)</label>
+      <input id="f-area" type="number" placeholder="50">
+    </div>
+    <div class="filter-group">
+      <label><input type="checkbox" id="f-vip" onchange="applyFilters()" style="margin-right:6px">
+      <span data-ru="Только VIP объекты" data-ro="Doar VIP">Только VIP объекты</span></label>
+    </div>
+    <button class="filter-apply" onclick="applyFilters()" data-ru="Применить фильтры" data-ro="Aplică filtre">Применить фильтры</button>
+  </aside>
+
+  <!-- LISTINGS -->
+  <div class="listings-area">
+    <div class="listings-header">
+      <div class="listings-count"><strong id="shown-count">0</strong> <span data-ru="объявлений" data-ro="anunțuri">объявлений</span></div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <select class="sort-select" id="sort-sel" onchange="applyFilters()">
+          <option value="date_desc" data-ru="Новые первые" data-ro="Noi primul">Новые первые</option>
+          <option value="price_asc" data-ru="Цена: дешевле" data-ro="Preț: mai mic">Цена: дешевле</option>
+          <option value="price_desc" data-ru="Цена: дороже" data-ro="Preț: mai mare">Цена: дороже</option>
+          <option value="area_desc" data-ru="Площадь: больше" data-ro="Suprafață: mai mare">Площадь: больше</option>
+        </select>
+        <div class="view-toggle">
+          <button class="vt-btn active" id="vt-grid" onclick="setView('grid')">⊞</button>
+          <button class="vt-btn" id="vt-list" onclick="setView('list')">☰</button>
+        </div>
+      </div>
+    </div>
+    <div id="listings-container" class="listings-grid"></div>
+    <div id="load-more-wrap" style="text-align:center;margin-top:24px;display:none">
+      <button onclick="loadMore()" style="background:var(--bg2);border:1.5px solid var(--border);color:var(--ink);padding:11px 32px;border-radius:10px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;" data-ru="Загрузить ещё" data-ro="Mai multe">Загрузить ещё</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAP -->
+<section class="map-section" id="map-section">
+  <div class="map-section-inner">
+    <div class="section-header">
+      <h2 class="section-title"><em data-ru="Карта" data-ro="Harta">Карта</em> <span data-ru="объявлений" data-ro="anunțurilor">объявлений</span></h2>
+    </div>
+    <div id="map"></div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="why-section">
+  <div class="section-header">
+    <h2 class="section-title"><span data-ru="Почему" data-ro="De ce">Почему</span> <em>ESTA</em></h2>
+  </div>
+  <div class="why-grid">
+    <div class="why-card"><div class="why-icon">✦</div><div class="why-title" data-ru="AI поиск" data-ro="Căutare AI">AI поиск</div><div class="why-desc" data-ru="Первый в регионе. Пишешь запрос своими словами — AI подбирает варианты." data-ro="Primul în regiune.">Первый в регионе. Пишешь запрос своими словами — AI подбирает варианты.</div></div>
+    <div class="why-card"><div class="why-icon">🌍</div><div class="why-title" data-ru="Молдова + ПМР" data-ro="Moldova + RMN">Молдова + ПМР</div><div class="why-desc" data-ru="Единая база объявлений двух регионов — Кишинёв, Тирасполь, Бельцы и другие." data-ro="Baza unică a două regiuni.">Единая база объявлений двух регионов.</div></div>
+    <div class="why-card"><div class="why-icon">🔒</div><div class="why-title" data-ru="Проверенные агенты" data-ro="Agenți verificați">Проверенные агенты</div><div class="why-desc" data-ru="Каждый агент проходит верификацию. Только реальные объявления." data-ro="Fiecare agent este verificat.">Каждый агент проходит верификацию.</div></div>
+    <div class="why-card"><div class="why-icon">⚡</div><div class="why-title" data-ru="Быстро и просто" data-ro="Rapid și simplu">Быстро и просто</div><div class="why-desc" data-ru="Разместить объявление за 2 минуты. Кабинет агента, Telegram уведомления." data-ro="Publicați un anunț în 2 minute.">Разместить объявление за 2 минуты.</div></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">ESTA.</div>
+        <p class="footer-desc" data-ru="Первый AI-портал недвижимости Молдовы и Приднестровья. Тирасполь · Кишинёв · Бельцы · Бендеры · Рыбница" data-ro="Primul portal AI imobiliar din Moldova și Transnistria.">Первый AI-портал недвижимости Молдовы и Приднестровья.</p>
+        <div style="margin-top:14px;display:flex;gap:10px">
+          <a href="https://t.me/solei3337" style="background:rgba(255,255,255,.1);padding:8px 14px;border-radius:8px;font-size:12px;font-weight:600;color:#fff;transition:background .2s" onmouseover="this.style.background='rgba(255,255,255,.2)'" onmouseout="this.style.background='rgba(255,255,255,.1)'">✈️ Telegram</a>
+          <a href="tel:+37377772473" style="background:rgba(255,255,255,.1);padding:8px 14px;border-radius:8px;font-size:12px;font-weight:600;color:#fff;transition:background .2s" onmouseover="this.style.background='rgba(255,255,255,.2)'" onmouseout="this.style.background='rgba(255,255,255,.1)'">📞 +373 777 72 473</a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4 data-ru="Недвижимость" data-ro="Imobiliare">Недвижимость</h4>
+        <a href="#" onclick="filterType('дом')" data-ru="Дома и дачи" data-ro="Case și vile">Дома и дачи</a>
+        <a href="#" onclick="filterType('квартира')" data-ru="Квартиры" data-ro="Apartamente">Квартиры</a>
+        <a href="#" onclick="filterType('участок')" data-ru="Участки" data-ro="Terenuri">Участки</a>
+        <a href="#" onclick="filterType('коммерция')" data-ru="Коммерция" data-ro="Comercial">Коммерческая</a>
+      </div>
+      <div class="footer-links">
+        <h4 data-ru="Агентам" data-ro="Agenților">Агентам</h4>
+        <a href="agent.html" data-ru="Кабинет агента" data-ro="Cabinet agent">Кабинет агента</a>
+        <a href="agent.html" data-ru="Разместить объявление" data-ro="Publicați anunț">Разместить объявление</a>
+        <a href="agent.html" data-ru="VIP размещение — $15" data-ro="Plasare VIP — $15">VIP размещение — $15</a>
+        <a href="dashboard.html" data-ru="Панель управления" data-ro="Panou de control">Панель управления</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 ESTA · <span data-ru="Недвижимость Молдовы и ПМР" data-ro="Imobiliare Moldova și RMN">Недвижимость Молдовы и ПМР</span></span>
+      <span data-ru="Тирасполь · +373 777 72 473" data-ro="Tiraspol · +373 777 72 473">Тирасполь · +373 777 72 473</span>
+    </div>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="ov" id="ov" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <button class="mc" onclick="document.getElementById('ov').classList.remove('open')">×</button>
+    <div id="modal-form">
+      <h2 class="modal-title" data-ru="Оставить заявку" data-ro="Lasă o cerere">Оставить заявку</h2>
+      <p class="modal-sub" data-ru="Брокер свяжется в течение 30 минут." data-ro="Brokerul vă va contacta în 30 de minute.">Брокер свяжется в течение 30 минут.</p>
+      <div class="modal-prop" id="modal-prop-name"></div>
+      <div class="fg"><label data-ru="Имя" data-ro="Nume">Имя</label><input id="m-name" placeholder="Иван"></div>
+      <div class="fg"><label data-ru="Телефон" data-ro="Telefon">Телефон</label><input id="m-phone" placeholder="+373 777 00 000"></div>
+      <div class="fr2">
+        <div class="fg"><label data-ru="Время" data-ro="Timp">Время</label><select id="m-time"><option>Утром</option><option>Днём</option><option>Вечером</option><option>Любое</option></select></div>
+        <div class="fg"><label data-ru="Связь" data-ro="Contact">Связь</label><select id="m-contact"><option>Звонок</option><option>WhatsApp</option><option>Telegram</option></select></div>
+      </div>
+      <button class="modal-submit" onclick="submitLead()" data-ru="📤 Отправить заявку" data-ro="📤 Trimite cererea">📤 Отправить заявку</button>
+    </div>
+    <div class="modal-success" id="modal-success">
+      <div class="ms-icon">✅</div>
+      <h3 class="ms-title" data-ru="Заявка принята!" data-ro="Cerere acceptată!">Заявка принята!</h3>
+      <p class="ms-desc" data-ru="Свяжемся в течение 30 минут." data-ro="Vă vom contacta în 30 de minute.">Свяжемся в течение 30 минут.<br><a href="https://t.me/solei3337" style="color:var(--sand);font-weight:700">✈️ @solei3337</a></p>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const API = 'https://web-production-e24bc.up.railway.app';
+const DEMO = [
+  {id:'d1',title:'Дом 130м² в Центре, 4 комнаты',type:'дом',district:'центр',city:'тирасполь',price:92000,area:130,rooms:4,desc:'Кирпичный дом 2008г. Евроремонт, гараж, двор 6 соток.',img:'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=600',is_vip:true,lat:46.843,lng:29.600},
+  {id:'d2',title:'2-комн. квартира, ул. Ленина, 3/5эт',type:'квартира',district:'центр',city:'тирасполь',price:38000,area:54,rooms:2,floor:'3/5',desc:'Светлая квартира с ремонтом. Рядом парк Победы.',img:'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600',is_vip:false,lat:46.845,lng:29.607},
+  {id:'d3',title:'Дом 180м² на Балке, 10 соток',type:'дом',district:'балка',city:'тирасполь',price:115000,area:180,rooms:5,desc:'Двухэтажный дом, сад, беседка, летняя кухня.',img:'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=600',is_vip:true,lat:46.858,lng:29.620},
+  {id:'d4',title:'3-комн. квартира, Западный район',type:'квартира',district:'западный',city:'тирасполь',price:52000,area:72,rooms:3,floor:'4/9',desc:'После капремонта, застеклённая лоджия.',img:'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=600',is_vip:false,lat:46.840,lng:29.591},
+  {id:'d5',title:'Участок 8 соток под строительство',type:'участок',district:'суклея',city:'тирасполь',price:18000,area:null,rooms:null,desc:'Ровный участок, все коммуникации. Документы готовы.',img:'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600',is_vip:false,lat:46.830,lng:29.615},
+  {id:'d6',title:'Студия 32м², центр Тирасполя',type:'квартира',district:'центр',city:'тирасполь',price:24000,area:32,rooms:1,floor:'2/5',desc:'Дизайнерский ремонт, встроенная кухня.',img:'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600',is_vip:false,lat:46.842,lng:29.603},
+  {id:'d7',title:'Коммерческое помещение 85м², центр',type:'коммерция',district:'центр',city:'тирасполь',price:78000,area:85,rooms:null,desc:'Первый этаж, отдельный вход, витринные окна.',img:'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600',is_vip:false,lat:46.846,lng:29.598},
+  {id:'d8',title:'Дом 95м², Кировское, участок 12 соток',type:'дом',district:'кировское',city:'тирасполь',price:58000,area:95,rooms:3,desc:'Газ, вода, свет. Сад 12 соток.',img:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600',is_vip:false,lat:46.862,lng:29.627},
+  {id:'d9',title:'4-комн. квартира, вид на город',type:'квартира',district:'центр',city:'тирасполь',price:67000,area:95,rooms:4,floor:'7/9',desc:'Панорамный вид, два санузла, подземный паркинг.',img:'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600',is_vip:true,lat:46.844,lng:29.605},
+  {id:'d10',title:'Дача с садом, 15 соток, Хутор',type:'дом',district:'хутор',city:'тирасполь',price:22000,area:45,rooms:2,desc:'Плодовый сад, колодец, летний душ, баня.',img:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600',is_vip:false,lat:46.835,lng:29.612},
+];
+
+let allListings = [];
+let filtered = [];
+let currentView = 'grid';
+let offset = 0;
+const PAGE = 12;
+let currentLang = 'ru';
+let map, markers = [];
+let favs = JSON.parse(localStorage.getItem('esta_favs')||'[]');
+let currentProp = '';
+
+// ── INIT ──
+window.onload = async () => {
+  await loadListings();
+  initMap();
+  updateCityCounts();
+};
+
+async function loadListings() {
+  showSkeletons();
+  try {
+    const r = await fetch(`${API}/listings?limit=200`);
+    const d = await r.json();
+    allListings = (d.listings||[]).length > 0 ? d.listings : DEMO;
+  } catch {
+    allListings = DEMO;
+  }
+  document.getElementById('total-count').textContent = allListings.length;
+  document.getElementById('vip-count').textContent = allListings.filter(l=>l.is_vip).length;
+  applyFilters();
+}
+
+function showSkeletons() {
+  const c = document.getElementById('listings-container');
+  c.innerHTML = Array(6).fill('<div class="skeleton skel-card"></div>').join('');
+}
+
+// ── FILTERS ──
+function applyFilters() {
+  const type   = document.getElementById('f-type')?.value || document.getElementById('s-type')?.value || '';
+  const city   = document.getElementById('f-city')?.value || document.getElementById('s-city')?.value || '';
+  const dist   = document.getElementById('f-district')?.value || '';
+  const pmin   = parseInt(document.getElementById('f-pmin')?.value||document.getElementById('s-price')?.value||0)||0;
+  const pmax   = parseInt(document.getElementById('f-pmax')?.value||document.getElementById('s-price')?.value||0)||0;
+  const rooms  = document.getElementById('f-rooms')?.value || document.getElementById('s-rooms')?.value || '';
+  const area   = parseInt(document.getElementById('f-area')?.value||0)||0;
+  const vip    = document.getElementById('f-vip')?.checked || false;
+  const sort   = document.getElementById('sort-sel')?.value || 'date_desc';
+
+  filtered = allListings.filter(l => {
+    if (type && l.type !== type) return false;
+    if (city && !(l.city||l.district||'').toLowerCase().includes(city)) return false;
+    if (dist && !(l.district||'').toLowerCase().includes(dist)) return false;
+    if (pmax && l.price > pmax) return false;
+    if (pmin && l.price < pmin) return false;
+    if (rooms) { const r=parseInt(rooms); if(rooms==='4') { if((l.rooms||0)<4) return false; } else if(l.rooms!==r) return false; }
+    if (area && (l.area||0) < area) return false;
+    if (vip && !l.is_vip) return false;
+    return true;
+  });
+
+  const sm = {price_asc:a=>a.price, price_desc:a=>-a.price, area_desc:a=>-(a.area||0)};
+  if (sm[sort]) filtered.sort((a,b)=>sm[sort](a)-sm[sort](b));
+  filtered.sort((a,b)=>(b.is_vip?1:0)-(a.is_vip?1:0));
+
+  offset = 0;
+  document.getElementById('shown-count').textContent = filtered.length;
+  renderListings(true);
+  updateMapMarkers();
+}
+
+function resetFilters() {
+  ['f-type','f-city','f-district','f-rooms'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['f-pmin','f-pmax','f-area'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  const vip=document.getElementById('f-vip');if(vip)vip.checked=false;
+  applyFilters();
+}
+
+function filterCity(city, el) {
+  document.querySelectorAll('.city-card').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  const fc = document.getElementById('f-city');
+  if(fc) fc.value = city;
+  applyFilters();
+}
+
+function filterType(type) {
+  const ft = document.getElementById('f-type');
+  if(ft) ft.value = type;
+  applyFilters();
+  document.getElementById('listings').scrollIntoView({behavior:'smooth'});
+}
+
+function setRegion(r) { applyFilters(); }
+
+// ── RENDER ──
+function renderListings(reset=false) {
+  const c = document.getElementById('listings-container');
+  const slice = filtered.slice(offset, offset + PAGE);
+  const isGrid = currentView === 'grid';
+
+  if (reset) {
+    c.className = isGrid ? 'listings-grid' : 'listings-list-view';
+    c.innerHTML = '';
+  }
+
+  if (filtered.length === 0) {
+    c.innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="empty-icon">🏚️</div><h3>Ничего не найдено</h3><p>Попробуй изменить фильтры</p></div>`;
+    document.getElementById('load-more-wrap').style.display = 'none';
+    return;
+  }
+
+  slice.forEach((l,i) => {
+    const isFav = favs.includes(l.id);
+    const delay = (i%PAGE)*0.04;
+    if (isGrid) {
+      c.innerHTML += `
+      <div class="card" style="animation-delay:${delay}s">
+        <div class="card-img">
+          <img src="${l.img||''}" alt="${l.title}" loading="lazy" onerror="this.style.display='none'">
+          <div class="card-badges">
+            ${l.is_vip?'<span class="badge badge-vip">⭐ VIP</span>':''}
+            <span class="badge badge-type">${l.type||'объект'}</span>
+          </div>
+          <button class="card-fav ${isFav?'active':''}" onclick="toggleFav('${l.id}',this)">${isFav?'❤️':'🤍'}</button>
+        </div>
+        <div class="card-body">
+          <div class="card-title">${l.title}</div>
+          <div class="card-meta">
+            <span>📍 ${l.district||l.city||'—'}</span>
+            ${l.area?`<span>📐 ${l.area}м²</span>`:''}
+            ${l.rooms?`<span>🚪 ${l.rooms}к</span>`:''}
+            ${l.floor?`<span>↑ ${l.floor}</span>`:''}
+          </div>
+          <div class="card-price">$${Number(l.price).toLocaleString('ru')}</div>
+          <div class="card-price-rub">≈ ${Math.round(l.price*18).toLocaleString('ru')} руб.</div>
+          <div class="card-footer">
+            <button class="card-btn" onclick="openModal('${l.title} · $${l.price.toLocaleString()}')">Заявка</button>
+            ${l.link?`<button class="card-btn primary" onclick="window.open('${l.link}')">Смотреть</button>`:'<button class="card-btn primary" onclick="openModal(\''+l.title+'\')">Подробнее</button>'}
+          </div>
+        </div>
+      </div>`;
+    } else {
+      c.innerHTML += `
+      <div class="list-card" style="animation-delay:${delay}s">
+        <div class="card-img">
+          <img src="${l.img||''}" alt="${l.title}" loading="lazy" onerror="this.style.display='none'">
+          <div class="card-badges">${l.is_vip?'<span class="badge badge-vip">⭐ VIP</span>':''}</div>
+          <button class="card-fav ${isFav?'active':''}" onclick="toggleFav('${l.id}',this)">${isFav?'❤️':'🤍'}</button>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-title">${l.title}</div>
+            <div class="card-meta">
+              <span>📍 ${l.district||l.city||'—'}</span>
+              ${l.area?`<span>📐 ${l.area}м²</span>`:''}
+              ${l.rooms?`<span>🚪 ${l.rooms}к</span>`:''}
+              ${l.floor?`<span>↑ ${l.floor}</span>`:''}
+            </div>
+            <div class="card-desc">${l.desc||''}</div>
+          </div>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between">
+            <div><div class="card-price">$${Number(l.price).toLocaleString('ru')}</div><div class="card-price-rub">≈ ${Math.round(l.price*18).toLocaleString('ru')} руб.</div></div>
+            <div class="card-footer" style="margin-top:0">
+              <button class="card-btn" onclick="openModal('${l.title} · $${l.price.toLocaleString()}')">Заявка</button>
+              <button class="card-btn primary" onclick="openModal('${l.title}')">Подробнее</button>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    }
+  });
+
+  offset += PAGE;
+  document.getElementById('load-more-wrap').style.display = offset < filtered.length ? 'block' : 'none';
+}
+
+function loadMore() { renderListings(false); }
+
+function setView(v) {
+  currentView = v;
+  document.getElementById('vt-grid').classList.toggle('active', v==='grid');
+  document.getElementById('vt-list').classList.toggle('active', v==='list');
+  renderListings(true);
+}
+
+// ── FAVOURITES ──
+function toggleFav(id, btn) {
+  const i = favs.indexOf(id);
+  if (i>=0) { favs.splice(i,1); btn.textContent='🤍'; btn.classList.remove('active'); }
+  else { favs.push(id); btn.textContent='❤️'; btn.classList.add('active'); }
+  localStorage.setItem('esta_favs', JSON.stringify(favs));
+  toast(i>=0 ? 'Убрано из избранного' : '❤️ Добавлено в избранное');
+}
+
+// ── MAP ──
+function initMap() {
+  map = L.map('map').setView([46.843,29.620],11);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'© CartoDB'}).addTo(map);
+  updateMapMarkers();
+}
+
+function updateMapMarkers() {
+  if (!map) return;
+  markers.forEach(m=>map.removeLayer(m));
+  markers=[];
+  const icon = L.divIcon({className:'',html:`<div style="width:12px;height:12px;border-radius:50%;background:#b5956a;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.3)"></div>`,iconSize:[12,12]});
+  const vipIcon = L.divIcon({className:'',html:`<div style="width:16px;height:16px;border-radius:50%;background:#b5956a;border:3px solid #fff;box-shadow:0 2px 8px rgba(181,149,106,.6)"></div>`,iconSize:[16,16]});
+  filtered.forEach(l=>{
+    const lat = l.lat || (46.843+(Math.random()-.5)*.06);
+    const lng = l.lng || (29.620+(Math.random()-.5)*.08);
+    const m = L.marker([lat,lng],{icon:l.is_vip?vipIcon:icon}).addTo(map);
+    m.bindPopup(`<b style="font-size:13px">${l.title}</b><br><span style="color:#b5956a;font-weight:700;font-size:15px">$${Number(l.price).toLocaleString()}</span><br><small>${l.district||''}</small>`);
+    markers.push(m);
+  });
+}
+
+// ── CITY COUNTS ──
+function updateCityCounts() {
+  const total = allListings.length;
+  const tir = allListings.filter(l=>(l.city||l.district||'').includes('ирасполь')||!l.city).length;
+  document.getElementById('cc-all').textContent = total + ' объявлений';
+  document.getElementById('cc-tir').textContent = tir + ' объявлений';
+  ['кишинёв','бендеры','рыбница','бельцы'].forEach((c,i)=>{
+    const ids=['cc-kish','cc-bend','cc-ryb','cc-bel'];
+    const n = allListings.filter(l=>(l.city||'').includes(c)).length;
+    document.getElementById(ids[i]).textContent = n ? n+' объявлений' : 'скоро';
+  });
+}
+
+// ── AI SEARCH ──
+function toggleAI() {
+  const p = document.getElementById('aiPanel');
+  p.classList.toggle('show');
+  if(p.classList.contains('show')) { p.scrollIntoView({behavior:'smooth',block:'nearest'}); document.getElementById('aiQuery').focus(); }
+}
+function setAI(t){ document.getElementById('aiQuery').value=t; document.getElementById('aiPanel').classList.add('show'); }
+
+async function aiSearch() {
+  const query = document.getElementById('aiQuery').value.trim();
+  if (!query) { toast('Напиши запрос'); return; }
+  const btn = document.getElementById('aiSendBtn');
+  btn.textContent='Думаю...'; btn.disabled=true;
+  try {
+    const r = await fetch(`${API}/ai-search`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query,limit:4})});
+    const d = await r.json();
+    const res = document.getElementById('aiResults');
+    res.classList.add('show');
+    document.getElementById('aiComment').textContent = d.comment||'';
+    const matches = d.matches||[];
+    document.getElementById('aiCards').innerHTML = matches.length
+      ? matches.map(m=>{const l=m.listing||{};return `
+        <div style="background:rgba(255,255,255,.08);border-radius:10px;padding:14px;border:1px solid rgba(255,255,255,.12)">
+          <img src="${l.img||''}" style="width:100%;height:110px;object-fit:cover;border-radius:7px;margin-bottom:10px" onerror="this.style.display='none'">
+          <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:4px">${l.title||''}</div>
+          <div style="font-size:18px;font-weight:700;color:var(--sand2);margin-bottom:6px">$${Number(l.price||0).toLocaleString('ru')}</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.5);margin-bottom:10px">${m.reason||''}</div>
+          <button onclick="openModal('${(l.title||'').replace(/'/g,"\\'")}·$${l.price}')" style="width:100%;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;padding:7px;border-radius:7px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;cursor:pointer;">Оставить заявку</button>
+        </div>`}).join('')
+      : '<div style="color:rgba(255,255,255,.5);font-size:13px">Ничего не найдено по этому запросу</div>';
+  } catch(e) { toast('Ошибка AI: '+e.message); }
+  btn.textContent='Найти ✦'; btn.disabled=false;
+}
+
+// ── MODAL / LEADS ──
+function openModal(prop='') {
+  currentProp = prop;
+  document.getElementById('modal-prop-name').textContent = prop || 'Общий вопрос';
+  document.getElementById('modal-form').style.display='';
+  document.getElementById('modal-success').classList.remove('show');
+  document.getElementById('ov').classList.add('open');
+}
+
+async function submitLead() {
+  const name = document.getElementById('m-name').value.trim();
+  const phone = document.getElementById('m-phone').value.trim();
+  if (!name||!phone) { toast('⚠️ Заполни имя и телефон'); return; }
+  try {
+    await fetch(`${API}/leads`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,phone,time:document.getElementById('m-time').value,contact:document.getElementById('m-contact').value,listing:currentProp})});
+  } catch {}
+  document.getElementById('modal-form').style.display='none';
+  document.getElementById('modal-success').classList.add('show');
+}
+
+// ── LANG ──
+function setLang(lang, btn) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('[data-ru]').forEach(el => {
+    el.textContent = lang==='ro' ? (el.dataset.ro||el.dataset.ru) : el.dataset.ru;
+  });
+}
+
+// ── UTILS ──
+function showPage(id) { document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); }
+function toast(m){const el=document.getElementById('toast');el.textContent=m;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2800);}
+</script>
+</body>
+</html>
