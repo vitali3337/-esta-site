@@ -174,6 +174,74 @@ console.log("Ошибка загрузки",e)
 loadListings()
 
 </script>
+<script>
 
+const API_URL = "https://web-production-e24bc.up.railway.app";
+
+async function loadListings() {
+
+  try {
+
+    const res = await fetch(API_URL + "/listings");
+    const data = await res.json();
+
+    const grid = document.querySelector(".cards-grid");
+
+    if (!grid) return;
+
+    grid.innerHTML = "";
+
+    data.listings.forEach(item => {
+
+      const img = item.img || "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600";
+
+      const card = document.createElement("div");
+      card.className = "card";
+
+      card.innerHTML = `
+        <div class="card-img">
+          <img src="${img}">
+        </div>
+
+        <div class="card-body">
+
+          <div class="card-title">
+            ${item.title || "Объект недвижимости"}
+          </div>
+
+          <div class="card-meta">
+            📍 ${item.district || "Тирасполь"}
+          </div>
+
+          <div class="card-price">
+            $${item.price || ""}
+          </div>
+
+          <div class="card-footer">
+
+            <a href="${item.link || "#"}" target="_blank" class="card-btn">
+              Открыть объявление
+            </a>
+
+          </div>
+
+        </div>
+      `;
+
+      grid.appendChild(card);
+
+    });
+
+  } catch(e) {
+
+    console.log("Ошибка загрузки:", e);
+
+  }
+
+}
+
+loadListings();
+
+</script>
 </body>
 </html>
