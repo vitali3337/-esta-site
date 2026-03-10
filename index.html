@@ -3,85 +3,76 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>ESTA — Портал недвижимости</title>
-
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<title>ESTA — Недвижимость</title>
 
 <style>
 
 body{
-margin:0;
-font-family:Arial;
+font-family: Arial;
 background:#f5f5f5;
+margin:0;
+padding:0;
 }
 
 header{
 background:#111;
 color:white;
 padding:20px;
-font-size:22px;
+font-size:24px;
 text-align:center;
 }
 
-.filters{
-background:white;
+.search{
+text-align:center;
 padding:20px;
-display:flex;
-gap:10px;
-justify-content:center;
-flex-wrap:wrap;
 }
 
-.filters input,
-.filters select,
-.filters button{
+.search input{
 padding:10px;
-border-radius:6px;
-border:1px solid #ccc;
-}
-
-#map{
-height:400px;
-margin:20px;
-border-radius:10px;
+width:300px;
+font-size:16px;
 }
 
 .container{
-padding:40px;
-max-width:1000px;
-margin:auto;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+gap:20px;
+padding:20px;
 }
 
 .card{
 background:white;
-padding:20px;
 border-radius:10px;
-box-shadow:0 10px 20px rgba(0,0,0,0.1);
-margin-bottom:20px;
+overflow:hidden;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
 }
 
 .card img{
-margin-top:10px;
-border-radius:6px;
+width:100%;
+height:180px;
+object-fit:cover;
+}
+
+.card-body{
+padding:15px;
+}
+
+.price{
+font-size:20px;
+color:#2a7;
+font-weight:bold;
+}
+
+button{
+padding:10px 20px;
+margin:10px;
 }
 
 #addForm{
-display:none;
 background:white;
 padding:20px;
 margin:20px;
-max-width:500px;
-margin:auto;
-border-radius:10px;
-box-shadow:0 10px 20px rgba(0,0,0,0.1);
-}
-
-#addForm input{
-width:100%;
-padding:10px;
-margin-bottom:10px;
+display:none;
 }
 
 </style>
@@ -94,25 +85,9 @@ margin-bottom:10px;
 ESTA — Портал недвижимости
 </header>
 
-<div class="filters">
+<div class="search">
 
-<input id="search" placeholder="AI поиск: 2 комнаты балка до 50000">
-
-<select id="rooms">
-<option value="">Комнаты</option>
-<option value="1">1</option>
-<option value="2">2</option>
-<option value="3">3</option>
-<option value="4">4+</option>
-</select>
-
-<input id="price" placeholder="Макс цена">
-
-<select id="district">
-<option value="">Район</option>
-<option value="балка">Балка</option>
-<option value="центр">Центр</option>
-</select>
+<input id="search" placeholder="Поиск: например 2 комнаты до 50000">
 
 <button onclick="openForm()">Добавить объект</button>
 
@@ -122,189 +97,119 @@ ESTA — Портал недвижимости
 
 <h3>Добавить недвижимость</h3>
 
-<input id="title" placeholder="Название">
-
-<input id="city" placeholder="Город">
-
-<input id="roomsInput" placeholder="Комнаты">
-
-<input id="priceInput" placeholder="Цена">
-
-<input id="latInput" placeholder="Широта">
-
-<input id="lngInput" placeholder="Долгота">
-
-<input id="imageInput" placeholder="Ссылка на фото">
+<input id="title" placeholder="Название"><br><br>
+<input id="city" placeholder="Город"><br><br>
+<input id="roomsInput" placeholder="Комнаты"><br><br>
+<input id="priceInput" placeholder="Цена"><br><br>
+<input id="imageInput" placeholder="Ссылка на фото"><br><br>
 
 <button onclick="addProperty()">Сохранить</button>
 
 </div>
 
-<div id="map"></div>
-
-<div class="container"></div>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<div class="container" id="homes"></div>
 
 <script>
 
-let homes=[]
-let map
-let markers=[]
+let homes = []
 
-fetch("listings.json")
-.then(res=>res.json())
-.then(data=>{
+async function loadHomes(){
 
-homes=data
+const res = await fetch("http://localhost:3000/homes")
 
-renderHomes(data)
-initMap(data)
+homes = await res.json()
 
-})
+renderHomes(homes)
 
-function renderHomes(data){
+}
 
-const container=document.querySelector(".container")
+function renderHomes(list){
+
+const container=document.getElementById("homes")
+
 container.innerHTML=""
 
-data.forEach(home=>{
+list.forEach(home=>{
 
-const card=document.createElement("div")
-card.className="card"
+container.innerHTML+=`
 
-card.innerHTML=`
-<h2>${home.title}</h2>
+<div class="card">
+
+<img src="${home.image}">
+
+<div class="card-body">
+
+<h3>${home.title}</h3>
+
 <p>${home.city}</p>
-<p>Комнаты: ${home.rooms}</p>
-<p><b>${home.price}$</b></p>
-<img src="${home.image}" width="100%">
+
+<p>${home.rooms} комнаты</p>
+
+<div class="price">$${home.price}</div>
+
+</div>
+
+</div>
+
 `
 
-container.appendChild(card)
-
 })
 
 }
 
-function initMap(data){
+document.getElementById("search").addEventListener("input",function(){
 
-map=L.map("map").setView([46.8403,29.6433],12)
+const text=this.value.toLowerCase()
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-attribution:'© OpenStreetMap'
-}).addTo(map)
+const filtered=homes.filter(home=>
 
-updateMap(data)
+home.title.toLowerCase().includes(text) ||
 
-}
+home.city.toLowerCase().includes(text) ||
 
-function updateMap(data){
+home.price.toString().includes(text)
 
-markers.forEach(m=>map.removeLayer(m))
-markers=[]
-
-data.forEach(home=>{
-
-if(home.lat && home.lng){
-
-const marker=L.marker([home.lat,home.lng])
-.addTo(map)
-.bindPopup(home.title+" $"+home.price)
-
-markers.push(marker)
-
-}
-
-})
-
-}
-
-function filterHomes(){
-
-const text=document.getElementById("search").value.toLowerCase()
-const roomFilter=document.getElementById("rooms").value
-const priceFilter=document.getElementById("price").value
-const district=document.getElementById("district").value
-
-const filtered=homes.filter(home=>{
-
-if(roomFilter && home.rooms!=roomFilter) return false
-
-if(priceFilter && home.price>priceFilter) return false
-
-if(district && !home.title.toLowerCase().includes(district)) return false
-
-if(text){
-
-let maxPrice=null
-let rooms=null
-
-const priceMatch=text.match(/\d{4,6}/)
-if(priceMatch) maxPrice=Number(priceMatch[0])
-
-const roomMatch=text.match(/[1-4]/)
-if(roomMatch) rooms=Number(roomMatch[0])
-
-if(rooms && home.rooms!=rooms) return false
-if(maxPrice && home.price>maxPrice) return false
-
-}
-
-return true
-
-})
+)
 
 renderHomes(filtered)
-updateMap(filtered)
 
-}
-
-document.getElementById("search").addEventListener("input",filterHomes)
-document.getElementById("rooms").addEventListener("change",filterHomes)
-document.getElementById("price").addEventListener("input",filterHomes)
-document.getElementById("district").addEventListener("change",filterHomes)
+})
 
 function openForm(){
 
 const form=document.getElementById("addForm")
 
-if(form.style.display==="none"){
-form.style.display="block"
-}else{
-form.style.display="none"
-}
+form.style.display=form.style.display==="none"?"block":"none"
 
 }
 
-function addProperty(){
-
-const title=document.getElementById("title").value
-const city=document.getElementById("city").value
-const rooms=Number(document.getElementById("roomsInput").value)
-const price=Number(document.getElementById("priceInput").value)
-const lat=Number(document.getElementById("latInput").value)
-const lng=Number(document.getElementById("lngInput").value)
-const image=document.getElementById("imageInput").value
+async function addProperty(){
 
 const property={
-title,
-city,
-rooms,
-price,
-lat,
-lng,
-image
+
+title:document.getElementById("title").value,
+city:document.getElementById("city").value,
+rooms:Number(document.getElementById("roomsInput").value),
+price:Number(document.getElementById("priceInput").value),
+image:document.getElementById("imageInput").value
+
 }
 
-homes.push(property)
+await fetch("http://localhost:3000/homes",{
 
-renderHomes(homes)
-updateMap(homes)
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify(property)
+
+})
+
+loadHomes()
 
 alert("Объект добавлен")
 
 }
+
+loadHomes()
 
 </script>
 
