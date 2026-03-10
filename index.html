@@ -35,7 +35,8 @@ flex-wrap:wrap;
 }
 
 .filters input,
-.filters select{
+.filters select,
+.filters button{
 padding:10px;
 border-radius:6px;
 border:1px solid #ccc;
@@ -64,6 +65,23 @@ margin-bottom:20px;
 .card img{
 margin-top:10px;
 border-radius:6px;
+}
+
+#addForm{
+display:none;
+background:white;
+padding:20px;
+margin:20px;
+max-width:500px;
+margin:auto;
+border-radius:10px;
+box-shadow:0 10px 20px rgba(0,0,0,0.1);
+}
+
+#addForm input{
+width:100%;
+padding:10px;
+margin-bottom:10px;
 }
 
 </style>
@@ -96,6 +114,30 @@ ESTA — Портал недвижимости
 <option value="центр">Центр</option>
 </select>
 
+<button onclick="openForm()">Добавить объект</button>
+
+</div>
+
+<div id="addForm">
+
+<h3>Добавить недвижимость</h3>
+
+<input id="title" placeholder="Название">
+
+<input id="city" placeholder="Город">
+
+<input id="roomsInput" placeholder="Комнаты">
+
+<input id="priceInput" placeholder="Цена">
+
+<input id="latInput" placeholder="Широта">
+
+<input id="lngInput" placeholder="Долгота">
+
+<input id="imageInput" placeholder="Ссылка на фото">
+
+<button onclick="addProperty()">Сохранить</button>
+
 </div>
 
 <div id="map"></div>
@@ -106,7 +148,7 @@ ESTA — Портал недвижимости
 
 <script>
 
-let homes = []
+let homes=[]
 let map
 let markers=[]
 
@@ -223,7 +265,48 @@ document.getElementById("rooms").addEventListener("change",filterHomes)
 document.getElementById("price").addEventListener("input",filterHomes)
 document.getElementById("district").addEventListener("change",filterHomes)
 
+function openForm(){
+
+const form=document.getElementById("addForm")
+
+if(form.style.display==="none"){
+form.style.display="block"
+}else{
+form.style.display="none"
+}
+
+}
+
+function addProperty(){
+
+const title=document.getElementById("title").value
+const city=document.getElementById("city").value
+const rooms=Number(document.getElementById("roomsInput").value)
+const price=Number(document.getElementById("priceInput").value)
+const lat=Number(document.getElementById("latInput").value)
+const lng=Number(document.getElementById("lngInput").value)
+const image=document.getElementById("imageInput").value
+
+const property={
+title,
+city,
+rooms,
+price,
+lat,
+lng,
+image
+}
+
+homes.push(property)
+
+renderHomes(homes)
+updateMap(homes)
+
+alert("Объект добавлен")
+
+}
+
 </script>
 
 </body>
-  </html>
+</html>
