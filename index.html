@@ -19,6 +19,21 @@ background:#111;
 color:white;
 padding:20px;
 font-size:22px;
+text-align:center;
+}
+
+.search-box{
+padding:20px;
+text-align:center;
+background:white;
+}
+
+.search-box input{
+padding:10px;
+width:320px;
+border-radius:6px;
+border:1px solid #ccc;
+font-size:16px;
 }
 
 .container{
@@ -35,17 +50,9 @@ box-shadow:0 10px 20px rgba(0,0,0,0.1);
 margin-bottom:20px;
 }
 
-button{
-background:black;
-color:white;
-border:none;
-padding:12px 20px;
+.card img{
+margin-top:10px;
 border-radius:6px;
-cursor:pointer;
-}
-
-button:hover{
-background:#b5956a;
 }
 
 </style>
@@ -58,15 +65,29 @@ background:#b5956a;
 ESTA — Портал недвижимости
 </header>
 
+<div class="search-box">
+<input id="search" placeholder="Поиск: например Тирасполь или 48000">
+</div>
+
 <div class="container"></div>
 
 <script>
+
+let homes = [];
 
 fetch("listings.json")
 .then(res => res.json())
 .then(data => {
 
+homes = data;
+renderHomes(data);
+
+});
+
+function renderHomes(data){
+
 const container = document.querySelector(".container");
+container.innerHTML = "";
 
 data.forEach(home => {
 
@@ -75,7 +96,7 @@ card.className = "card";
 
 card.innerHTML = `
 <h2>${home.title}</h2>
-<p>${home.city}</p>
+<p>Город: ${home.city}</p>
 <p><b>${home.price}$</b></p>
 <img src="${home.image}" width="100%">
 `;
@@ -83,6 +104,20 @@ card.innerHTML = `
 container.appendChild(card);
 
 });
+
+}
+
+document.getElementById("search").addEventListener("input", function(){
+
+const value = this.value.toLowerCase();
+
+const filtered = homes.filter(home =>
+home.title.toLowerCase().includes(value) ||
+home.city.toLowerCase().includes(value) ||
+String(home.price).includes(value)
+);
+
+renderHomes(filtered);
 
 });
 
