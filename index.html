@@ -6,7 +6,33 @@
 <title>ESTA — Недвижимость</title>
 
 <style>
+<script>
 
+fetch("listings.json")
+.then(res => res.json())
+.then(data => {
+
+const container = document.querySelector(".container");
+
+data.forEach(home => {
+
+const card = document.createElement("div");
+card.className = "card";
+
+card.innerHTML = `
+<h2>${home.title}</h2>
+<p>${home.city}</p>
+<p><b>${home.price}$</b></p>
+<img src="${home.image}" width="100%">
+`;
+
+container.appendChild(card);
+
+});
+
+});
+
+</script>
 body{
 margin:0;
 font-family:Arial;
