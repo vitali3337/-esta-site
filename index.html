@@ -32,8 +32,8 @@ background:white;
 }
 
 .search-box input{
-padding:10px;
-width:320px;
+padding:12px;
+width:340px;
 border-radius:6px;
 border:1px solid #ccc;
 font-size:16px;
@@ -75,7 +75,7 @@ ESTA — Портал недвижимости
 </header>
 
 <div class="search-box">
-<input id="search" placeholder="Поиск: например Тирасполь или 48000">
+<input id="search" placeholder="Например: 2 комнаты балка до 50000">
 </div>
 
 <div id="map"></div>
@@ -88,6 +88,7 @@ ESTA — Портал недвижимости
 
 let homes = [];
 let map;
+let markers = [];
 
 fetch("listings.json")
 .then(res => res.json())
@@ -99,6 +100,10 @@ renderHomes(data);
 initMap(data);
 
 });
+
+// ====================
+// РЕНДЕР КАРТОЧЕК
+// ====================
 
 function renderHomes(data){
 
@@ -114,6 +119,7 @@ card.className = "card";
 card.innerHTML = `
 <h2>${home.title}</h2>
 <p>Город: ${home.city}</p>
+<p>Комнаты: ${home.rooms}</p>
 <p><b>${home.price}$</b></p>
 <img src="${home.image}" width="100%">
 `;
@@ -124,6 +130,10 @@ container.appendChild(card);
 
 }
 
+// ====================
+// КАРТА
+// ====================
+
 function initMap(data){
 
 map = L.map('map').setView([46.8403, 29.6433], 12);
@@ -132,13 +142,24 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
 attribution:'© OpenStreetMap'
 }).addTo(map);
 
+updateMap(data);
+
+}
+
+function updateMap(data){
+
+markers.forEach(m => map.removeLayer(m));
+markers = [];
+
 data.forEach(home => {
 
 if(home.lat && home.lng){
 
-L.marker([home.lat, home.lng])
+const marker = L.marker([home.lat, home.lng])
 .addTo(map)
 .bindPopup("<b>"+home.title+"</b><br>$"+home.price);
+
+markers.push(marker);
 
 }
 
@@ -146,17 +167,43 @@ L.marker([home.lat, home.lng])
 
 }
 
+// ====================
+// AI ПОИСК
+// ====================
+
 document.getElementById("search").addEventListener("input", function(){
 
-const value = this.value.toLowerCase();
+const text = this.value.toLowerCase();
 
-const filtered = homes.filter(home =>
-home.title.toLowerCase().includes(value) ||
-home.city.toLowerCase().includes(value) ||
-String(home.price).includes(value)
-);
+let maxPrice = null;
+let rooms = null;
+
+const priceMatch = text.match(/\d{4,6}/);
+if(priceMatch){
+maxPrice = Number(priceMatch[0]);
+}
+
+const roomMatch = text.match(/[1-4]/);
+if(roomMatch){
+rooms = Number(roomMatch[0]);
+}
+
+const filtered = homes.filter(home => {
+
+if(rooms && home.rooms != rooms) return false;
+
+if(maxPrice && home.price > maxPrice) return false;
+
+if(text.includes("балка") && !home.title.toLowerCase().includes("балка")) return false;
+
+if(text.includes("центр") && !home.title.toLowerCase().includes("центр")) return false;
+
+return true;
+
+});
 
 renderHomes(filtered);
+updateMap(filtered);
 
 });
 
