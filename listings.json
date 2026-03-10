@@ -1,0 +1,26 @@
+[
+  {
+    "title": "2-комнатная квартира Балка",
+    "city": "Тирасполь",
+    "price": 48000,
+    "rooms": 2,
+    "area": 52,
+    "image": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2"
+  },
+  {
+    "title": "1-комнатная квартира Центр",
+    "city": "Тирасполь",
+    "price": 35000,
+    "rooms": 1,
+    "area": 36,
+    "image": "https://images.unsplash.com/photo-1560448075-bb4caa6c6d91"
+  },
+  {
+    "title": "Дом Бендеры",
+    "city": "Бендеры",
+    "price": 65000,
+    "rooms": 4,
+    "area": 120,
+    "image": "https://images.unsplash.com/photo-1572120360610-d971b9d7767c"
+  }
+]
