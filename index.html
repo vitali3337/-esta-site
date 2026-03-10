@@ -3,36 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>ESTA — Недвижимость</title>
 
 <style>
-<script>
 
-fetch("listings.json")
-.then(res => res.json())
-.then(data => {
-
-const container = document.querySelector(".container");
-
-data.forEach(home => {
-
-const card = document.createElement("div");
-card.className = "card";
-
-card.innerHTML = `
-<h2>${home.title}</h2>
-<p>${home.city}</p>
-<p><b>${home.price}$</b></p>
-<img src="${home.image}" width="100%">
-`;
-
-container.appendChild(card);
-
-});
-
-});
-
-</script>
 body{
 margin:0;
 font-family:Arial;
@@ -83,21 +58,35 @@ background:#b5956a;
 ESTA — Портал недвижимости
 </header>
 
-<div class="container">
+<div class="container"></div>
 
-<div class="card">
-<h2>Купить недвижимость</h2>
-<p>Квартиры, дома и коммерческая недвижимость</p>
-<button>Смотреть объекты</button>
-</div>
+<script>
 
-<div class="card">
-<h2>Продать недвижимость</h2>
-<p>Добавьте объявление бесплатно</p>
-<button>Добавить объект</button>
-</div>
+fetch("listings.json")
+.then(res => res.json())
+.then(data => {
 
-</div>
+const container = document.querySelector(".container");
+
+data.forEach(home => {
+
+const card = document.createElement("div");
+card.className = "card";
+
+card.innerHTML = `
+<h2>${home.title}</h2>
+<p>${home.city}</p>
+<p><b>${home.price}$</b></p>
+<img src="${home.image}" width="100%">
+`;
+
+container.appendChild(card);
+
+});
+
+});
+
+</script>
 
 </body>
 </html>
