@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ESTA — Недвижимость</title>
+<title>ESTA — Портал недвижимости</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
 <style>
 
@@ -34,6 +37,12 @@ width:320px;
 border-radius:6px;
 border:1px solid #ccc;
 font-size:16px;
+}
+
+#map{
+height:400px;
+margin:20px;
+border-radius:10px;
 }
 
 .container{
@@ -69,24 +78,32 @@ ESTA — Портал недвижимости
 <input id="search" placeholder="Поиск: например Тирасполь или 48000">
 </div>
 
+<div id="map"></div>
+
 <div class="container"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
 
 let homes = [];
+let map;
 
 fetch("listings.json")
 .then(res => res.json())
 .then(data => {
 
 homes = data;
+
 renderHomes(data);
+initMap(data);
 
 });
 
 function renderHomes(data){
 
 const container = document.querySelector(".container");
+
 container.innerHTML = "";
 
 data.forEach(home => {
@@ -102,6 +119,28 @@ card.innerHTML = `
 `;
 
 container.appendChild(card);
+
+});
+
+}
+
+function initMap(data){
+
+map = L.map('map').setView([46.8403, 29.6433], 12);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+attribution:'© OpenStreetMap'
+}).addTo(map);
+
+data.forEach(home => {
+
+if(home.lat && home.lng){
+
+L.marker([home.lat, home.lng])
+.addTo(map)
+.bindPopup("<b>"+home.title+"</b><br>$"+home.price);
+
+}
 
 });
 
