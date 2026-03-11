@@ -435,5 +435,160 @@ body{font-family:'DM Sans',sans-serif;background:var(--ink);color:var(--text);mi
         </div>
       </div>
     </div>
+<script>
 
+// API сервера
+const API_URL = "https://web-production-c32cc.up.railway.app/listings";
+
+// загрузка объявлений
+async function loadListings(){
+
+try{
+
+const res = await fetch(API_URL);
+const data = await res.json();
+
+const container = document.getElementById("myListings");
+
+container.innerHTML = "";
+
+if(!data.listings || data.listings.length === 0){
+
+container.innerHTML = `
+<div style="background:var(--ink2);border:1px dashed rgba(255,255,255,.07);border-radius:12px;padding:40px;text-align:center;color:var(--muted)">
+<div style="font-size:40px;margin-bottom:12px">🏚️</div>
+<div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--text);margin-bottom:6px">Объектов пока нет</div>
+</div>
+`;
+
+return;
+}
+
+data.listings.forEach(item => {
+
+const card = document.createElement("div");
+
+card.className = "lst-card";
+
+card.innerHTML = `
+
+<div class="lst-img">
+<img src="${item.img || 'https://via.placeholder.com/120'}">
+</div>
+
+<div>
+
+<div class="lst-title">
+${item.title}
+</div>
+
+<div class="lst-meta">
+<span>${item.source || ''}</span>
+<span>${item.parsed || ''}</span>
+</div>
+
+<div class="lst-status s-active">
+Активно
+</div>
+
+</div>
+
+<div>
+
+<div class="lst-price">
+${item.price ? item.price + '$' : 'Цена по запросу'}
+</div>
+
+<div class="lst-actions">
+
+<a href="${item.link}" target="_blank">
+<button class="lst-btn">Открыть</button>
+</a>
+
+<button class="lst-btn vip-btn">
+VIP
+</button>
+
+<button class="lst-btn danger">
+Удалить
+</button>
+
+</div>
+
+</div>
+
+`;
+
+container.appendChild(card);
+
+});
+
+// обновление статистики
+document.getElementById("myCount").innerText = data.listings.length;
+document.getElementById("st-listings").innerText = data.listings.length;
+
+}catch(err){
+
+console.error("Ошибка загрузки:", err);
+
+}
+
+}
+
+
+// переключение страниц
+function goPage(page, btn){
+
+document.querySelectorAll(".page").forEach(p=>{
+p.classList.remove("active");
+});
+
+document.getElementById("page-"+page).classList.add("active");
+
+document.querySelectorAll(".sb-item").forEach(b=>{
+b.classList.remove("active");
+});
+
+if(btn) btn.classList.add("active");
+
+}
+
+
+// вход по коду
+function checkCode(code){
+
+if(code.length === 6){
+
+submitCode();
+
+}
+
+}
+
+function submitCode(){
+
+document.getElementById("loginScreen").style.display = "none";
+document.getElementById("appView").style.display = "grid";
+
+loadListings();
+
+}
+
+
+// Telegram вход (заглушка)
+function startTgLogin(){
+
+alert("Напиши боту @realinvest_pmr_bot и получи код входа");
+
+}
+
+
+// запуск после загрузки страницы
+document.addEventListener("DOMContentLoaded", () => {
+
+console.log("ESTA Agent panel loaded");
+
+});
+
+</script>
     <!--
