@@ -1,444 +1,8 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ESTA — Кабинет агента</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-:root {
-  --ink:    #0d0f12;
-  --ink2:   #141720;
-  --ink3:   #1c2030;
-  --card:   #1e2330;
-  --sand:   #c8b89a;
-  --sand2:  #e8d9c4;
-  --text:   #ece8e1;
-  --muted:  #6b6860;
-  --green:  #4ade80;
-  --red:    #f87171;
-  --gold:   #f5c842;
-  --border: rgba(200,184,154,0.13);
-  --r:      14px;
-}
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'DM Sans',sans-serif;background:var(--ink);color:var(--text);min-height:100vh;}
-::-webkit-scrollbar{width:5px;}
-::-webkit-scrollbar-track{background:var(--ink2);}
-::-webkit-scrollbar-thumb{background:var(--ink3);border-radius:3px;}
-
-/* ── LAYOUT ── */
-.app { display:grid; grid-template-columns:240px 1fr; min-height:100vh; }
-
-/* ── SIDEBAR ── */
-.sidebar {
-  background:var(--ink2); border-right:1px solid var(--border);
-  padding:28px 0; display:flex; flex-direction:column;
-  position:sticky; top:0; height:100vh; overflow:hidden;
-}
-.sb-logo {
-  font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600;
-  color:var(--sand); padding:0 24px 28px; letter-spacing:1px;
-  border-bottom:1px solid var(--border);
-}
-.sb-logo small { display:block; font-size:10px; color:var(--muted); letter-spacing:3px; font-family:'DM Sans',sans-serif; margin-top:2px; }
-
-.sb-agent {
-  padding:20px 24px; border-bottom:1px solid var(--border);
-  display:flex; align-items:center; gap:12px;
-}
-.sb-avatar {
-  width:38px; height:38px; border-radius:50%;
-  background:linear-gradient(135deg,var(--sand),var(--sand2));
-  display:flex; align-items:center; justify-content:center;
-  font-size:16px; font-weight:700; color:var(--ink); flex-shrink:0;
-}
-.sb-name { font-size:13px; font-weight:600; }
-.sb-role { font-size:11px; color:var(--muted); margin-top:2px; }
-
-.sb-nav { padding:16px 12px; flex:1; }
-.sb-item {
-  display:flex; align-items:center; gap:10px;
-  padding:10px 12px; border-radius:9px; border:none;
-  background:transparent; color:var(--muted);
-  font-family:'DM Sans',sans-serif; font-size:13px; font-weight:500;
-  cursor:pointer; transition:all .18s; width:100%; text-align:left;
-  margin-bottom:2px;
-}
-.sb-item:hover { background:rgba(200,184,154,.07); color:var(--text); }
-.sb-item.active { background:rgba(200,184,154,.12); color:var(--sand); }
-.sb-item .ico { font-size:16px; width:20px; text-align:center; flex-shrink:0; }
-.sb-badge {
-  margin-left:auto; background:var(--sand); color:var(--ink);
-  font-size:10px; font-weight:700; padding:2px 7px; border-radius:10px;
-}
-
-.sb-bottom { padding:16px 24px; border-top:1px solid var(--border); }
-.sb-stat { display:flex; justify-content:space-between; font-size:12px; color:var(--muted); margin-bottom:6px; }
-.sb-stat strong { color:var(--text); }
-
-/* ── MAIN ── */
-.main { padding:32px; overflow-y:auto; }
-.page { display:none; }
-.page.active { display:block; animation:fadeIn .25s ease; }
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-
-.page-title {
-  font-family:'Cormorant Garamond',serif; font-size:32px; font-weight:400;
-  margin-bottom:6px;
-}
-.page-title em { font-style:italic; color:var(--sand); }
-.page-sub { font-size:13px; color:var(--muted); margin-bottom:28px; }
-
-/* ── LOGIN SCREEN ── */
-.login-screen {
-  display:flex; align-items:center; justify-content:center;
-  min-height:100vh; background:var(--ink);
-  position:fixed; inset:0; z-index:100;
-}
-.login-box {
-  background:var(--ink2); border:1px solid var(--border);
-  border-radius:20px; padding:48px 40px; max-width:420px; width:100%;
-  text-align:center; box-shadow:0 0 80px rgba(200,184,154,.06);
-}
-.login-logo {
-  font-family:'Cormorant Garamond',serif; font-size:36px; color:var(--sand);
-  letter-spacing:2px; margin-bottom:8px;
-}
-.login-sub { font-size:13px; color:var(--muted); margin-bottom:32px; line-height:1.7; }
-.login-tg {
-  background:#229ED9; color:#fff; border:none;
-  padding:14px 32px; border-radius:12px; font-size:15px; font-weight:600;
-  font-family:'DM Sans',sans-serif; cursor:pointer; transition:all .2s;
-  display:inline-flex; align-items:center; gap:10px; margin-bottom:20px;
-}
-.login-tg:hover { background:#1a8bc4; transform:scale(1.02); }
-.login-divider { font-size:12px; color:var(--muted); margin:16px 0; }
-.login-code-wrap { display:none; text-align:left; }
-.login-code-wrap.show { display:block; }
-.lc-label { font-size:11px; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); margin-bottom:8px; display:block; }
-.lc-input {
-  width:100%; background:var(--ink3); border:1px solid rgba(255,255,255,.08);
-  color:var(--text); padding:12px 16px; border-radius:10px;
-  font-family:'DM Sans',sans-serif; font-size:18px; outline:none;
-  text-align:center; letter-spacing:8px; font-weight:600;
-  transition:border-color .2s; margin-bottom:12px;
-}
-.lc-input:focus { border-color:var(--sand); }
-.lc-btn {
-  width:100%; background:var(--sand); color:var(--ink);
-  border:none; padding:12px; border-radius:10px;
-  font-family:'DM Sans',sans-serif; font-size:14px; font-weight:700;
-  cursor:pointer; transition:background .2s;
-}
-.lc-btn:hover { background:var(--sand2); }
-.login-hint { font-size:12px; color:var(--muted); margin-top:20px; line-height:1.6; }
-
-/* ── STATS CARDS ── */
-.stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:28px; }
-.stat-card {
-  background:var(--ink2); border:1px solid var(--border);
-  border-radius:var(--r); padding:20px;
-}
-.stat-num { font-family:'Cormorant Garamond',serif; font-size:36px; font-weight:600; color:var(--sand); }
-.stat-label { font-size:12px; color:var(--muted); margin-top:4px; }
-.stat-delta { font-size:11px; color:var(--green); margin-top:6px; }
-
-/* ── MY LISTINGS ── */
-.listings-list { display:flex; flex-direction:column; gap:12px; }
-.lst-card {
-  background:var(--ink2); border:1px solid var(--border);
-  border-radius:var(--r); padding:16px 20px;
-  display:grid; grid-template-columns:80px 1fr auto;
-  gap:16px; align-items:center;
-  transition:border-color .2s;
-}
-.lst-card:hover { border-color:rgba(200,184,154,.3); }
-.lst-img {
-  width:80px; height:60px; border-radius:8px;
-  object-fit:cover; background:var(--ink3);
-  display:flex; align-items:center; justify-content:center;
-  font-size:24px; flex-shrink:0; overflow:hidden;
-}
-.lst-img img { width:100%; height:100%; object-fit:cover; }
-.lst-title { font-weight:600; font-size:14px; margin-bottom:4px; }
-.lst-meta { font-size:12px; color:var(--muted); display:flex; gap:14px; flex-wrap:wrap; }
-.lst-price { font-family:'Cormorant Garamond',serif; font-size:20px; color:var(--sand); font-weight:600; white-space:nowrap; }
-.lst-status { font-size:11px; padding:3px 10px; border-radius:20px; font-weight:600; margin-top:6px; display:inline-block; }
-.s-active { background:rgba(74,222,128,.12); color:var(--green); }
-.s-vip    { background:rgba(245,200,66,.12);  color:var(--gold); }
-.s-draft  { background:rgba(255,255,255,.06); color:var(--muted); }
-.lst-actions { display:flex; gap:8px; flex-direction:column; }
-.lst-btn {
-  padding:6px 14px; border-radius:7px; border:1px solid var(--border);
-  background:transparent; color:var(--muted);
-  font-family:'DM Sans',sans-serif; font-size:11px; font-weight:600;
-  cursor:pointer; transition:all .18s; white-space:nowrap;
-}
-.lst-btn:hover { border-color:var(--sand); color:var(--sand); }
-.lst-btn.danger:hover { border-color:var(--red); color:var(--red); }
-.lst-btn.vip-btn { border-color:rgba(245,200,66,.3); color:var(--gold); }
-.lst-btn.vip-btn:hover { background:rgba(245,200,66,.1); }
-
-/* ── ADD FORM ── */
-.add-form {
-  background:var(--ink2); border:1px solid var(--border);
-  border-radius:20px; padding:32px; max-width:720px;
-}
-.form-section { margin-bottom:28px; }
-.fs-title {
-  font-size:11px; text-transform:uppercase; letter-spacing:2px;
-  color:var(--sand); margin-bottom:16px; padding-bottom:10px;
-  border-bottom:1px solid var(--border);
-}
-.form-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-.form-grid.three { grid-template-columns:1fr 1fr 1fr; }
-.fg { display:flex; flex-direction:column; gap:6px; }
-.fg.full { grid-column:1/-1; }
-.fl { font-size:10px; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); }
-.fi, .fs-el, .fta {
-  background:var(--ink3); border:1px solid rgba(255,255,255,.07);
-  color:var(--text); padding:11px 14px; border-radius:9px;
-  font-family:'DM Sans',sans-serif; font-size:13px; outline:none;
-  transition:border-color .2s;
-}
-.fi:focus, .fs-el:focus, .fta:focus { border-color:var(--sand); }
-.fi::placeholder, .fta::placeholder { color:var(--muted); }
-.fs-el option { background:var(--ink2); }
-.fta { min-height:100px; resize:vertical; }
-
-/* ── PHOTO UPLOAD ── */
-.photo-zone {
-  border:2px dashed rgba(200,184,154,.2); border-radius:12px;
-  padding:32px; text-align:center; cursor:pointer;
-  transition:all .2s; position:relative;
-}
-.photo-zone:hover, .photo-zone.drag { border-color:var(--sand); background:rgba(200,184,154,.04); }
-.photo-zone input { position:absolute; inset:0; opacity:0; cursor:pointer; }
-.pz-icon { font-size:36px; margin-bottom:10px; }
-.pz-text { font-size:13px; color:var(--muted); }
-.pz-text strong { color:var(--sand); }
-.photos-preview { display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; }
-.preview-item {
-  width:90px; height:70px; border-radius:8px; overflow:hidden;
-  position:relative; border:1px solid var(--border);
-}
-.preview-item img { width:100%; height:100%; object-fit:cover; }
-.preview-item .del {
-  position:absolute; top:3px; right:3px;
-  background:rgba(0,0,0,.7); color:#fff; border:none;
-  width:18px; height:18px; border-radius:50%; font-size:10px;
-  cursor:pointer; display:flex; align-items:center; justify-content:center;
-}
-
-/* ── VIP BLOCK ── */
-.vip-block {
-  background:linear-gradient(135deg,rgba(245,200,66,.06),rgba(245,200,66,.02));
-  border:1px solid rgba(245,200,66,.2); border-radius:12px; padding:20px;
-  display:flex; align-items:center; gap:16px;
-}
-.vip-icon { font-size:32px; flex-shrink:0; }
-.vip-info { flex:1; }
-.vip-title { font-size:14px; font-weight:600; color:var(--gold); margin-bottom:4px; }
-.vip-desc { font-size:12px; color:var(--muted); line-height:1.6; }
-.vip-price { font-size:20px; font-weight:700; color:var(--gold); white-space:nowrap; }
-.vip-check { display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer; }
-.vip-check input { width:18px; height:18px; accent-color:var(--gold); cursor:pointer; }
-
-/* ── SUBMIT ── */
-.form-submit {
-  background:var(--sand); color:var(--ink); border:none;
-  padding:14px 40px; border-radius:10px;
-  font-family:'DM Sans',sans-serif; font-size:15px; font-weight:700;
-  cursor:pointer; transition:all .2s;
-}
-.form-submit:hover { background:var(--sand2); transform:scale(1.02); }
-.form-submit:disabled { opacity:.5; cursor:not-allowed; transform:none; }
-
-/* ── VIP PAYMENT MODAL ── */
-.ov { display:none; position:fixed; inset:0; background:rgba(0,0,0,.82); backdrop-filter:blur(10px); z-index:200; align-items:center; justify-content:center; padding:20px; }
-.ov.open { display:flex; }
-.modal { background:var(--ink2); border:1px solid var(--border); border-radius:20px; padding:40px; max-width:460px; width:100%; position:relative; animation:mIn .25s ease; }
-@keyframes mIn{from{opacity:0;transform:scale(.93)}to{opacity:1;transform:none}}
-.mc { position:absolute; top:14px; right:18px; background:none; border:none; color:var(--muted); font-size:22px; cursor:pointer; }
-.modal-title { font-family:'Cormorant Garamond',serif; font-size:28px; margin-bottom:6px; }
-.modal-sub { font-size:13px; color:var(--muted); margin-bottom:24px; line-height:1.6; }
-
-.pay-options { display:flex; flex-direction:column; gap:10px; margin-bottom:24px; }
-.pay-opt {
-  background:var(--ink3); border:1px solid var(--border);
-  border-radius:12px; padding:16px 18px;
-  display:flex; align-items:center; gap:14px; cursor:pointer;
-  transition:all .2s;
-}
-.pay-opt:hover, .pay-opt.sel { border-color:var(--sand); background:rgba(200,184,154,.06); }
-.pay-opt .po-icon { font-size:24px; flex-shrink:0; }
-.pay-opt .po-name { font-size:13px; font-weight:600; margin-bottom:2px; }
-.pay-opt .po-desc { font-size:11px; color:var(--muted); }
-.pay-opt .po-check { margin-left:auto; width:18px; height:18px; border-radius:50%; border:2px solid var(--border); flex-shrink:0; transition:all .2s; }
-.pay-opt.sel .po-check { background:var(--sand); border-color:var(--sand); }
-
-.pay-details {
-  background:var(--ink3); border:1px solid var(--border);
-  border-radius:10px; padding:16px; margin-bottom:20px;
-  font-size:13px; line-height:1.8; display:none;
-}
-.pay-details.show { display:block; }
-.pay-details strong { color:var(--sand); }
-.pay-details code {
-  background:rgba(200,184,154,.1); padding:2px 8px; border-radius:4px;
-  font-family:monospace; color:var(--sand2);
-}
-
-.pay-confirm {
-  width:100%; background:var(--gold); color:var(--ink);
-  border:none; padding:14px; border-radius:10px;
-  font-family:'DM Sans',sans-serif; font-size:14px; font-weight:700;
-  cursor:pointer; transition:background .2s;
-}
-.pay-confirm:hover { background:#f0c030; }
-
-/* ── SUCCESS ── */
-.success-screen {
-  display:none; text-align:center; padding:32px 0;
-}
-.success-screen.show { display:block; }
-.success-icon { font-size:60px; margin-bottom:16px; }
-.success-title { font-family:'Cormorant Garamond',serif; font-size:28px; margin-bottom:8px; }
-.success-desc { font-size:13px; color:var(--muted); line-height:1.7; }
-
-/* ── TOAST ── */
-.toast { position:fixed; bottom:22px; right:22px; background:var(--card); border:1px solid var(--sand); border-radius:9px; padding:11px 16px; font-size:13px; z-index:999; transform:translateY(50px); opacity:0; pointer-events:none; transition:all .3s; }
-.toast.show { transform:translateY(0); opacity:1; }
-
-/* ── RESPONSIVE ── */
-@media(max-width:768px) {
-  .app { grid-template-columns:1fr; }
-  .sidebar { display:none; }
-  .stats-row { grid-template-columns:1fr 1fr; }
-  .form-grid { grid-template-columns:1fr; }
-  .form-grid.three { grid-template-columns:1fr 1fr; }
-  .lst-card { grid-template-columns:60px 1fr; }
-  .lst-actions { flex-direction:row; grid-column:1/-1; }
-}
-</style>
-</head>
-<body>
-
-<!-- LOGIN -->
-<div class="login-screen" id="loginScreen">
-  <div class="login-box">
-    <div class="login-logo">ESTA</div>
-    <p class="login-sub">Кабинет агента по недвижимости ПМР.<br>Войди через Telegram — быстро и безопасно.</p>
-
-    <button class="login-tg" onclick="startTgLogin()">
-      ✈️ Войти через Telegram
-    </button>
-
-    <div class="login-divider">или введи код от администратора</div>
-
-    <div class="login-code-wrap" id="codeWrap">
-      <label class="lc-label">Код доступа</label>
-      <input class="lc-input" id="codeInput" maxlength="6" placeholder="· · · · · ·" oninput="checkCode(this.value)">
-      <button class="lc-btn" onclick="submitCode()">Войти</button>
-    </div>
-
-    <button style="background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;margin-top:12px;font-family:'DM Sans',sans-serif;" onclick="document.getElementById('codeWrap').classList.toggle('show')">
-      У меня есть код от администратора
-    </button>
-
-    <p class="login-hint">
-      Нажми "Войти через Telegram" → напиши боту <strong style="color:var(--sand)">@realinvest_pmr_bot</strong> → получи код → введи его здесь.
-    </p>
-  </div>
-</div>
-
-<!-- APP -->
-<div class="app" id="appView" style="display:none">
-
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="sb-logo">ESTA <small>АГЕНТ</small></div>
-    <div class="sb-agent">
-      <div class="sb-avatar" id="sbAvatar">А</div>
-      <div>
-        <div class="sb-name" id="sbName">Агент</div>
-        <div class="sb-role" id="sbRole">Риэлтор</div>
-      </div>
-    </div>
-    <nav class="sb-nav">
-      <button class="sb-item active" onclick="goPage('dashboard',this)"><span class="ico">📊</span>Дашборд</button>
-      <button class="sb-item" onclick="goPage('my-listings',this)"><span class="ico">🏠</span>Мои объекты <span class="sb-badge" id="myCount">0</span></button>
-      <button class="sb-item" onclick="goPage('add',this)"><span class="ico">➕</span>Добавить объект</button>
-      <button class="sb-item" onclick="goPage('leads',this)"><span class="ico">📋</span>Заявки <span class="sb-badge" id="leadsCount" style="background:var(--green);color:#0d0f12">0</span></button>
-      <button class="sb-item" onclick="goPage('vip',this)"><span class="ico">⭐</span>VIP размещение</button>
-      <button class="sb-item" onclick="goPage('profile',this)"><span class="ico">👤</span>Профиль</button>
-    </nav>
-    <div class="sb-bottom">
-      <div class="sb-stat"><span>Просмотры сегодня</span><strong id="views">—</strong></div>
-      <div class="sb-stat"><span>Активных объектов</span><strong id="activeCount">—</strong></div>
-      <div class="sb-stat"><span>VIP объектов</span><strong id="vipCount">—</strong></div>
-    </div>
-  </aside>
-
-  <!-- MAIN -->
-  <main class="main">
-
-    <!-- DASHBOARD -->
-    <div class="page active" id="page-dashboard">
-      <h1 class="page-title">Добро пожаловать, <em id="welcomeName">агент</em></h1>
-      <p class="page-sub">Управляй объявлениями, смотри заявки, продвигай объекты.</p>
-
-      <div class="stats-row">
-        <div class="stat-card">
-          <div class="stat-num" id="st-listings">0</div>
-          <div class="stat-label">Объектов всего</div>
-          <div class="stat-delta" id="st-active-txt">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num" id="st-leads">0</div>
-          <div class="stat-label">Заявок получено</div>
-          <div class="stat-delta">за всё время</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num" id="st-vip">0</div>
-          <div class="stat-label">VIP объектов</div>
-          <div class="stat-delta" style="color:var(--gold)">приоритет в поиске</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num" style="font-size:24px" id="st-phone">+373 777 72 473</div>
-          <div class="stat-label">Контакт агента</div>
-          <div class="stat-delta">@solei3337</div>
-        </div>
-      </div>
-
-      <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;margin-bottom:16px">Последние заявки</h3>
-      <div id="recentLeads" style="display:flex;flex-direction:column;gap:10px">
-        <div style="background:var(--ink2);border:1px dashed rgba(255,255,255,.07);border-radius:12px;padding:24px;text-align:center;color:var(--muted);font-size:13px">
-          Заявок пока нет. Когда клиент оставит заявку на сайте — она появится здесь и придёт в Telegram.
-        </div>
-      </div>
-    </div>
-
-    <!-- MY LISTINGS -->
-    <div class="page" id="page-my-listings">
-      <h1 class="page-title">Мои <em>объекты</em></h1>
-      <p class="page-sub">Все добавленные тобой объявления.</p>
-      <div style="margin-bottom:16px;display:flex;gap:10px">
-        <button onclick="goPage('add',document.querySelector('.sb-item:nth-child(3)'))" style="background:var(--sand);color:var(--ink);border:none;padding:10px 22px;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">+ Добавить объект</button>
-      </div>
-      <div class="listings-list" id="myListings">
-        <div style="background:var(--ink2);border:1px dashed rgba(255,255,255,.07);border-radius:12px;padding:40px;text-align:center;color:var(--muted)">
-          <div style="font-size:40px;margin-bottom:12px">🏚️</div>
-          <div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--text);margin-bottom:6px">Объектов пока нет</div>
-          <div style="font-size:13px">Добавь первое объявление — займёт 2 минуты</div>
-        </div>
-      </div>
-    </div>
 <script>
 
 // API сервера
 const API_URL = "https://web-production-c32cc.up.railway.app/listings";
+
 
 // загрузка объявлений
 async function loadListings(){
@@ -509,10 +73,6 @@ ${item.price ? item.price + '$' : 'Цена по запросу'}
 VIP
 </button>
 
-<button class="lst-btn danger">
-Удалить
-</button>
-
 </div>
 
 </div>
@@ -523,13 +83,45 @@ container.appendChild(card);
 
 });
 
-// обновление статистики
 document.getElementById("myCount").innerText = data.listings.length;
 document.getElementById("st-listings").innerText = data.listings.length;
 
 }catch(err){
 
 console.error("Ошибка загрузки:", err);
+
+}
+
+}
+
+
+
+// добавление объявления
+async function addListing(listing){
+
+try{
+
+const res = await fetch(API_URL,{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify(listing)
+});
+
+const data = await res.json();
+
+console.log("Added:",data);
+
+loadListings();
+
+return true;
+
+}catch(e){
+
+console.log("API error:",e);
+
+return false;
 
 }
 
@@ -554,16 +146,16 @@ if(btn) btn.classList.add("active");
 }
 
 
+
 // вход по коду
 function checkCode(code){
 
 if(code.length === 6){
-
 submitCode();
-
 }
 
 }
+
 
 function submitCode(){
 
@@ -575,39 +167,15 @@ loadListings();
 }
 
 
-// Telegram вход (заглушка)
+
+// Telegram вход
 function startTgLogin(){
 
 alert("Напиши боту @realinvest_pmr_bot и получи код входа");
 
 }
-async function addListing(listing){
 
-try{
 
-const res = await fetch("https://web-production-c32cc.up.railway.app/listings",{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify(listing)
-});
-
-const data = await res.json();
-
-console.log("Added:",data);
-
-return true;
-
-}catch(e){
-
-console.log("API error:",e);
-
-return false;
-
-}
-
-}
 
 // запуск после загрузки страницы
 document.addEventListener("DOMContentLoaded", () => {
@@ -617,9 +185,3 @@ console.log("ESTA Agent panel loaded");
 });
 
 </script>
-    
-</main>
-</div>
-
-</body>
-  </html>
