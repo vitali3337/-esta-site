@@ -581,7 +581,33 @@ function startTgLogin(){
 alert("Напиши боту @realinvest_pmr_bot и получи код входа");
 
 }
+async function addListing(listing){
 
+try{
+
+const res = await fetch("https://web-production-c32cc.up.railway.app/listings",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify(listing)
+});
+
+const data = await res.json();
+
+console.log("Added:",data);
+
+return true;
+
+}catch(e){
+
+console.log("API error:",e);
+
+return false;
+
+}
+
+}
 
 // запуск после загрузки страницы
 document.addEventListener("DOMContentLoaded", () => {
