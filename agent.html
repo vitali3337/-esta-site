@@ -3,481 +3,131 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Кабинет агента — ESTA</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>ESTA — Кабинет агента</title>
+
 <style>
-:root{--bg:#f7f5f2;--white:#fff;--ink:#181510;--muted:#8c8780;--sand:#b5956a;--sand3:#f2e8d9;--green:#1a7a4a;--border:rgba(181,149,106,.18);--r:12px;}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);}
-.nav{background:var(--white);border-bottom:1px solid var(--border);padding:0 24px;height:58px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100;}
-.nav-logo{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;}
-.nav-logo span{color:var(--sand);}
-.nav-logo a{text-decoration:none;color:inherit;}
-.nav-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
-.btn{padding:7px 16px;border-radius:8px;border:none;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;}
-.btn-out{background:transparent;border:1.5px solid var(--border);color:var(--ink);}
-.btn-solid{background:var(--ink);color:#fff;}
-.btn-sand{background:var(--sand);color:#fff;}
 
-/* LOGIN SCREEN */
-.login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
-.login-box{background:#fff;border-radius:20px;border:1px solid var(--border);padding:40px;width:100%;max-width:420px;text-align:center;}
-.login-logo{font-family:'Playfair Display',serif;font-size:28px;margin-bottom:6px;}
-.login-logo span{color:var(--sand);}
-.login-sub{font-size:13px;color:var(--muted);margin-bottom:28px;}
-.login-tabs{display:flex;background:var(--bg);border-radius:10px;padding:3px;margin-bottom:22px;}
-.lt{flex:1;padding:8px;border:none;background:transparent;border-radius:8px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .18s;}
-.lt.active{background:#fff;color:var(--sand);box-shadow:0 1px 4px rgba(0,0,0,.08);}
-.fg{margin-bottom:12px;text-align:left;}
-.fg label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:4px;}
-.fg input,.fg select{width:100%;background:var(--bg);border:1.5px solid transparent;border-radius:9px;padding:10px 13px;font-size:13px;color:var(--ink);outline:none;transition:border-color .18s;}
-.fg input:focus,.fg select:focus{border-color:var(--sand);background:#fff;}
-.fg input::placeholder{color:var(--muted);}
-.submit-btn{width:100%;background:var(--ink);color:#fff;border:none;padding:12px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;margin-top:4px;font-family:'Inter',sans-serif;}
-.submit-btn:hover{background:var(--sand);}
-.or-div{text-align:center;font-size:12px;color:var(--muted);margin:14px 0;position:relative;}
-.or-div::before,.or-div::after{content:'';position:absolute;top:50%;width:42%;height:1px;background:var(--border);}
-.or-div::before{left:0;}.or-div::after{right:0;}
-.tg-btn{width:100%;background:#229ED9;color:#fff;border:none;padding:11px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:'Inter',sans-serif;}
-
-/* DASHBOARD */
-.dashboard{display:none;max-width:1100px;margin:24px auto;padding:0 20px;}
-.dash-header{display:flex;align-items:center;gap:16px;margin-bottom:24px;background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:20px;}
-.avatar{width:56px;height:56px;border-radius:50%;background:var(--sand3);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:var(--sand);flex-shrink:0;}
-.dh-name{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;}
-.dh-plan{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;padding:3px 8px;border-radius:5px;background:var(--sand3);color:var(--sand);margin-top:3px;}
-.dh-right{margin-left:auto;display:flex;gap:8px;}
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
-.stat-card{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;}
-.sc-num{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;}
-.sc-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px;}
-.sc-sub{font-size:11px;color:var(--green);font-weight:600;margin-top:2px;}
-.tabs-row{display:flex;gap:2px;margin-bottom:16px;background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:4px;}
-.tab{flex:1;padding:8px;border:none;background:transparent;border-radius:8px;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;transition:all .18s;}
-.tab.active{background:var(--ink);color:#fff;}
-
-/* LISTINGS TAB */
-.add-btn{background:var(--sand);color:#fff;border:none;padding:9px 18px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;}
-.prop-list{display:flex;flex-direction:column;gap:10px;margin-top:14px;}
-.prop-item{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;display:flex;align-items:center;gap:14px;}
-.pi-img{width:72px;height:56px;border-radius:8px;background:var(--bg);object-fit:cover;flex-shrink:0;}
-.pi-info{flex:1;}
-.pi-title{font-size:13px;font-weight:700;margin-bottom:3px;}
-.pi-meta{font-size:11px;color:var(--muted);}
-.pi-price{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;margin-right:8px;}
-.pi-status{font-size:10px;font-weight:700;padding:3px 7px;border-radius:5px;}
-.active-s{background:#e6f4ec;color:var(--green);}
-.vip-s{background:#fef3cd;color:#856404;}
-.pi-actions{display:flex;gap:6px;}
-.icon-btn{width:30px;height:30px;border-radius:7px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
-.icon-btn:hover{border-color:var(--sand);color:var(--sand);}
-.empty-list{text-align:center;padding:40px;color:var(--muted);}
-
-/* LEADS TAB */
-.lead-item{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;display:flex;align-items:center;gap:14px;margin-bottom:10px;}
-.li-dot{width:10px;height:10px;border-radius:50%;background:var(--green);flex-shrink:0;}
-.li-dot.old{background:var(--muted);}
-.li-name{font-size:13px;font-weight:700;}
-.li-phone{font-size:13px;color:var(--sand);font-weight:600;}
-.li-prop{font-size:11px;color:var(--muted);}
-.li-time{font-size:10px;color:var(--muted);margin-left:auto;}
-
-/* ADD FORM */
-.add-form{display:none;background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:22px;margin-top:14px;}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.fg-full{grid-column:1/-1;}
-.form-submit{background:var(--sand);color:#fff;border:none;padding:11px 28px;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;}
-.form-cancel{background:transparent;border:1.5px solid var(--border);color:var(--muted);padding:11px 20px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;}
-
-/* PROFILE TAB */
-.profile-form{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:22px;}
-.plan-card{background:linear-gradient(135deg,var(--ink),#3d2f20);color:#fff;border-radius:var(--r);padding:20px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;}
-.pc-info h3{font-family:'Playfair Display',serif;font-size:16px;}
-.pc-info p{font-size:12px;opacity:.6;margin-top:3px;}
-.pc-upgrade{background:var(--sand);color:#fff;border:none;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;}
-
-.toast{position:fixed;bottom:18px;right:18px;background:var(--ink);color:#fff;border-radius:9px;padding:10px 16px;font-size:13px;z-index:999;transform:translateY(60px);opacity:0;transition:all .3s;}
-.toast.show{transform:translateY(0);opacity:1;}
-
-@media(max-width:700px){
-  .stats-row{grid-template-columns:1fr 1fr;}
-  .form-grid{grid-template-columns:1fr;}
-  .fg-full{grid-column:auto;}
-  .dh-right{display:none;}
-  .pi-actions .icon-btn:nth-child(n+3){display:none;}
+body{
+font-family:Arial;
+background:#f5f5f5;
+margin:0;
 }
+
+.container{
+max-width:600px;
+margin:auto;
+padding:40px 20px;
+}
+
+h1{
+margin-bottom:20px;
+}
+
+form{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 10px 20px rgba(0,0,0,0.1);
+display:flex;
+flex-direction:column;
+gap:12px;
+}
+
+input,textarea{
+padding:10px;
+border:1px solid #ccc;
+border-radius:6px;
+font-size:14px;
+}
+
+button{
+padding:12px;
+background:black;
+color:white;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+button:hover{
+background:#c4924a;
+}
+
 </style>
+
 </head>
 <body>
 
-<nav class="nav">
-  <div class="nav-logo"><a href="index.html">ESTA<span>.</span></a></div>
-  <span style="font-size:12px;color:var(--muted)">Кабинет агента</span>
-  <div class="nav-right">
-    <a href="index.html" class="btn btn-out">← Сайт</a>
-    <button class="btn btn-solid" onclick="logout()" style="display:none" id="logoutBtn">Выйти</button>
-  </div>
-</nav>
+<div class="container">
 
-<!-- LOGIN -->
-<div class="login-screen" id="loginScreen">
-  <div class="login-box">
-    <div class="login-logo">ESTA<span>.</span></div>
-    <div class="login-sub">Кабинет агента</div>
-    <div class="login-tabs">
-      <button class="lt active" id="lt-login" onclick="switchLoginTab('login')">Войти</button>
-      <button class="lt" id="lt-reg" onclick="switchLoginTab('reg')">Регистрация</button>
-    </div>
+<h1>Добавить объект</h1>
 
-    <div id="lf-login">
-      <div class="fg"><label>Телефон или Email</label><input id="l-phone" placeholder="+373 777 00 000"></div>
-      <div class="fg"><label>Пароль</label><input id="l-pass" type="password" placeholder="••••••••"></div>
-      <button class="submit-btn" onclick="doLogin()">Войти в кабинет</button>
-      <div class="or-div">или</div>
-      <button class="tg-btn" onclick="loginTelegram()">✈️ Войти через Telegram-бота</button>
-      <p style="font-size:11px;color:var(--muted);margin-top:14px">Нажми кнопку → напиши боту <b>/start</b> → получи код → введи ниже</p>
-      <div class="fg" style="margin-top:10px"><label>Код из Telegram</label><input id="tg-code" placeholder="Например: a3f8b2c1" oninput="if(this.value.length>=6)loginByCode()"></div>
-    </div>
+<form id="addListing">
 
-    <div id="lf-reg" style="display:none">
-      <div class="fg"><label>Имя *</label><input id="r-name" placeholder="Виталий"></div>
-      <div class="fg"><label>Телефон *</label><input id="r-phone" placeholder="+373 777 00 000"></div>
-      <div class="fg"><label>Email</label><input id="r-email" type="email" placeholder="email@mail.com"></div>
-      <div class="fg"><label>Пароль *</label><input id="r-pass" type="password" placeholder="Минимум 6 символов"></div>
-      <div class="fg"><label>Тип</label>
-        <select id="r-type">
-          <option value="person">Частное лицо — бесплатно</option>
-          <option value="agent">Агент / Риэлтор — $15/мес</option>
-          <option value="agency">Агентство — $15/мес</option>
-        </select>
-      </div>
-      <button class="submit-btn" onclick="doRegister()">Создать аккаунт</button>
-      <div class="or-div">или</div>
-      <button class="tg-btn" onclick="loginTelegram()">✈️ Регистрация через Telegram</button>
-    </div>
-  </div>
+<input type="text" id="title" placeholder="Название объекта" required>
+
+<input type="number" id="price" placeholder="Цена $" required>
+
+<input type="text" id="city" placeholder="Город" required>
+
+<input type="number" id="rooms" placeholder="Количество комнат">
+
+<input type="text" id="floor" placeholder="Этаж">
+
+<input type="text" id="phone" placeholder="Телефон">
+
+<input type="text" id="image" placeholder="Ссылка на фото">
+
+<textarea id="description" placeholder="Описание"></textarea>
+
+<button type="submit">Добавить объявление</button>
+
+</form>
+
 </div>
-
-<!-- DASHBOARD -->
-<div class="dashboard" id="dashboard">
-  <div class="dash-header">
-    <div class="avatar" id="userAvatar">В</div>
-    <div>
-      <div class="dh-name" id="userName">Виталий</div>
-      <div><span class="dh-plan" id="userPlan">Частное лицо</span></div>
-      <div style="font-size:11px;color:var(--muted);margin-top:4px" id="userPhone"></div>
-    </div>
-    <div class="dh-right">
-      <button class="btn btn-out" onclick="logout()">Выйти</button>
-      <button class="add-btn" onclick="toggleAddForm()">+ Добавить объявление</button>
-    </div>
-  </div>
-
-  <div class="stats-row">
-    <div class="stat-card"><div class="sc-num" id="st-props">0</div><div class="sc-label">Объявлений</div><div class="sc-sub">активных</div></div>
-    <div class="stat-card"><div class="sc-num" id="st-views">0</div><div class="sc-label">Просмотров</div><div class="sc-sub">за всё время</div></div>
-    <div class="stat-card"><div class="sc-num" id="st-leads">0</div><div class="sc-label">Заявок</div><div class="sc-sub">получено</div></div>
-    <div class="stat-card"><div class="sc-num" id="st-vip">0</div><div class="sc-label">VIP</div><div class="sc-sub">активных</div></div>
-  </div>
-
-  <div class="tabs-row">
-    <button class="tab active" onclick="showTab('props',this)">🏠 Мои объявления</button>
-    <button class="tab" onclick="showTab('leads',this)">📥 Заявки</button>
-    <button class="tab" onclick="showTab('profile',this)">👤 Профиль</button>
-  </div>
-
-  <!-- PROPS TAB -->
-  <div id="tab-props">
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <div style="font-size:13px;color:var(--muted)">Ваши объявления на платформе ESTA</div>
-      <button class="add-btn" onclick="toggleAddForm()">+ Добавить</button>
-    </div>
-
-    <!-- ADD FORM -->
-    <div class="add-form" id="addForm">
-      <h3 style="font-family:'Playfair Display',serif;font-size:18px;margin-bottom:16px">Новое объявление</h3>
-      <div class="form-grid">
-        <div class="fg fg-full"><label>Заголовок *</label><input id="p-title" placeholder="Продам 3-комн. квартиру в центре Тирасполя"></div>
-        <div class="fg"><label>Тип</label>
-          <select id="p-type"><option value="квартира">Квартира</option><option value="дом">Дом / Дача</option><option value="участок">Участок</option><option value="коммерция">Коммерция</option><option value="гараж">Гараж</option></select>
-        </div>
-        <div class="fg"><label>Сделка</label>
-          <select id="p-deal"><option value="sale">Продажа</option><option value="rent">Аренда</option></select>
-        </div>
-        <div class="fg"><label>Город</label>
-          <select id="p-city"><option value="тирасполь">Тирасполь</option><option value="бендеры">Бендеры</option><option value="рыбница">Рыбница</option><option value="кишинёв">Кишинёв</option><option value="бельцы">Бельцы</option></select>
-        </div>
-        <div class="fg"><label>Район / Адрес</label><input id="p-district" placeholder="Центр, ул. Ленина 5"></div>
-        <div class="fg"><label>Цена $ *</label><input id="p-price" type="number" placeholder="45000"></div>
-        <div class="fg"><label>Площадь м²</label><input id="p-area" type="number" placeholder="65"></div>
-        <div class="fg"><label>Комнат</label><input id="p-rooms" type="number" placeholder="2" min="1" max="10"></div>
-        <div class="fg"><label>Этаж / Всего</label><input id="p-floor" placeholder="3/9"></div>
-        <div class="fg"><label>Телефон для связи</label><input id="p-phone" placeholder="+373 777 00 000"></div>
-        <div class="fg fg-full"><label>Описание</label><textarea id="p-desc" style="width:100%;background:var(--bg);border:1.5px solid transparent;border-radius:9px;padding:10px 13px;font-size:13px;color:var(--ink);outline:none;resize:vertical;min-height:80px;font-family:'Inter',sans-serif" placeholder="Опишите объект..."></textarea></div>
-        <div class="fg fg-full"><label>Ссылка на фото (URL)</label><input id="p-img" placeholder="https://...jpg"></div>
-      </div>
-      <div style="display:flex;gap:10px;margin-top:6px">
-        <button class="form-submit" onclick="submitProp()">Опубликовать</button>
-        <button class="form-cancel" onclick="toggleAddForm()">Отмена</button>
-      </div>
-    </div>
-
-    <div class="prop-list" id="propList"></div>
-  </div>
-
-  <!-- LEADS TAB -->
-  <div id="tab-leads" style="display:none">
-    <p style="font-size:13px;color:var(--muted);margin-bottom:14px">Заявки поступают также в Telegram-бот @realinvest_pmr_bot</p>
-    <div id="leadsList"></div>
-  </div>
-
-  <!-- PROFILE TAB -->
-  <div id="tab-profile" style="display:none">
-    <div class="profile-form">
-      <div class="plan-card">
-        <div class="pc-info">
-          <h3 id="planTitle">Частное лицо</h3>
-          <p id="planDesc">До 3 объявлений бесплатно</p>
-        </div>
-        <button class="pc-upgrade" onclick="upgradePlan()">Upgrade → $15/мес</button>
-      </div>
-      <div class="form-grid">
-        <div class="fg"><label>Имя</label><input id="pr-name"></div>
-        <div class="fg"><label>Фамилия</label><input id="pr-surname"></div>
-        <div class="fg"><label>Телефон</label><input id="pr-phone"></div>
-        <div class="fg"><label>Email</label><input id="pr-email"></div>
-        <div class="fg"><label>Агентство</label><input id="pr-agency" placeholder="РеалИнвест"></div>
-        <div class="fg"><label>Город</label><input id="pr-city" placeholder="Тирасполь"></div>
-      </div>
-      <button class="form-submit" onclick="saveProfile()">Сохранить профиль</button>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
 
 <script>
-const API='https://web-production-e24bc.up.railway.app';
-const SECRET='realinvest2024';
-let user=null;
-let myProps=[];
-let myLeads=[];
 
-window.onload=()=>{
-  user=JSON.parse(localStorage.getItem('esta_user')||'null');
-  if(user){showDashboard();}
+const API = "https://realinvest-api-production.up.railway.app";
+
+document.getElementById("addListing").addEventListener("submit", async function(e){
+
+e.preventDefault();
+
+const listing = {
+title:document.getElementById("title").value,
+price:parseInt(document.getElementById("price").value),
+city:document.getElementById("city").value,
+rooms:parseInt(document.getElementById("rooms").value || 0),
+floor:document.getElementById("floor").value,
+phone:document.getElementById("phone").value,
+image:document.getElementById("image").value,
+description:document.getElementById("description").value
 };
 
-function switchLoginTab(t){
-  document.getElementById('lt-login').classList.toggle('active',t==='login');
-  document.getElementById('lt-reg').classList.toggle('active',t==='reg');
-  document.getElementById('lf-login').style.display=t==='login'?'':'none';
-  document.getElementById('lf-reg').style.display=t==='reg'?'':'none';
+try{
+
+await fetch(API + "/listings",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify(listing)
+});
+
+alert("Объявление добавлено");
+
+document.getElementById("addListing").reset();
+
+}catch(e){
+
+alert("Ошибка отправки");
+
 }
 
-function loginTelegram(){
-  window.open('https://t.me/realinvest_pmr_bot?start=login','_blank');
-  toast('Напиши боту /start — скопируй и вставь код выше');
-}
+});
 
-function loginByCode(){
-  const code=document.getElementById('tg-code').value.trim();
-  if(code.length<6)return;
-  // Simple local auth by code
-  user={name:'Агент ESTA',phone:'',plan:'free',code};
-  localStorage.setItem('esta_user',JSON.stringify(user));
-  showDashboard();
-  toast('✅ Вход выполнен!');
-}
-
-function doLogin(){
-  const phone=document.getElementById('l-phone').value.trim();
-  const pass=document.getElementById('l-pass').value;
-  if(!phone||!pass){toast('⚠️ Заполни все поля');return;}
-  user={name:phone.split('@')[0],phone,plan:'free'};
-  localStorage.setItem('esta_user',JSON.stringify(user));
-  showDashboard();
-}
-
-function doRegister(){
-  const name=document.getElementById('r-name').value.trim();
-  const phone=document.getElementById('r-phone').value.trim();
-  const pass=document.getElementById('r-pass').value;
-  const type=document.getElementById('r-type').value;
-  if(!phone||!pass){toast('⚠️ Заполни телефон и пароль');return;}
-  if(pass.length<6){toast('⚠️ Пароль минимум 6 символов');return;}
-  user={name:name||phone,phone,plan:type==='person'?'free':'pro'};
-  localStorage.setItem('esta_user',JSON.stringify(user));
-  // Notify admin
-  fetch(`${API}/leads`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,phone,message:`Регистрация: ${type}`,listing:'Новый агент ESTA'})}).catch(()=>{});
-  if(type!=='person')toast('Аккаунт создан! Для активации напиши @solei3337');
-  showDashboard();
-}
-
-function showDashboard(){
-  document.getElementById('loginScreen').style.display='none';
-  document.getElementById('dashboard').style.display='block';
-  document.getElementById('logoutBtn').style.display='';
-  fillProfile();
-  loadMyProps();
-  loadLeads();
-}
-
-function fillProfile(){
-  if(!user)return;
-  const init=(user.name||'А')[0].toUpperCase();
-  document.getElementById('userAvatar').textContent=init;
-  document.getElementById('userName').textContent=user.name||'Агент';
-  document.getElementById('userPhone').textContent=user.phone||'';
-  const planMap={free:'Частное лицо',pro:'Агентство',agent:'Агент'};
-  document.getElementById('userPlan').textContent=planMap[user.plan]||'Частное лицо';
-  document.getElementById('planTitle').textContent=planMap[user.plan]||'Частное лицо';
-  document.getElementById('planDesc').textContent=user.plan==='free'?'До 3 объявлений бесплатно':'Неограниченные объявления';
-  document.getElementById('pr-name').value=user.name||'';
-  document.getElementById('pr-phone').value=user.phone||'';
-  document.getElementById('pr-email').value=user.email||'';
-}
-
-async function loadMyProps(){
-  try{
-    const r=await fetch(`${API}/listings?limit=100`);
-    const d=await r.json();
-    myProps=(d.listings||[]).slice(0,user?.plan==='free'?3:100);
-  }catch{myProps=[];}
-  renderProps();
-  updateStats();
-}
-
-async function loadLeads(){
-  try{
-    const r=await fetch(`${API}/leads?secret=${SECRET}`);
-    const d=await r.json();
-    myLeads=d.leads||[];
-  }catch{myLeads=[];}
-  renderLeads();
-}
-
-function renderProps(){
-  const c=document.getElementById('propList');
-  document.getElementById('st-props').textContent=myProps.length;
-  if(!myProps.length){c.innerHTML='<div class="empty-list"><div style="font-size:40px;margin-bottom:10px">🏚️</div><p>У вас пока нет объявлений</p><p style="font-size:12px;margin-top:6px">Нажмите "+ Добавить" чтобы разместить первое</p></div>';return;}
-  c.innerHTML=myProps.map(p=>`
-    <div class="prop-item">
-      <img class="pi-img" src="${p.img||p.photos&&p.photos[0]||''}" onerror="this.style.background='var(--bg)'">
-      <div class="pi-info">
-        <div class="pi-title">${p.title||'Без названия'}</div>
-        <div class="pi-meta">${p.district||p.city||''} · ${p.area?p.area+'м²':''} · 👁 ${p.views||0}</div>
-      </div>
-      <div style="text-align:right">
-        <div class="pi-price">$${Number(p.price).toLocaleString()}</div>
-        <span class="pi-status ${p.is_vip?'vip-s':'active-s'}">${p.is_vip?'⭐ VIP':'Активно'}</span>
-      </div>
-      <div class="pi-actions">
-        ${!p.is_vip?`<button class="icon-btn" title="Сделать VIP" onclick="makeVip('${p.id}')">⭐</button>`:''}
-        <button class="icon-btn" title="Удалить" onclick="deleteProp('${p.id}')">🗑️</button>
-      </div>
-    </div>`).join('');
-}
-
-function renderLeads(){
-  const c=document.getElementById('leadsList');
-  document.getElementById('st-leads').textContent=myLeads.length;
-  if(!myLeads.length){c.innerHTML='<div class="empty-list"><div style="font-size:40px;margin-bottom:10px">📭</div><p>Заявок пока нет</p><p style="font-size:12px;margin-top:6px">Они также приходят в Telegram @realinvest_pmr_bot</p></div>';return;}
-  c.innerHTML=myLeads.map(l=>`
-    <div class="lead-item">
-      <div class="li-dot ${l.status!=='new'?'old':''}"></div>
-      <div>
-        <div class="li-name">${l.name||'Аноним'} <span class="li-phone">${l.phone}</span></div>
-        <div class="li-prop">${l.listing||l.property_title||'Общий вопрос'} · ${l.contact_via||'Звонок'}</div>
-      </div>
-      <div class="li-time">${(l.created_at||'').split('T')[0]||'сегодня'}</div>
-    </div>`).join('');
-}
-
-function updateStats(){
-  const views=myProps.reduce((s,p)=>s+(p.views||0),0);
-  const vip=myProps.filter(p=>p.is_vip).length;
-  document.getElementById('st-views').textContent=views;
-  document.getElementById('st-vip').textContent=vip;
-}
-
-function toggleAddForm(){
-  const f=document.getElementById('addForm');
-  f.style.display=f.style.display==='none'||f.style.display===''?'block':'none';
-  if(f.style.display==='block')f.scrollIntoView({behavior:'smooth'});
-}
-
-async function submitProp(){
-  const title=document.getElementById('p-title').value.trim();
-  const price=document.getElementById('p-price').value;
-  if(!title||!price){toast('⚠️ Заполни заголовок и цену');return;}
-  const body={
-    title,
-    type:document.getElementById('p-type').value,
-    deal:document.getElementById('p-deal').value,
-    city:document.getElementById('p-city').value,
-    district:document.getElementById('p-district').value,
-    price:parseFloat(price),
-    area:document.getElementById('p-area').value||null,
-    rooms:document.getElementById('p-rooms').value||null,
-    floor:document.getElementById('p-floor').value||null,
-    phone:document.getElementById('p-phone').value||user?.phone||'',
-    desc:document.getElementById('p-desc').value,
-    img:document.getElementById('p-img').value||null,
-    source:'agent',
-  };
-  try{
-    const r=await fetch(`${API}/listings`,{method:'POST',headers:{'Content-Type':'application/json','x-secret':SECRET},body:JSON.stringify(body)});
-    const d=await r.json();
-    if(d.ok||d.id){toast('✅ Объявление добавлено!');toggleAddForm();loadMyProps();}
-    else toast('Ошибка: '+JSON.stringify(d));
-  }catch(e){
-    // Save locally as fallback
-    toast('✅ Сохранено локально (API недоступен)');
-    toggleAddForm();
-  }
-}
-
-async function deleteProp(id){
-  if(!confirm('Удалить объявление?'))return;
-  try{
-    await fetch(`${API}/listings/${id}`,{method:'DELETE',headers:{'x-secret':SECRET}});
-    toast('Удалено');
-    loadMyProps();
-  }catch{toast('Ошибка удаления');}
-}
-
-async function makeVip(id){
-  toast('Для VIP ($5) напиши @solei3337 с ID объявления: '+id);
-  setTimeout(()=>window.open('https://t.me/solei3337'),1500);
-}
-
-function upgradePlan(){
-  toast('Для подключения тарифа за $15/мес напиши @solei3337');
-  setTimeout(()=>window.open('https://t.me/solei3337'),1500);
-}
-
-function saveProfile(){
-  user.name=document.getElementById('pr-name').value;
-  user.phone=document.getElementById('pr-phone').value;
-  user.email=document.getElementById('pr-email').value;
-  localStorage.setItem('esta_user',JSON.stringify(user));
-  fillProfile();
-  toast('✅ Профиль сохранён');
-}
-
-function showTab(t,btn){
-  ['props','leads','profile'].forEach(id=>{document.getElementById('tab-'+id).style.display=id===t?'':'none';});
-  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
-  if(btn)btn.classList.add('active');
-}
-
-function logout(){
-  localStorage.removeItem('esta_user');
-  location.reload();
-}
-
-function toast(m){const el=document.getElementById('toast');el.textContent=m;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),3500);}
 </script>
+
 </body>
 </html>
