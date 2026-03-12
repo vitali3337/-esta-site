@@ -1044,4 +1044,72 @@ document.querySelectorAll('.spt').forEach(b => {
 </script>
 <script src="main.js"></script>
 </body>
+<script>
+
+const API="https://realinvest-api-production.up.railway.app";
+
+async function loadListings(){
+
+try{
+
+const res=await fetch(API+"/listings");
+const data=await res.json();
+
+renderListings(data.listings);
+
+}catch(e){
+
+console.log("API error",e);
+
+}
+
+}
+
+function renderListings(list){
+
+const container=document.getElementById("listings");
+
+if(!container)return;
+
+container.innerHTML="";
+
+list.forEach(l=>{
+
+const card=document.createElement("div");
+
+card.className="card";
+
+card.innerHTML=`
+
+<div class="ci-wrap">
+<img src="${l.image || 'https://via.placeholder.com/400'}">
+</div>
+
+<div class="card-body">
+
+<div class="card-title">
+${l.title}
+</div>
+
+<div class="card-meta">
+${l.city || ""}
+</div>
+
+<div class="card-price">
+${l.price}$ 
+</div>
+
+</div>
+
+`;
+
+container.appendChild(card);
+
+});
+
+}
+
+loadListings();
+
+</script>
 </html>
