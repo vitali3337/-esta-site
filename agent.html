@@ -150,7 +150,64 @@ document.getElementById("addListing").reset();
 });
 
 </script>
+<script>
 
+const API="https://realinvest-api-production.up.railway.app"
+
+
+document.getElementById("addListing").onsubmit=async(e)=>{
+
+e.preventDefault()
+
+const listing={
+
+title:title.value,
+price:parseInt(price.value),
+city:city.value,
+
+rooms:parseInt(rooms.value),
+floor:floor.value,
+
+phone:phone.value,
+description:description.value,
+
+image:image1.value,
+image2:image2.value,
+image3:image3.value,
+image4:image4.value,
+image5:image5.value,
+image6:image6.value,
+image7:image7.value,
+image8:image8.value,
+image9:image9.value,
+image10:image10.value
+
+}
+
+await fetch(API+"/listings",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify(listing)
+})
+
+alert("Объявление добавлено")
+
+}
+
+
+async function deleteListing(id){
+
+await fetch(API+"/listings/"+id,{
+method:"DELETE"
+})
+
+alert("Удалено")
+
+}
+
+</script>
 </body>
 
 </html>
