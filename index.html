@@ -472,7 +472,7 @@ img { max-width: 100%; display: block; }
 </div>
 
 <!-- MAIN LAYOUT -->
-<div class="layout" id="listings">
+<div class="layout">
   <aside class="sb">
     <div class="sb-top"><span class="sb-title">Фильтры</span><button class="sb-reset" onclick="resetFilters()">Сбросить</button></div>
     <div class="fg"><label>Тип объекта</label><select id="f-type" onchange="applyFilters()"><option value="">Все типы</option><option value="квартира">Квартира</option><option value="дом">Дом / Дача</option><option value="участок">Участок</option><option value="коммерция">Коммерция</option><option value="гараж">Гараж</option></select></div>
@@ -488,6 +488,7 @@ img { max-width: 100%; display: block; }
     <button class="apply-btn" onclick="applyFilters()">Применить</button>
   </aside>
   <div>
+   <div id="listings" class="grid-v"></div>
     <div class="lt-top">
       <div class="lt-count"><strong id="shown-n">0</strong> объявлений</div>
       <select class="sort-s" id="sort-s" onchange="applyFilters()">
