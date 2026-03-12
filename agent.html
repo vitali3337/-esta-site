@@ -10,16 +10,15 @@
 <style>
 
 body{
-font-family:Arial, sans-serif;
+font-family:Arial;
 background:#f5f5f5;
 margin:0;
-padding:0;
 }
 
 header{
 background:#111;
 color:white;
-padding:15px;
+padding:20px;
 }
 
 .container{
@@ -32,7 +31,7 @@ form{
 background:white;
 padding:20px;
 border-radius:10px;
-box-shadow:0 10px 30px rgba(0,0,0,0.1);
+box-shadow:0 5px 20px rgba(0,0,0,0.1);
 }
 
 input,textarea{
@@ -84,6 +83,8 @@ background:#444;
 
 <input type="text" id="phone" placeholder="Телефон">
 
+<input type="file" id="image">
+
 <textarea id="description" placeholder="Описание"></textarea>
 
 <button type="submit">Добавить объект</button>
@@ -99,6 +100,16 @@ const API="https://realinvest-api-production.up.railway.app";
 document.getElementById("addListing").addEventListener("submit",async function(e){
 
 e.preventDefault();
+
+let imageURL="https://images.unsplash.com/photo-1560185127-6ed189bf02f4";
+
+const file=document.getElementById("image").files[0];
+
+if(file){
+
+imageURL=URL.createObjectURL(file);
+
+}
 
 const listing={
 
@@ -116,7 +127,7 @@ phone:document.getElementById("phone").value,
 
 description:document.getElementById("description").value,
 
-image:"https://images.unsplash.com/photo-1560185127-6ed189bf02f4"
+image:imageURL
 
 };
 
