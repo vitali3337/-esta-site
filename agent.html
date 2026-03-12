@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ESTA — Кабинет агента</title>
+<title>Кабинет агента | ESTA</title>
 
 <style>
 
@@ -11,56 +12,62 @@ body{
 font-family:Arial;
 background:#f5f5f5;
 margin:0;
+padding:0;
+}
+
+header{
+background:#111;
+color:white;
+padding:15px;
 }
 
 .container{
-max-width:600px;
+max-width:800px;
 margin:auto;
-padding:40px 20px;
-}
-
-h1{
-margin-bottom:20px;
+padding:20px;
 }
 
 form{
 background:white;
 padding:20px;
 border-radius:10px;
-box-shadow:0 10px 20px rgba(0,0,0,0.1);
-display:flex;
-flex-direction:column;
-gap:12px;
+box-shadow:0 5px 20px rgba(0,0,0,0.1);
 }
 
 input,textarea{
+width:100%;
 padding:10px;
-border:1px solid #ccc;
+margin-bottom:10px;
 border-radius:6px;
-font-size:14px;
+border:1px solid #ddd;
 }
 
 button{
-padding:12px;
-background:black;
+background:#111;
 color:white;
 border:none;
+padding:12px;
 border-radius:6px;
 cursor:pointer;
 }
 
 button:hover{
-background:#c4924a;
+background:#444;
 }
 
 </style>
 
 </head>
+
 <body>
+
+<header>
+<h2>ESTA — Кабинет агента</h2>
+</header>
 
 <div class="container">
 
-<h1>Добавить объект</h1>
+<h3>Добавить объявление</h3>
 
 <form id="addListing">
 
@@ -76,11 +83,11 @@ background:#c4924a;
 
 <input type="text" id="phone" placeholder="Телефон">
 
-<input type="text" id="image" placeholder="Ссылка на фото">
+<input type="file" id="image">
 
 <textarea id="description" placeholder="Описание"></textarea>
 
-<button type="submit">Добавить объявление</button>
+<button type="submit">Добавить объект</button>
 
 </form>
 
@@ -88,46 +95,62 @@ background:#c4924a;
 
 <script>
 
-const API = "https://realinvest-api-production.up.railway.app";
+const API="https://realinvest-api-production.up.railway.app";
 
-document.getElementById("addListing").addEventListener("submit", async function(e){
+document.getElementById("addListing").addEventListener("submit",async function(e){
 
 e.preventDefault();
 
-const listing = {
+const file=document.getElementById("image").files[0];
+
+let imageURL="";
+
+if(file){
+
+imageURL=URL.createObjectURL(file);
+
+}
+
+const listing={
+
 title:document.getElementById("title").value,
+
 price:parseInt(document.getElementById("price").value),
+
 city:document.getElementById("city").value,
-rooms:parseInt(document.getElementById("rooms").value || 0),
+
+rooms:parseInt(document.getElementById("rooms").value)||0,
+
 floor:document.getElementById("floor").value,
+
 phone:document.getElementById("phone").value,
-image:document.getElementById("image").value,
-description:document.getElementById("description").value
+
+description:document.getElementById("description").value,
+
+image:imageURL
+
 };
 
-try{
+await fetch(API+"/listings",{
 
-await fetch(API + "/listings",{
 method:"POST",
+
 headers:{
 "Content-Type":"application/json"
 },
+
 body:JSON.stringify(listing)
+
 });
 
-alert("Объявление добавлено");
+alert("Объявление добавлено!");
 
 document.getElementById("addListing").reset();
-
-}catch(e){
-
-alert("Ошибка отправки");
-
-}
 
 });
 
 </script>
 
 </body>
+
 </html>
