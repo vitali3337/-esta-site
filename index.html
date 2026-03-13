@@ -13,6 +13,41 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
+   .gallery{
+position:relative;
+height:200px;
+overflow:hidden;
+border-radius:10px;
+}
+
+.gallery img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.g-left,
+.g-right{
+position:absolute;
+top:50%;
+transform:translateY(-50%);
+background:rgba(0,0,0,0.6);
+color:white;
+border:none;
+width:35px;
+height:35px;
+border-radius:50%;
+cursor:pointer;
+font-size:18px;
+}
+
+.g-left{
+left:10px;
+}
+
+.g-right{
+right:10px;
+}
 /* ══════════════════════════════════════════
    ESTA — Design System
    Palette: Deep Navy + Warm Cream + Gold
