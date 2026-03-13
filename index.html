@@ -1272,6 +1272,287 @@ console.log(err);
 loadListings();
 
 </script>
+<script>
+
+// ===== API =====
+const API_CANDIDATES = [
+  "https://web-production-e24bc.up.railway.app",
+  "https://realinvest-api-production.up.railway.app"
+];
+
+let API = API_CANDIDATES[0];
+
+let allListings = [];
+let filtered = [];
+let page = 1;
+const PAGE_SIZE = 12;
+
+
+// ===== получить фото =====
+function getImage(p){
+
+  if(p.images && p.images.length > 0){
+    return p.images[0];
+  }
+
+  if(p.img){
+    return p.img;
+  }
+
+  return "https://via.placeholder.com/400x260?text=No+Photo";
+
+}
+
+
+// ===== загрузка объявлений =====
+async function loadListings(){
+
+  try{
+
+    let res = await fetch(API + "/listings");
+
+    if(!res.ok) throw new Error("API error");
+
+    let data = await res.json();
+
+    allListings = data.listings || data;
+
+  }
+
+  catch(e){
+
+    console.log("API недоступен, используем демо");
+
+    allListings = DEMO;
+
+  }
+
+  filtered = [...allListings];
+
+  render();
+
+}
+
+
+// ===== рендер =====
+function render(){
+
+  const container = document.getElementById("listings");
+
+  container.innerHTML = "";
+
+  const start = 0;
+  const end = page * PAGE_SIZE;
+
+  filtered.slice(start,end).forEach(p=>{
+
+    const card = document.createElement("div");
+
+    card.className = "card";
+
+    card.innerHTML = `
+
+      <div class="card-img">
+        <img src="${getImage(p)}">
+      </div>
+
+      <div class="card-body">
+
+        <div class="card-title">
+          ${p.title || "Объект"}
+        </div>
+
+        <div class="card-city">
+          ${p.city || ""}
+        </div>
+
+        <div class="card-price">
+          $${p.price || ""}
+        </div>
+
+      </div>
+
+    `;
+
+    container.appendChild(card);
+
+  });
+
+  document.getElementById("shown-n").innerText = filtered.length;
+
+}
+
+
+// ===== фильтр =====
+function applyFilters(){
+
+  const city = document.getElementById("s-city")?.value || "";
+  const type = document.getElementById("s-type")?.value || "";
+  const rooms = document.getElementById("s-rooms")?.value || "";
+  const price = document.getElementById("s-price")?.value || "";
+
+  filtered = allListings.filter(p=>{
+
+    if(city && p.city?.toLowerCase() !== city) return false;
+
+    if(type && p.type?.toLowerCase() !== type) return false;
+
+    if(rooms && String(p.rooms) !== rooms) return false;
+
+    if(price && p.price > Number(price)) return false;
+
+    return true;
+
+  });
+
+  page = 1;
+
+  render();
+
+}
+
+
+// ===== сброс =====
+function resetFilters(){
+
+  document.querySelectorAll("select,input").forEach(el=>{
+
+    if(el.type !== "checkbox") el.value="";
+
+  });
+
+  filtered = [...allListings];
+
+  render();
+
+}
+
+
+// ===== загрузить ещё =====
+function loadMore(){
+
+  page++;
+
+  render();
+
+}
+
+
+// ===== AI панель =====
+function toggleAI(){
+
+  const panel = document.getElementById("aiPanel");
+
+  if(panel.style.display==="block"){
+    panel.style.display="none";
+  }else{
+    panel.style.display="block";
+  }
+
+}
+
+
+// ===== AI поиск =====
+function aiSearch(){
+
+  const q = document.getElementById("aiQ").value.toLowerCase();
+
+  if(!q) return;
+
+  filtered = allListings.filter(p=>{
+
+    return JSON.stringify(p).toLowerCase().includes(q);
+
+  });
+
+  render();
+
+}
+
+
+// ===== город =====
+function filterCity(city,el){
+
+  document.querySelectorAll(".cbtn").forEach(b=>b.classList.remove("on"));
+
+  if(el) el.classList.add("on");
+
+  filtered = allListings.filter(p=>{
+
+    if(!city) return true;
+
+    return p.city?.toLowerCase() === city;
+
+  });
+
+  render();
+
+}
+
+
+// ===== тип =====
+function filterType(type){
+
+  filtered = allListings.filter(p=>{
+
+    return p.type?.toLowerCase() === type;
+
+  });
+
+  render();
+
+}
+
+
+// ===== карта =====
+let map;
+let markers=[];
+
+function initMap(){
+
+  map = L.map("map").setView([46.85,29.60],9);
+
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+
+  drawMarkers();
+
+}
+
+
+function drawMarkers(){
+
+  markers.forEach(m=>map.removeLayer(m));
+
+  markers=[];
+
+  filtered.forEach(p=>{
+
+    if(!p.lat) return;
+
+    const m = L.marker([p.lat,p.lng]).addTo(map);
+
+    m.bindPopup(`
+      <b>${p.title}</b><br>
+      $${p.price}
+    `);
+
+    markers.push(m);
+
+  });
+
+}
+
+
+// ===== запуск =====
+loadListings();
+
+setTimeout(()=>{
+  if(document.getElementById("map")){
+    initMap();
+  }
+},1000);
+
+</script>
 </body>
 <script>
 
