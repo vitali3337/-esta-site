@@ -1457,6 +1457,56 @@ function setLang(l, btn) { document.querySelectorAll('.lb').forEach(b => b.class
 function setSPTabEl(btn) { document.querySelectorAll('.sbt').forEach(b => b.classList.remove('on')); btn.classList.add('on'); }
 function setSPTab(name, btn) { document.querySelectorAll('.nt').forEach(b => b.classList.remove('active')); btn.classList.add('active'); }
 function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3200); }
-</script>
+const galleryIndex = {};
+
+function getImages(p){
+
+if(p.images && p.images.length>0){
+return p.images;
+}
+
+if(p.img){
+return [p.img];
+}
+
+return ["https://via.placeholder.com/400x260"];
+
+}
+
+function prevImg(id){
+
+let p = allListings.find(x=>x.id==id);
+
+let imgs = getImages(p);
+
+if(!galleryIndex[id]) galleryIndex[id]=0;
+
+galleryIndex[id]--;
+
+if(galleryIndex[id] < 0){
+galleryIndex[id] = imgs.length-1;
+}
+
+document.getElementById("img-"+id).src = imgs[galleryIndex[id]];
+
+}
+
+function nextImg(id){
+
+let p = allListings.find(x=>x.id==id);
+
+let imgs = getImages(p);
+
+if(!galleryIndex[id]) galleryIndex[id]=0;
+
+galleryIndex[id]++;
+
+if(galleryIndex[id] >= imgs.length){
+galleryIndex[id]=0;
+}
+
+document.getElementById("img-"+id).src = imgs[galleryIndex[id]];
+
+}</script>
 </body>
 </html>
