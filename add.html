@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ESTA — Добавить объект</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f3f3f3;
+margin:0;
+}
+
+header{
+background:black;
+color:white;
+padding:20px;
+font-size:22px;
+}
+
+.container{
+max-width:700px;
+margin:auto;
+background:white;
+padding:30px;
+margin-top:30px;
+border-radius:10px;
+}
+
+input,select,textarea{
+width:100%;
+padding:12px;
+margin-top:10px;
+margin-bottom:20px;
+border:1px solid #ddd;
+border-radius:6px;
+font-size:15px;
+}
+
+button{
+background:black;
+color:white;
+padding:15px;
+border:none;
+border-radius:6px;
+font-size:16px;
+cursor:pointer;
+width:100%;
+}
+
+button:hover{
+background:#333;
+}
+
+.error{
+color:red;
+margin-bottom:15px;
+}
+
+.success{
+color:green;
+margin-bottom:15px;
+}
+
+.preview img{
+width:120px;
+margin-right:10px;
+margin-top:10px;
+border-radius:6px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+ESTA — Добавить объект
+
+</header>
+
+<div class="container">
+
+<div id="msg"></div>
+
+<form id="addListing">
+
+<label>Название</label>
+<input type="text" id="title" required>
+
+<label>Цена $</label>
+<input type="number" id="price" required>
+
+<label>Город</label>
+<select id="city">
+
+<option>Тирасполь</option>
+<option>Бендеры</option>
+<option>Рыбница</option>
+<option>Дубоссары</option>
+
+</select>
+
+<label>Район</label>
+
+<select id="district">
+
+<option>Центр</option>
+<option>Балка</option>
+<option>Западный</option>
+<option>Кировский</option>
+<option>Суклея</option>
+
+</select>
+
+<label>Комнаты</label>
+<input type="number" id="rooms">
+
+<label>Этаж</label>
+<input type="text" id="floor">
+
+<label>Телефон</label>
+<input type="text" id="phone">
+
+<label>Описание</label>
+<textarea id="description"></textarea>
+
+<label>Фото</label>
+
+<input type="file" id="image" multiple>
+
+<div class="preview" id="preview"></div>
+
+<button type="submit">
+
+Добавить объект
+
+</button>
+
+</form>
+
+</div>
+
+<script>
+
+const API="https://realinvest-api-production.up.railway.app/listings"
+
+const form=document.getElementById("addListing")
+
+const preview=document.getElementById("preview")
+
+let images=[]
+
+document.getElementById("image").addEventListener("change",function(){
+
+preview.innerHTML=""
+
+images=[]
+
+const files=this.files
+
+for(let f of files){
+
+const reader=new FileReader()
+
+reader.onload=function(e){
+
+images.push(e.target.result)
+
+const img=document.createElement("img")
+
+img.src=e.target.result
+
+preview.appendChild(img)
+
+}
+
+reader.readAsDataURL(f)
+
+}
+
+})
+
+form.addEventListener("submit",async function(e){
+
+e.preventDefault()
+
+const title=document.getElementById("title").value
+const price=document.getElementById("price").value
+const city=document.getElementById("city").value
+const rooms=document.getElementById("rooms").value
+const floor=document.getElementById("floor").value
+const phone=document.getElementById("phone").value
+const description=document.getElementById("description").value
+
+if(!title || !price){
+
+msg.innerHTML='<div class="error">Заполните обязательные поля</div>'
+
+return
+
+}
+
+const data={
+title,
+price,
+city,
+rooms,
+floor,
+phone,
+description,
+image:images[0] || ""
+}
+
+try{
+
+const r=await fetch(API,{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify(data)
+})
+
+if(r.ok){
+
+msg.innerHTML='<div class="success">Объявление добавлено</div>'
+
+form.reset()
+
+preview.innerHTML=""
+
+}
+
+else{
+
+msg.innerHTML='<div class="error">Ошибка API</div>'
+
+}
+
+}
+
+catch{
+
+msg.innerHTML='<div class="error">Сервер недоступен</div>'
+
+}
+
+})
+
+</script>
+
+</body>
+</html>
