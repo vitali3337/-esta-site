@@ -88,19 +88,28 @@ border-radius:6px;
 
 <script>
 
+// ===== API =====
+const API="https://realinvest-api-production.up.railway.app";
+
+// ===== Cloudinary =====
+const CLOUD_NAME="dquexunri";
+const PRESET="esta_upload";
+
+
+// ===== превью фото =====
 const preview=document.getElementById("preview");
 
 document.getElementById("images").addEventListener("change",function(){
 
 preview.innerHTML="";
 
-let files=this.files;
+let files=[...this.files].slice(0,10);
 
-for(let file of files){
+files.forEach(file=>{
 
 let reader=new FileReader();
 
-reader.onload=function(e){
+reader.onload=e=>{
 
 let img=document.createElement("img");
 img.src=e.target.result;
@@ -111,23 +120,27 @@ preview.appendChild(img);
 
 reader.readAsDataURL(file);
 
-}
+});
 
 });
 
+
+// ===== загрузка фото =====
 async function uploadImages(files){
 
 let urls=[];
 
 for(let file of files){
 
+try{
+
 let formData=new FormData();
 
 formData.append("file",file);
-formData.append("upload_preset","esta_upload");
+formData.append("upload_preset",PRESET);
 
 let res=await fetch(
-"https://api.cloudinary.com/v1_1/dquexunri/image/upload",
+`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
 {
 method:"POST",
 body:formData
@@ -136,7 +149,15 @@ body:formData
 
 let data=await res.json();
 
+if(data.secure_url){
 urls.push(data.secure_url);
+}
+
+}catch(err){
+
+console.log("Ошибка загрузки фото",err);
+
+}
 
 }
 
@@ -144,38 +165,49 @@ return urls;
 
 }
 
+
+// ===== отправка формы =====
 document.getElementById("form").addEventListener("submit",async function(e){
 
 e.preventDefault();
 
-let files=document.getElementById("images").files;
+let files=[...document.getElementById("images").files].slice(0,10);
 
 let imageUrls=await uploadImages(files);
 
 let listing={
 
 title:document.getElementById("title").value,
-price:document.getElementById("price").value,
+price:Number(document.getElementById("price").value),
 city:document.getElementById("city").value,
 description:document.getElementById("description").value,
 images:imageUrls
 
 };
 
-await fetch(
-"https://realinvest-api-production.up.railway.app/listings",
-{
+try{
+
+await fetch(API+"/listings",{
+
 method:"POST",
+
 headers:{
 "Content-Type":"application/json"
 },
+
 body:JSON.stringify(listing)
-}
-);
+
+});
 
 alert("Объявление добавлено");
 
 location.href="/";
+
+}catch(e){
+
+alert("Ошибка API");
+
+}
 
 });
 
