@@ -1042,7 +1042,88 @@ document.querySelectorAll('.spt').forEach(b => {
   b.onclick = function () { document.querySelectorAll('.spt').forEach(x => x.classList.remove('on')); this.classList.add('on'); };
 });
 </script>
-<script src="main.js"></script>
+<script>
+
+const API="https://realinvest-api-production.up.railway.app/listings"
+
+async function loadListings(){
+
+const container=document.getElementById("listings")
+
+container.innerHTML="Загрузка..."
+
+let res=await fetch(API)
+
+let data=await res.json()
+
+container.innerHTML=""
+
+data.listings.forEach(listing=>{
+
+let gallery=""
+
+if(listing.gallery){
+
+gallery=listing.gallery.map(img=>`
+<img src="${img}" onclick="changePhoto(this)">
+`).join("")
+
+}
+
+container.innerHTML+=`
+
+<div class="listing-card">
+
+<div class="gallery">
+
+<img class="main-photo" src="${listing.image}">
+
+<div class="thumbs">
+
+${gallery}
+
+</div>
+
+</div>
+
+<h3>${listing.title}</h3>
+
+<p>${listing.city}</p>
+
+<p><b>$${listing.price}</b></p>
+
+<button onclick="callAgent('${listing.phone}')">
+Заявка
+</button>
+
+</div>
+
+`
+
+})
+
+}
+
+function changePhoto(el){
+
+let card=el.closest(".listing-card")
+
+let main=card.querySelector(".main-photo")
+
+main.src=el.src
+
+}
+
+function callAgent(phone){
+
+alert("Позвоните агенту: "+phone)
+
+}
+
+loadListings()
+
+</script>
+  <script src="main.js"></script>
 </body>
 <script>
 
