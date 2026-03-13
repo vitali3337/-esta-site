@@ -1,55 +1,54 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-
-<title>ESTA — Добавить объект</title>
+<title>Добавить объект</title>
 
 <style>
 
 body{
 font-family:Arial;
 background:#f5f5f5;
-margin:0;
+padding:40px;
 }
 
 .container{
-max-width:700px;
+max-width:600px;
 margin:auto;
-padding:30px;
-}
-
-.card{
 background:white;
 padding:30px;
 border-radius:10px;
-box-shadow:0 5px 20px rgba(0,0,0,0.1);
 }
 
-input,textarea{
+input, textarea{
 width:100%;
-padding:12px;
-margin-bottom:15px;
-border-radius:6px;
+padding:10px;
+margin-top:10px;
+margin-bottom:20px;
 border:1px solid #ddd;
-font-size:16px;
+border-radius:6px;
 }
 
 button{
 background:black;
 color:white;
-padding:14px;
+padding:12px;
 border:none;
-border-radius:8px;
-font-size:16px;
+border-radius:6px;
 cursor:pointer;
-width:100%;
 }
 
-button:hover{
-opacity:0.9;
+.preview{
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+}
+
+.preview img{
+width:100px;
+height:100px;
+object-fit:cover;
+border-radius:6px;
 }
 
 </style>
@@ -60,109 +59,125 @@ opacity:0.9;
 
 <div class="container">
 
-<h1>ESTA — Кабинет агента</h1>
+<h2>Добавить объект</h2>
 
-<div class="card">
+<form id="form">
 
-<h2>Добавить объявление</h2>
+<label>Название</label>
+<input id="title" required>
 
-<form id="addListing">
+<label>Цена</label>
+<input id="price" required>
 
-<input type="text" id="title" placeholder="Название объекта" required>
+<label>Город</label>
+<input id="city" value="Тирасполь">
 
-<input type="number" id="price" placeholder="Цена $" required>
+<label>Описание</label>
+<textarea id="description"></textarea>
 
-<input type="text" id="city" placeholder="Город" value="Тирасполь">
-
-<input type="number" id="rooms" placeholder="Количество комнат">
-
-<input type="text" id="floor" placeholder="Этаж">
-
-<input type="text" id="phone" placeholder="Телефон">
-
-<textarea id="description" placeholder="Описание"></textarea>
-
-<label>Фотографии объекта (до 10)</label>
+<label>Фотографии (до 10)</label>
 <input type="file" id="images" multiple accept="image/*">
 
-<button type="submit">
-Добавить объект
-</button>
+<div class="preview" id="preview"></div>
+
+<button type="submit">Добавить объект</button>
 
 </form>
 
 </div>
 
-</div>
-
 <script>
 
-const API="https://realinvest-api-production.up.railway.app/listings"
+const preview=document.getElementById("preview");
 
-const CLOUD_NAME="dqexunri"
-const PRESET="esta_upload"
+document.getElementById("images").addEventListener("change",function(){
 
-document.getElementById("addListing").addEventListener("submit",async function(e){
+preview.innerHTML="";
 
-e.preventDefault()
-
-let title=document.getElementById("title").value
-let price=document.getElementById("price").value
-let city=document.getElementById("city").value
-let rooms=document.getElementById("rooms").value
-let floor=document.getElementById("floor").value
-let phone=document.getElementById("phone").value
-let description=document.getElementById("description").value
-
-let files=document.getElementById("images").files
-
-let images=[]
+let files=this.files;
 
 for(let file of files){
 
-let formData=new FormData()
+let reader=new FileReader();
 
-formData.append("file",file)
-formData.append("upload_preset",PRESET)
+reader.onload=function(e){
+
+let img=document.createElement("img");
+img.src=e.target.result;
+
+preview.appendChild(img);
+
+};
+
+reader.readAsDataURL(file);
+
+}
+
+});
+
+async function uploadImages(files){
+
+let urls=[];
+
+for(let file of files){
+
+let formData=new FormData();
+
+formData.append("file",file);
+formData.append("upload_preset","esta_upload");
 
 let res=await fetch(
-`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+"https://api.cloudinary.com/v1_1/dquexunri/image/upload",
 {
 method:"POST",
 body:formData
-})
+}
+);
 
-let data=await res.json()
+let data=await res.json();
 
-images.push(data.secure_url)
+urls.push(data.secure_url);
 
 }
+
+return urls;
+
+}
+
+document.getElementById("form").addEventListener("submit",async function(e){
+
+e.preventDefault();
+
+let files=document.getElementById("images").files;
+
+let imageUrls=await uploadImages(files);
 
 let listing={
-title,
-price,
-city,
-rooms,
-floor,
-phone,
-description,
-image:images[0],
-gallery:images
-}
 
-await fetch(API,{
+title:document.getElementById("title").value,
+price:document.getElementById("price").value,
+city:document.getElementById("city").value,
+description:document.getElementById("description").value,
+images:imageUrls
+
+};
+
+await fetch(
+"https://realinvest-api-production.up.railway.app/listings",
+{
 method:"POST",
 headers:{
 "Content-Type":"application/json"
 },
 body:JSON.stringify(listing)
-})
+}
+);
 
-alert("Объявление добавлено!")
+alert("Объявление добавлено");
 
-location.reload()
+location.href="/";
 
-})
+});
 
 </script>
 
