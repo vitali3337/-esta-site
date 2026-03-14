@@ -940,68 +940,23 @@ function typeNormalize(t) {
 
 // ─── AIRTABLE LOAD ───
 async function loadFromAirtable() {
-  if (AT_TOKEN === 'ВСТАВЬ_ТОКЕН_ЗДЕСЬ' || !AT_TOKEN.startsWith('pat')) {
-    return null;
-  }
-  try {
-    const url = `https://api.airtable.com/v0/${AT_BASE}/${AT_TABLE}?pageSize=100&view=Grid%20view`;
-    const r = await fetch(url, {
-      headers: { Authorization: `Bearer ${AT_TOKEN}` },
-      signal: AbortSignal.timeout(10000)
-    });
-    if (!r.ok) throw new Error('AT error ' + r.status);
-    const data = await r.json();
-    const records = data.records || [];
-    return records.map(rec => {
-      const f = rec.fields || {};
-      // Attachments field (Airtable attachment array)
-      const atts = f.Attachments || f.Photos || f.Фото || f.photo || [];
-      const imgUrl = Array.isArray(atts) && atts.length > 0
-        ? (atts[0].url || atts[0])
-        : (f.img || f.image || f.Image || '');
-      // Price: stored as currency string "$35 000" or number
-      let rawPrice = f.Price || f.Цена || f.price || 0;
-      if (typeof rawPrice === 'string') rawPrice = Number(rawPrice.replace(/[^0-9.]/g,''));
-      // City/District values are option labels in English
-      const cityRaw = (f.City || f.Город || f.city || 'тирасполь');
-      const cityVal = Array.isArray(cityRaw) ? cityRaw[0] : (typeof cityRaw === 'object' && cityRaw ? cityRaw.name || '' : cityRaw);
-      const districtRaw = (f.District || f.Район || f.district || '');
-      const districtVal = Array.isArray(districtRaw) ? districtRaw[0] : (typeof districtRaw === 'object' && districtRaw ? districtRaw.name || '' : districtRaw);
-      const typeRaw = (f["Property Type"] || f.Тип || f.type || '');
-      const typeVal = Array.isArray(typeRaw) ? typeRaw[0] : (typeof typeRaw === 'object' && typeRaw ? typeRaw.name || '' : typeRaw);
-      const dealRaw = (f["Deal Type"] || f.deal_type || '');
-      const dealVal = Array.isArray(dealRaw) ? dealRaw[0] : (typeof dealRaw === 'object' && dealRaw ? dealRaw.name || '' : dealRaw);
-      // Map English city names to Russian for filters
-      const cityMap = { tiraspol:'тирасполь', chisinau:'кишинёв', kishinev:'кишинёв', bendery:'бендеры', bender:'бендеры', ribnitsa:'рыбница', rybnitsa:'рыбница', balti:'бельцы', beltsy:'бельцы', dubossary:'дубоссары' };
-      const cityNorm = cityMap[String(cityVal).toLowerCase().trim()] || String(cityVal).toLowerCase().trim();
-      const distNorm = String(districtVal).toLowerCase().trim();
-      // Status Premium = VIP
-      const statusRaw = f.Status || f.status || '';
-      const isVip = String(statusRaw).toLowerCase().includes('premium') || !!(f.VIP || f.vip);
-      return {
-        id: rec.id,
-        title:    f.Title || f.Название || f.title || f.Name || 'Объект',
-        type:     typeNormalize(String(typeVal).toLowerCase().trim()),
-        city:     cityNorm,
-        district: distNorm,
-        price:    Number(rawPrice),
-        area:     Number(f["Area(m)"] || f.Area || f.Площадь || f.area || 0) || null,
-        rooms:    Number(f.Rooms || f.Комнат || f.rooms || 0) || null,
-        floor:    f.Floor || f.Этаж || f.floor || '',
-        desc:     f.Description || f.Описание || f.desc || '',
-        is_vip:   isVip,
-        img:      imgUrl,
-        lat:      Number(f.Lat || f.lat || 0) || null,
-        lng:      Number(f.Lng || f.lng || 0) || null,
-        phone:    f.Phone || f.Телефон || f.phone || '',
-        contact:  f["Contact Name"] || f.contact_name || '',
-        deal:     String(dealVal).toLowerCase().trim(),
-        created:  rec.createdTime || ''
-      };
-    }).filter(p => p.price > 0 || p.title);
-  } catch (e) {
-    console.warn('Airtable error:', e.message);
-    return null;
+async function loadListings(){
+
+try{
+
+let res = await fetch(
+"https://realinvest-api-production.up.railway.app/listings"
+);
+
+let data = await res.json();
+
+all = data.listings || data;
+
+}catch(e){
+
+console.log("API error",e);
+
+
   }
 }
 
