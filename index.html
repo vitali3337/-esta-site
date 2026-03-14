@@ -1135,7 +1135,25 @@ function renderCards(reset = false) {
       l.floor ? '↑ ' + l.floor : ''
     ].filter(Boolean).join('  ·  ');
     const ts = (l.title||'').replace(/['"]/g,'');
-    const imgH = l.img ? `<img src="${l.img}" loading="lazy" onerror="this.parentNode.style.background='var(--cream3)'">` : '';
+    const imgs = l.images || (l.img ? [l.img] : []);
+
+let imgH = '';
+
+if(imgs.length){
+
+imgH = `
+<div class="gallery">
+
+<img id="img-${l.id}" src="${imgs[0]}" loading="lazy">
+
+${imgs.length>1 ? `<button class="g-left" onclick="prevImg('${l.id}')">‹</button>` : ""}
+
+${imgs.length>1 ? `<button class="g-right" onclick="nextImg('${l.id}')">›</button>` : ""}
+
+</div>
+`;
+
+}9
 
     if (curView === 'grid') {
       const el = document.createElement('div');
@@ -1506,7 +1524,57 @@ galleryIndex[id]=0;
 }
 
 document.getElementById("img-"+id).src = imgs[galleryIndex[id]];
+const galleryIndex = {};
 
+function getImages(p){
+
+if(p.images && p.images.length>0){
+return p.images;
+}
+
+if(p.img){
+return [p.img];
+}
+
+return ["https://via.placeholder.com/400x260"];
+
+}
+
+function prevImg(id){
+
+let p = all.find(x=>x.id==id);
+
+let imgs = getImages(p);
+
+if(!galleryIndex[id]) galleryIndex[id]=0;
+
+galleryIndex[id]--;
+
+if(galleryIndex[id] < 0){
+galleryIndex[id] = imgs.length-1;
+}
+
+document.getElementById("img-"+id).src = imgs[galleryIndex[id]];
+
+}
+
+function nextImg(id){
+
+let p = all.find(x=>x.id==id);
+
+let imgs = getImages(p);
+
+if(!galleryIndex[id]) galleryIndex[id]=0;
+
+galleryIndex[id]++;
+
+if(galleryIndex[id] >= imgs.length){
+galleryIndex[id]=0;
+}
+
+document.getElementById("img-"+id).src = imgs[galleryIndex[id]];
+
+   }
 }</script>
 </body>
 </html>
