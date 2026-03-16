@@ -2,1534 +2,438 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ESTA — Недвижимость Молдовы и ПМР</title>
-<meta name="description" content="Купить, продать, снять недвижимость в Тирасполе, Кишинёве, Бельцах, Бендерах. Первый AI-портал Молдовы и Приднестровья.">
-<meta property="og:title" content="ESTA — Недвижимость Молдовы и ПМР">
-<meta property="og:description" content="Первый AI-портал недвижимости. Тирасполь, Кишинёв, Бельцы, Бендеры, Рыбница.">
-<meta property="og:type" content="website">
-<meta property="og:image" content="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=60">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-   .gallery{
-position:relative;
-height:200px;
-overflow:hidden;
-border-radius:10px;
-}
-
-.gallery img{
-width:100%;
-height:100%;
-object-fit:cover;
-}
-
-.g-left,
-.g-right{
-position:absolute;
-top:50%;
-transform:translateY(-50%);
-background:rgba(0,0,0,0.6);
-color:white;
-border:none;
-width:35px;
-height:35px;
-border-radius:50%;
-cursor:pointer;
-font-size:18px;
-}
-
-.g-left{
-left:10px;
-}
-
-.g-right{
-right:10px;
-}
-/* ══════════════════════════════════════════
-   ESTA — Design System
-   Palette: Deep Navy + Warm Cream + Gold
-══════════════════════════════════════════ */
-:root {
-  --navy:    #0d1b2a;
-  --navy2:   #152236;
-  --navy3:   #1e3250;
-  --cream:   #f8f4ee;
-  --cream2:  #f0ebe2;
-  --cream3:  #e8e1d6;
-  --white:   #ffffff;
-  --ink:     #1a1410;
-  --muted:   #8a8278;
-  --gold:    #c9953e;
-  --gold2:   #e0b468;
-  --gold3:   #f5e6c8;
-  --gold4:   #fdf6e8;
-  --green:   #1a6b3c;
-  --border:  rgba(201,149,62,.15);
-  --borderN: rgba(255,255,255,.08);
-  --r:  8px;
-  --r2: 16px;
-  --r3: 24px;
-  --sh:  0 2px 16px rgba(13,27,42,.06);
-  --sh2: 0 8px 40px rgba(13,27,42,.14);
-  --sh3: 0 24px 80px rgba(13,27,42,.22);
-}
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior: smooth; font-size: 14px; }
-body { font-family: 'Outfit', sans-serif; background: var(--cream); color: var(--ink); line-height: 1.6; }
-a { text-decoration: none; color: inherit; }
-img { display: block; max-width: 100%; }
-button, input, select, textarea { font-family: inherit; }
-::-webkit-scrollbar { width: 5px; } ::-webkit-scrollbar-track { background: var(--cream2); } ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
-
-/* ═══ NAV ═══ */
-.nav {
-  position: sticky; top: 0; z-index: 400;
-  height: 60px; display: flex; align-items: center; padding: 0 24px; gap: 12px;
-  background: rgba(248,244,238,.96); backdrop-filter: blur(24px) saturate(1.3);
-  border-bottom: 1px solid var(--border);
-}
-.logo { font-family: 'Playfair Display', serif; font-size: 21px; font-weight: 700; letter-spacing: -.3px; flex-shrink: 0; }
-.logo span { color: var(--gold); }
-.ntabs { display: flex; gap: 0; }
-.nt { padding: 6px 14px; background: transparent; border: none; font-size: 13px; font-weight: 500; color: var(--muted); cursor: pointer; border-radius: 7px; transition: all .15s; }
-.nt:hover { color: var(--ink); background: var(--cream2); }
-.nt.active { color: var(--gold); background: var(--gold4); }
-.nav-srch { flex: 1; max-width: 280px; position: relative; }
-.nav-srch input { width: 100%; padding: 7px 12px 7px 34px; background: var(--cream2); border: 1.5px solid transparent; border-radius: 9px; font-size: 12.5px; outline: none; transition: all .2s; }
-.nav-srch input:focus { border-color: var(--gold); background: var(--white); }
-.nav-srch .si { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 13px; pointer-events: none; }
-.nav-r { margin-left: auto; display: flex; align-items: center; gap: 8px; }
-.lang-sw { display: flex; background: var(--cream2); border-radius: 7px; padding: 2px; }
-.lb { padding: 3px 9px; border-radius: 5px; border: none; font-size: 11px; font-weight: 700; color: var(--muted); background: transparent; cursor: pointer; transition: all .15s; }
-.lb.on { background: var(--white); color: var(--gold); }
-.nbtn { padding: 7px 16px; border-radius: 8px; border: none; font-size: 12.5px; font-weight: 600; cursor: pointer; transition: all .18s; }
-.nbtn-ghost { background: transparent; border: 1.5px solid var(--border); color: var(--ink); }
-.nbtn-ghost:hover { border-color: var(--gold); color: var(--gold); }
-.nbtn-solid { background: var(--navy); color: var(--white); }
-.nbtn-solid:hover { background: var(--gold); }
-.nbtn-ai { background: linear-gradient(135deg,#1e1060,#4731c8); color: var(--white); display: flex; align-items: center; gap: 5px; }
-.nbtn-ai:hover { opacity: .88; }
-
-/* ═══ HERO ═══ */
-.hero {
-  background: var(--navy);
-  padding: 64px 24px 0;
-  position: relative; overflow: hidden;
-  min-height: 520px;
-}
-.hero::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1600&q=40') center/cover;
-  opacity: .08;
-}
-.hero::after {
-  content: '';
-  position: absolute; bottom: 0; left: 0; right: 0; height: 200px;
-  background: linear-gradient(to bottom, transparent, var(--cream));
-  z-index: 2;
-}
-.hero-in { max-width: 1160px; margin: 0 auto; position: relative; z-index: 3; }
-.hero-badge {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(201,149,62,.12); border: 1px solid rgba(201,149,62,.28);
-  color: var(--gold2); font-size: 10px; font-weight: 700; letter-spacing: 2.5px;
-  padding: 5px 14px; border-radius: 20px; margin-bottom: 24px; text-transform: uppercase;
-}
-.hero-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold); animation: pulse 2s infinite; }
-@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.3;transform:scale(.8)} }
-.hero h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(32px, 5vw, 68px);
-  font-weight: 700; color: var(--white); line-height: 1.06;
-  margin-bottom: 16px;
-}
-.hero h1 em { font-style: italic; color: var(--gold2); }
-.hero-sub { font-size: 14px; color: rgba(255,255,255,.42); max-width: 500px; margin-bottom: 32px; font-weight: 300; line-height: 1.8; }
-.hero-stats { display: flex; gap: 36px; margin-bottom: 36px; }
-.hs { }
-.hs-n { font-family: 'Playfair Display', serif; font-size: 32px; color: var(--white); font-weight: 700; line-height: 1; }
-.hs-l { font-size: 10px; color: rgba(255,255,255,.32); text-transform: uppercase; letter-spacing: 2px; margin-top: 3px; }
-
-/* ═══ SEARCH BOX ═══ */
-.sbox {
-  background: var(--white);
-  border-radius: var(--r3) var(--r3) 0 0;
-  padding: 24px 28px 28px;
-  box-shadow: 0 -20px 60px rgba(0,0,0,.3);
-  position: relative; z-index: 4;
-}
-.sbox-tabs { display: flex; border-bottom: 2px solid var(--cream2); margin-bottom: 20px; }
-.sbt { padding: 8px 18px; background: transparent; border: none; font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all .15s; }
-.sbt.on { color: var(--gold); border-bottom-color: var(--gold); }
-.sbox-row { display: grid; grid-template-columns: 1.4fr 1fr 100px 100px auto; gap: 10px; align-items: end; }
-.sf { display: flex; flex-direction: column; gap: 4px; }
-.sf label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); }
-.sf select, .sf input {
-  background: var(--cream2); border: 1.5px solid transparent;
-  border-radius: var(--r); padding: 10px 12px; font-size: 13px; color: var(--ink); outline: none;
-  transition: all .18s;
-}
-.sf select:focus, .sf input:focus { border-color: var(--gold); background: var(--white); box-shadow: 0 0 0 3px rgba(201,149,62,.08); }
-.go-btn {
-  background: var(--navy); color: var(--white); border: none;
-  padding: 10px 22px; border-radius: var(--r); font-size: 14px; font-weight: 700;
-  cursor: pointer; transition: background .2s; white-space: nowrap;
-  display: flex; align-items: center; gap: 6px;
-}
-.go-btn:hover { background: var(--gold); }
-.ai-teaser {
-  margin-top: 14px;
-  background: linear-gradient(135deg, #0d1240, #1e1580);
-  border-radius: 10px; padding: 11px 16px;
-  display: flex; align-items: center; gap: 12px; cursor: pointer;
-  transition: opacity .18s; border: 1px solid rgba(255,255,255,.06);
-}
-.ai-teaser:hover { opacity: .9; }
-.at-star { font-size: 18px; flex-shrink: 0; }
-.at-txt { font-size: 12.5px; color: rgba(255,255,255,.75); }
-.at-txt strong { color: var(--white); font-weight: 700; }
-.at-arr { margin-left: auto; font-size: 11px; font-weight: 700; color: rgba(255,255,255,.4); white-space: nowrap; }
-
-/* ═══ API NOTICE ═══ */
-.notice { display: none; background: #fff8e1; border-left: 3px solid var(--gold); padding: 10px 18px; font-size: 12.5px; color: #7a5c00; }
-.notice.show { display: block; }
-
-/* ═══ AI PANEL ═══ */
-.ai-wrap { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
-.ai-panel {
-  background: linear-gradient(150deg, #080c20, #0f1940, #1a1060);
-  border-radius: var(--r2); border: 1px solid rgba(99,88,220,.2);
-  padding: 28px 32px; display: none; margin-top: 4px;
-}
-.ai-panel.open { display: block; animation: rise .25s ease; }
-@keyframes rise { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
-.ai-hd { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
-.ai-ico { width: 42px; height: 42px; border-radius: 12px; background: linear-gradient(135deg,#3b2fa5,#6355e4); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
-.ai-title { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--white); }
-.ai-sub { font-size: 11px; color: rgba(255,255,255,.3); margin-top: 2px; }
-.ai-close { margin-left: auto; width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,.07); border: none; color: rgba(255,255,255,.4); font-size: 17px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-.ai-row { display: flex; gap: 9px; margin-bottom: 12px; }
-.ai-input {
-  flex: 1; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1);
-  color: var(--white); padding: 12px 16px; border-radius: 10px; font-size: 13.5px; outline: none;
-  transition: border-color .18s;
-}
-.ai-input:focus { border-color: rgba(99,88,220,.5); }
-.ai-input::placeholder { color: rgba(255,255,255,.22); }
-.ai-go { background: linear-gradient(135deg,#3b2fa5,#6355e4); color: var(--white); border: none; padding: 12px 20px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; }
-.chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.chip { padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.04); color: rgba(255,255,255,.55); font-size: 11.5px; cursor: pointer; transition: all .15s; }
-.chip:hover { border-color: rgba(99,88,220,.5); color: var(--white); background: rgba(99,88,220,.15); }
-.ai-result-box { margin-top: 18px; }
-.ai-comment { background: rgba(255,255,255,.05); border-left: 3px solid #6355e4; border-radius: 8px; padding: 11px 16px; font-size: 13px; color: rgba(255,255,255,.7); margin-bottom: 14px; line-height: 1.75; }
-.ai-cards { display: grid; grid-template-columns: repeat(auto-fill,minmax(200px,1fr)); gap: 12px; }
-.ai-card { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); border-radius: 10px; overflow: hidden; cursor: pointer; transition: border-color .18s; }
-.ai-card:hover { border-color: rgba(99,88,220,.45); }
-.ai-card img { width: 100%; height: 110px; object-fit: cover; }
-.ai-cb { padding: 10px 12px; }
-.ai-ct { font-size: 12px; font-weight: 600; color: var(--white); line-height: 1.4; display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden; margin-bottom: 4px; }
-.ai-cp { font-family: 'Playfair Display', serif; font-size: 17px; color: var(--gold2); }
-.ai-cr { font-size: 10.5px; color: rgba(255,255,255,.3); margin-top: 3px; line-height: 1.5; }
-.ai-cbtn { width: 100%; margin-top: 8px; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1); color: rgba(255,255,255,.75); padding: 6px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; }
-.ai-spin { display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,.4); font-size: 13px; padding: 14px 0; }
-.spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.1); border-top-color: #6355e4; border-radius: 50%; animation: spin .7s linear infinite; }
-@keyframes spin { to{transform:rotate(360deg)} }
-
-/* ═══ CITIES ═══ */
-.cities-bar { background: var(--white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 26px 24px; }
-.cities-in { max-width: 1160px; margin: 0 auto; }
-.sec-lbl { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); margin-bottom: 12px; }
-.cities-g { display: flex; gap: 8px; flex-wrap: wrap; }
-.city-chip {
-  display: flex; align-items: center; gap: 8px;
-  padding: 9px 16px; border-radius: 40px;
-  background: var(--cream2); border: 1.5px solid transparent;
-  cursor: pointer; transition: all .2s; font-size: 13px; font-weight: 500;
-}
-.city-chip:hover, .city-chip.on { background: var(--gold4); border-color: var(--gold); color: var(--gold); }
-.city-chip .cc { font-size: 11px; color: var(--muted); font-weight: 400; }
-.city-chip.on .cc { color: var(--gold2); }
-
-/* ═══ MAIN LAYOUT ═══ */
-.main { max-width: 1160px; margin: 28px auto; padding: 0 24px; display: grid; grid-template-columns: 220px 1fr; gap: 20px; align-items: start; }
-
-/* ═══ SIDEBAR ═══ */
-.sidebar { background: var(--white); border: 1px solid var(--border); border-radius: var(--r2); padding: 18px; position: sticky; top: 70px; }
-.sb-hd { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-.sb-lbl { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); }
-.sb-reset { font-size: 11.5px; color: var(--gold); font-weight: 600; background: none; border: none; cursor: pointer; }
-.fld { margin-bottom: 13px; }
-.fld label { display: block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 5px; }
-.fld select, .fld input { width: 100%; background: var(--cream2); border: 1.5px solid transparent; border-radius: 7px; padding: 8px 10px; font-size: 12.5px; color: var(--ink); outline: none; transition: border-color .18s; }
-.fld select:focus, .fld input:focus { border-color: var(--gold); }
-.price-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-.cb-group { display: flex; flex-direction: column; gap: 6px; }
-.cb-item { display: flex; align-items: center; gap: 7px; font-size: 12.5px; cursor: pointer; }
-.cb-item input { width: 14px; height: 14px; accent-color: var(--gold); }
-.sb-div { height: 1px; background: var(--border); margin: 13px 0; }
-.apply-btn {
-  width: 100%; background: var(--navy); color: var(--white);
-  border: none; padding: 10px; border-radius: 9px;
-  font-size: 13px; font-weight: 700; cursor: pointer;
-  transition: background .2s; margin-top: 4px;
-}
-.apply-btn:hover { background: var(--gold); }
-
-/* ═══ LISTINGS AREA ═══ */
-.list-top { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
-.list-count { font-size: 13px; color: var(--muted); margin-right: auto; }
-.list-count strong { color: var(--ink); font-size: 15px; }
-.sort-sel { background: var(--cream2); border: 1.5px solid var(--border); color: var(--ink); padding: 7px 11px; border-radius: 7px; font-size: 12.5px; outline: none; cursor: pointer; }
-.view-btns { display: flex; gap: 3px; }
-.vbtn { width: 32px; height: 32px; border-radius: 7px; border: 1.5px solid var(--border); background: transparent; color: var(--muted); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; }
-.vbtn.on, .vbtn:hover { border-color: var(--gold); color: var(--gold); background: var(--gold4); }
-
-/* ═══ CARDS ═══ */
-.grid-view { display: grid; grid-template-columns: repeat(auto-fill, minmax(248px,1fr)); gap: 14px; }
-.list-view { display: flex; flex-direction: column; gap: 11px; }
-.prop-card {
-  background: var(--white); border: 1px solid var(--border); border-radius: var(--r2);
-  overflow: hidden; cursor: pointer; transition: all .25s;
-  animation: rise .35s ease both;
-}
-.prop-card:hover { transform: translateY(-4px); box-shadow: var(--sh3); border-color: var(--gold2); }
-.card-img { height: 185px; overflow: hidden; background: var(--cream2); position: relative; flex-shrink: 0; }
-.card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .45s; }
-.prop-card:hover .card-img img { transform: scale(1.06); }
-.badges { position: absolute; top: 9px; left: 9px; display: flex; gap: 4px; flex-wrap: wrap; }
-.badge { font-size: 9.5px; font-weight: 700; padding: 3px 8px; border-radius: 5px; letter-spacing: .5px; }
-.b-vip { background: rgba(201,149,62,.92); color: var(--white); }
-.b-type { background: rgba(13,27,42,.76); color: var(--white); }
-.fav { position: absolute; top: 9px; right: 9px; width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,.92); border: none; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform .15s; }
-.fav:active { transform: scale(.88); }
-.fav.on { color: #e53e3e; }
-.card-body { padding: 13px 15px 16px; }
-.card-title { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 500; line-height: 1.4; margin-bottom: 6px; display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden; }
-.card-meta { display: flex; flex-wrap: wrap; gap: 4px; font-size: 10.5px; color: var(--muted); margin-bottom: 9px; line-height: 1.6; }
-.card-price { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--navy); }
-.card-sub { font-size: 10px; color: var(--muted); margin-top: 1px; }
-.card-btns { display: flex; gap: 6px; margin-top: 12px; }
-.cbtn2 { flex: 1; padding: 8px; border-radius: 8px; border: 1.5px solid var(--border); background: transparent; font-size: 11.5px; font-weight: 600; cursor: pointer; transition: all .18s; color: var(--muted); }
-.cbtn2:hover { border-color: var(--gold); color: var(--gold); }
-.cbtn2.prim { background: var(--navy); color: var(--white); border-color: var(--navy); }
-.cbtn2.prim:hover { background: var(--gold); border-color: var(--gold); }
-
-/* list card variant */
-.list-card { flex-direction: row; }
-.list-card .card-img { width: 200px; height: auto; min-height: 140px; border-radius: 0; flex-shrink: 0; }
-.list-card .card-body { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
-.list-card .card-title { -webkit-line-clamp: 1; font-size: 16px; }
-.card-desc { font-size: 12px; color: var(--muted); line-height: 1.65; display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden; margin-bottom: 8px; }
-
-/* skeleton */
-.skel { background: linear-gradient(90deg, var(--cream2) 25%, var(--cream3) 50%, var(--cream2) 75%); background-size: 200%; animation: shimmer 1.5s infinite; }
-@keyframes shimmer { 0%{background-position:200%} 100%{background-position:-200%} }
-.skel-card { height: 290px; border-radius: var(--r2); }
-
-.empty { grid-column: 1/-1; text-align: center; padding: 56px; color: var(--muted); }
-.empty .ei { font-size: 52px; margin-bottom: 14px; }
-.empty h3 { font-size: 18px; color: var(--ink); margin-bottom: 6px; }
-
-.more-btn {
-  display: block; width: 100%; margin-top: 20px;
-  background: var(--cream2); border: 1.5px solid var(--border);
-  color: var(--ink); padding: 12px; border-radius: var(--r);
-  font-size: 13.5px; font-weight: 700; cursor: pointer;
-  transition: all .2s; text-align: center;
-}
-.more-btn:hover { border-color: var(--gold); color: var(--gold); background: var(--gold4); }
-
-/* ═══ MAP ═══ */
-.map-section { max-width: 1160px; margin: 28px auto; padding: 0 24px; }
-.map-hd { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
-.sec-title { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; }
-.sec-title span { color: var(--gold); font-style: italic; }
-#map { height: 360px; border-radius: var(--r3); border: 1px solid var(--border); overflow: hidden; }
-
-/* ═══ WHY ═══ */
-.why { background: var(--navy); padding: 56px 24px; }
-.why-in { max-width: 1160px; margin: 0 auto; }
-.why-hd { margin-bottom: 28px; }
-.why-hd h2 { font-family: 'Playfair Display', serif; font-size: 30px; color: var(--white); margin-bottom: 5px; }
-.why-hd p { font-size: 13px; color: rgba(255,255,255,.32); }
-.why-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px,1fr)); gap: 12px; }
-.why-card { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07); border-radius: var(--r2); padding: 22px; transition: border-color .2s; }
-.why-card:hover { border-color: rgba(201,149,62,.3); }
-.wi { font-size: 28px; margin-bottom: 10px; }
-.wt { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 5px; }
-.wd { font-size: 12px; color: rgba(255,255,255,.38); line-height: 1.75; }
-
-/* ═══ PRICING ═══ */
-.pricing { max-width: 1160px; margin: 56px auto; padding: 0 24px; }
-.pricing-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-top: 24px; }
-.plan {
-  background: var(--white); border: 1.5px solid var(--border);
-  border-radius: var(--r3); padding: 28px 24px; text-align: center;
-  position: relative; transition: all .22s;
-}
-.plan:hover { border-color: var(--gold); box-shadow: var(--sh2); }
-.plan.feat { border-color: var(--gold); background: var(--gold4); }
-.plan-badge { position: absolute; top: -11px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--white); font-size: 10px; font-weight: 700; padding: 3px 14px; border-radius: 12px; text-transform: uppercase; white-space: nowrap; }
-.plan-icon { font-size: 36px; margin-bottom: 10px; }
-.plan-name { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); margin-bottom: 8px; }
-.plan-price { font-family: 'Playfair Display', serif; font-size: 40px; font-weight: 700; color: var(--navy); line-height: 1; }
-.plan-price sup { font-size: 18px; }
-.plan-price sub { font-size: 13px; font-weight: 400; color: var(--muted); }
-.plan-desc { font-size: 12px; color: var(--muted); margin: 8px 0 18px; line-height: 1.7; }
-.plan-feats { text-align: left; margin-bottom: 20px; }
-.plan-feat { display: flex; align-items: flex-start; gap: 7px; font-size: 12.5px; margin-bottom: 7px; color: var(--ink); }
-.fc-ok { color: var(--green); flex-shrink: 0; margin-top: 1px; }
-.fc-no { color: var(--muted); flex-shrink: 0; }
-.plan-btn { width: 100%; padding: 11px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all .2s; border: none; }
-.plan-btn-o { background: transparent; border: 1.5px solid var(--border); color: var(--ink); }
-.plan-btn-o:hover { border-color: var(--gold); color: var(--gold); }
-.plan-btn-s { background: var(--navy); color: var(--white); }
-.plan-btn-s:hover { background: var(--gold); }
-
-/* ═══ FOOTER ═══ */
-.footer { background: var(--navy2); color: rgba(255,255,255,.42); padding: 52px 24px 24px; }
-.footer-in { max-width: 1160px; margin: 0 auto; }
-.footer-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 32px; margin-bottom: 32px; }
-.f-logo { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--white); margin-bottom: 9px; }
-.f-logo span { color: var(--gold); }
-.f-desc { font-size: 12px; line-height: 1.85; margin-bottom: 14px; }
-.f-contacts a { display: flex; align-items: center; gap: 8px; font-size: 12px; color: rgba(255,255,255,.5); margin-bottom: 6px; transition: color .15s; }
-.f-contacts a:hover { color: var(--white); }
-.f-col h4 { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 2.5px; color: rgba(255,255,255,.22); margin-bottom: 12px; }
-.f-col a { display: block; font-size: 12px; color: rgba(255,255,255,.42); margin-bottom: 6px; transition: color .15s; }
-.f-col a:hover { color: var(--gold2); }
-.footer-bot { border-top: 1px solid rgba(255,255,255,.06); padding-top: 18px; display: flex; justify-content: space-between; font-size: 11px; flex-wrap: wrap; gap: 6px; }
-
-/* ═══ MODAL ═══ */
-.overlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(13,27,42,.82); backdrop-filter: blur(14px);
-  z-index: 900; align-items: center; justify-content: center; padding: 16px;
-}
-.overlay.open { display: flex; }
-.modal {
-  background: var(--white); border-radius: var(--r3); padding: 32px;
-  width: 100%; max-width: 420px; position: relative;
-  max-height: 92vh; overflow-y: auto; animation: rise .22s ease;
-}
-.modal-close { position: absolute; top: 13px; right: 14px; background: var(--cream2); border: none; color: var(--muted); width: 28px; height: 28px; border-radius: 50%; font-size: 17px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-.mtabs { display: flex; border-bottom: 2px solid var(--cream2); margin-bottom: 22px; }
-.mtab { flex: 1; padding: 9px; background: transparent; border: none; font-size: 13.5px; font-weight: 700; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all .18s; }
-.mtab.on { color: var(--gold); border-bottom-color: var(--gold); }
-.mfld { margin-bottom: 12px; }
-.mfld label { display: block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 5px; }
-.mfld input, .mfld select { width: 100%; background: var(--cream2); border: 1.5px solid transparent; border-radius: var(--r); padding: 11px 13px; font-size: 13.5px; color: var(--ink); outline: none; transition: all .18s; }
-.mfld input:focus, .mfld select:focus { border-color: var(--gold); background: var(--white); }
-.mrow2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.m-btn { width: 100%; background: var(--navy); color: var(--white); border: none; padding: 13px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 6px; transition: background .2s; }
-.m-btn:hover { background: var(--gold); }
-.m-or { text-align: center; font-size: 11.5px; color: var(--muted); margin: 13px 0; position: relative; }
-.m-or::before, .m-or::after { content:''; position:absolute; top:50%; width:43%; height:1px; background: var(--cream3); }
-.m-or::before { left:0; } .m-or::after { right:0; }
-.m-tg { width: 100%; background: #229ED9; color: var(--white); border: none; padding: 11px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 9px; }
-.m-success { display: none; text-align: center; padding: 20px 0; }
-.m-success.show { display: block; }
-.ms-ico { font-size: 52px; margin-bottom: 10px; }
-.ms-title { font-family: 'Playfair Display', serif; font-size: 24px; margin-bottom: 7px; }
-.ms-txt { font-size: 13px; color: var(--muted); line-height: 1.75; }
-.lead-info { background: var(--gold4); border-radius: 8px; padding: 9px 13px; font-size: 12.5px; color: var(--gold); font-weight: 600; margin-bottom: 14px; }
-
-/* ═══ TOAST ═══ */
-.toast {
-  position: fixed; bottom: 20px; right: 20px;
-  background: var(--navy); color: var(--white);
-  border-radius: 10px; padding: 11px 18px;
-  font-size: 13px; z-index: 9999;
-  transform: translateY(70px); opacity: 0;
-  transition: all .3s; pointer-events: none;
-  box-shadow: var(--sh3); max-width: 300px;
-}
-.toast.show { transform: translateY(0); opacity: 1; }
-
-/* ═══ RESPONSIVE ═══ */
-@media(max-width:960px) {
-  .ntabs, .nav-srch { display: none; }
-  .sbox-row { grid-template-columns: 1fr 1fr; }
-  .sbox-row .sf:nth-child(3), .sbox-row .sf:nth-child(4) { display: none; }
-  .go-btn { grid-column: 1/-1; }
-  .main { grid-template-columns: 1fr; }
-  .sidebar { display: none; }
-  .footer-grid { grid-template-columns: 1fr 1fr; }
-  .pricing-grid { grid-template-columns: 1fr; }
-}
-@media(max-width:600px) {
-  .hero { padding: 36px 16px 0; }
-  .sbox { padding: 16px; }
-  .grid-view { grid-template-columns: 1fr 1fr; }
-  .card-img { height: 145px; }
-  .list-card .card-img { width: 130px; }
-  .footer-grid { grid-template-columns: 1fr; }
-  .hero-stats { gap: 22px; flex-wrap: wrap; }
-  .cities-g { gap: 6px; }
-}
-</style>
-</head>
-<body>
-
-<!-- ═══ NAV ═══ -->
-<nav class="nav">
-  <div class="logo"><a href="#">ESTA<span>.</span></a></div>
-  <div class="ntabs">
-    <button class="nt active" onclick="setSPTab('Купить',this)">Купить</button>
-    <button class="nt" onclick="setSPTab('Снять',this)">Снять</button>
-    <button class="nt" onclick="openModal('register')">Продать</button>
-    <button class="nt" onclick="filterType('коммерция')">Коммерция</button>
-  </div>
-  <div class="nav-srch">
-    <span class="si">🔍</span>
-    <input placeholder="Район, тип, цена..." oninput="quickSearch(this.value)" id="nav-q">
-  </div>
-  <div class="nav-r">
-    <div class="lang-sw">
-      <button class="lb on" onclick="setLang('ru',this)">RU</button>
-      <button class="lb" onclick="setLang('ro',this)">RO</button>
-    </div>
-    <button class="nbtn nbtn-ai" onclick="toggleAI()">✦ AI</button>
-    <button class="nbtn nbtn-ghost" id="loginBtn" onclick="openModal('login')">Войти</button>
-    <button class="nbtn nbtn-solid" onclick="openModal('register')">Разместить</button>
-  </div>
-</nav>
-
-<!-- ═══ HERO ═══ -->
-<section class="hero">
-  <div class="hero-in">
-    <div class="hero-badge"><span class="hero-dot"></span>Молдова · ПМР · AI-портал</div>
-    <h1>Найди дом,<br>который <em>ждёт тебя</em></h1>
-    <p class="hero-sub">Тирасполь, Кишинёв, Бельцы, Бендеры, Рыбница.<br>Честные цены, проверенные агенты.</p>
-    <div class="hero-stats">
-      <div class="hs"><div class="hs-n" id="h-count">—</div><div class="hs-l">Объявлений</div></div>
-      <div class="hs"><div class="hs-n">13+</div><div class="hs-l">Городов</div></div>
-      <div class="hs"><div class="hs-n" id="h-vip">—</div><div class="hs-l">VIP</div></div>
-      <div class="hs"><div class="hs-n">✦</div><div class="hs-l">AI Поиск</div></div>
-    </div>
-    <!-- SEARCH -->
-    <div class="sbox">
-      <div class="sbox-tabs" id="sp-tabs">
-        <button class="sbt on" onclick="setSPTabEl(this)">Купить</button>
-        <button class="sbt" onclick="setSPTabEl(this)">Снять</button>
-        <button class="sbt" onclick="setSPTabEl(this)">Продать</button>
-        <button class="sbt" onclick="setSPTabEl(this)">Участки</button>
-      </div>
-      <div class="sbox-row">
-        <div class="sf">
-          <label>Город</label>
-          <select id="s-city" onchange="applyFilters()">
-            <option value="">Все города</option>
-            <optgroup label="Приднестровье">
-              <option value="тирасполь">Тирасполь</option>
-              <option value="бендеры">Бендеры</option>
-              <option value="рыбница">Рыбница</option>
-              <option value="дубоссары">Дубоссары</option>
-              <option value="слободзея">Слободзея</option>
-            </optgroup>
-            <optgroup label="Молдова">
-              <option value="кишинёв">Кишинёв</option>
-              <option value="бельцы">Бельцы</option>
-              <option value="оргеев">Оргеев</option>
-              <option value="сорока">Сорока</option>
-            </optgroup>
-          </select>
-        </div>
-        <div class="sf">
-          <label>Тип недвижимости</label>
-          <select id="s-type" onchange="applyFilters()">
-            <option value="">Все типы</option>
-            <option value="квартира">Квартира</option>
-            <option value="дом">Дом / Дача</option>
-            <option value="участок">Участок</option>
-            <option value="коммерция">Коммерция</option>
-          </select>
-        </div>
-        <div class="sf">
-          <label>Цена до $</label>
-          <input id="s-price" type="number" placeholder="100 000">
-        </div>
-        <div class="sf">
-          <label>Площадь м²</label>
-          <input id="s-area" type="number" placeholder="50">
-        </div>
-        <button class="go-btn" onclick="applyFilters()">🔍 Найти</button>
-      </div>
-      <div class="ai-teaser" onclick="toggleAI()">
-        <span class="at-star">✦</span>
-        <span class="at-txt"><strong>AI поиск:</strong> «дом для семьи до $80к» — напиши своими словами</span>
-        <span class="at-arr">Попробовать →</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ API NOTICE ═══ -->
-<div class="notice" id="notice">
-  ℹ️ Загружаем объявления из Airtable... Если видите демо-данные — добавьте токен в настройках.
-</div>
-
-<!-- ═══ AI PANEL ═══ -->
-<div class="ai-wrap">
-<div class="ai-panel" id="aiPanel">
-  <div class="ai-hd">
-    <div class="ai-ico">✦</div>
-    <div>
-      <div class="ai-title">AI поиск недвижимости</div>
-      <div class="ai-sub">Первый в Молдове и ПМР — пиши своими словами</div>
-    </div>
-    <button class="ai-close" onclick="toggleAI()">×</button>
-  </div>
-  <div class="ai-row">
-    <input class="ai-input" id="aiQ" placeholder="Дом для семьи до $90 000, тихий район Тирасполя, 3-4 комнаты..." onkeydown="if(event.key==='Enter')aiSearch()">
-    <button class="ai-go" id="aiGoBtn" onclick="aiSearch()">Найти ✦</button>
-  </div>
-  <div class="chips">
-    <span class="chip" onclick="runChip(this.textContent)">🏠 Дом до $80к тихий район</span>
-    <span class="chip" onclick="runChip(this.textContent)">🏢 2-комн. квартира в центре</span>
-    <span class="chip" onclick="runChip(this.textContent)">👨‍👩‍👧 Для семьи с детьми</span>
-    <span class="chip" onclick="runChip(this.textContent)">📈 Инвестиция до $50к</span>
-    <span class="chip" onclick="runChip(this.textContent)">🌿 Участок под стройку</span>
-    <span class="chip" onclick="runChip(this.textContent)">🏪 Коммерция в центре</span>
-  </div>
-  <div id="aiResultBox" style="display:none" class="ai-result-box">
-    <div class="ai-comment" id="aiComment"></div>
-    <div class="ai-cards" id="aiCards"></div>
-  </div>
-</div>
-</div>
-
-<!-- ═══ CITIES ═══ -->
-<div class="cities-bar">
-  <div class="cities-in">
-    <div class="sec-lbl">Выбери город</div>
-    <div class="cities-g">
-      <div class="city-chip on" onclick="filterCity('',this)">🗺️ Все <span class="cc" id="cc-all"></span></div>
-      <div class="city-chip" onclick="filterCity('тирасполь',this)">🏙️ Тирасполь <span class="cc" id="cc-tir"></span></div>
-      <div class="city-chip" onclick="filterCity('кишинёв',this)">🌆 Кишинёв <span class="cc" id="cc-kis"></span></div>
-      <div class="city-chip" onclick="filterCity('бендеры',this)">🏛️ Бендеры <span class="cc" id="cc-ben"></span></div>
-      <div class="city-chip" onclick="filterCity('рыбница',this)">🏘️ Рыбница <span class="cc" id="cc-ryb"></span></div>
-      <div class="city-chip" onclick="filterCity('бельцы',this)">🏗️ Бельцы <span class="cc" id="cc-bal"></span></div>
-      <div class="city-chip" onclick="filterCity('дубоссары',this)">🌊 Дубоссары <span class="cc" id="cc-dub"></span></div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ MAIN ═══ -->
-<div class="main">
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <div class="sb-hd">
-      <span class="sb-lbl">Фильтры</span>
-      <button class="sb-reset" onclick="resetFilters()">Сбросить</button>
-    </div>
-    <div class="fld">
-      <label>Тип объекта</label>
-      <select id="f-type" onchange="applyFilters()">
-        <option value="">Все типы</option>
-        <option value="квартира">Квартира</option>
-        <option value="дом">Дом / Дача</option>
-        <option value="участок">Участок</option>
-        <option value="коммерция">Коммерция</option>
-        <option value="гараж">Гараж</option>
-      </select>
-    </div>
-    <div class="fld">
-      <label>Город</label>
-      <select id="f-city" onchange="applyFilters()">
-        <option value="">Все города</option>
-        <optgroup label="Приднестровье">
-          <option value="тирасполь">Тирасполь</option>
-          <option value="бендеры">Бендеры</option>
-          <option value="рыбница">Рыбница</option>
-          <option value="дубоссары">Дубоссары</option>
-          <option value="слободзея">Слободзея</option>
-        </optgroup>
-        <optgroup label="Молдова">
-          <option value="кишинёв">Кишинёв</option>
-          <option value="бельцы">Бельцы</option>
-          <option value="оргеев">Оргеев</option>
-          <option value="сорока">Сорока</option>
-        </optgroup>
-      </select>
-    </div>
-    <div class="fld">
-      <label>Цена ($)</label>
-      <div class="price-pair">
-        <input id="f-pmin" type="number" placeholder="От">
-        <input id="f-pmax" type="number" placeholder="До">
-      </div>
-    </div>
-    <div class="fld">
-      <label>Комнат</label>
-      <select id="f-rooms" onchange="applyFilters()">
-        <option value="">Любое</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4+</option>
-      </select>
-    </div>
-    <div class="fld">
-      <label>Площадь от (м²)</label>
-      <input id="f-area" type="number" placeholder="40">
-    </div>
-    <div class="sb-div"></div>
-    <div class="fld">
-      <div class="cb-group">
-        <label class="cb-item"><input type="checkbox" id="f-vip" onchange="applyFilters()"> Только VIP</label>
-        <label class="cb-item"><input type="checkbox" id="f-photo" onchange="applyFilters()"> С фото</label>
-      </div>
-    </div>
-    <button class="apply-btn" onclick="applyFilters()">Применить</button>
-  </aside>
-
-  <!-- Listings -->
-  <div>
-    <div class="list-top">
-      <div class="list-count">Найдено: <strong id="shown-n">0</strong></div>
-      <select class="sort-sel" id="sort-s" onchange="applyFilters()">
-        <option value="vip">VIP первые</option>
-        <option value="cheap">Дешевле</option>
-        <option value="dear">Дороже</option>
-        <option value="area">Площадь ↓</option>
-        <option value="new">Новые</option>
-      </select>
-      <div class="view-btns">
-        <button class="vbtn on" id="vb-g" onclick="setView('grid')">⊞</button>
-        <button class="vbtn" id="vb-l" onclick="setView('list')">☰</button>
-      </div>
-    </div>
-    <div id="cards-cont" class="grid-view"></div>
-    <button class="more-btn" id="more-btn" onclick="loadMore()" style="display:none">Загрузить ещё</button>
-  </div>
-</div>
-
-<!-- ═══ MAP ═══ -->
-<div class="map-section">
-  <div class="map-hd">
-    <h2 class="sec-title">Карта <span>объявлений</span></h2>
-    <span style="font-size:12px;color:var(--muted)">Нажми на маркер для деталей</span>
-  </div>
-  <div id="map"></div>
-</div>
-
-<!-- ═══ WHY ═══ -->
-<div class="why">
-  <div class="why-in">
-    <div class="why-hd">
-      <h2>Почему ESTA?</h2>
-      <p>Первый AI-портал недвижимости Молдовы и Приднестровья</p>
-    </div>
-    <div class="why-grid">
-      <div class="why-card"><div class="wi">✦</div><div class="wt">AI Поиск</div><div class="wd">Пишешь своими словами — AI понимает. Такого нет ни на makler.md, ни на 999.md.</div></div>
-      <div class="why-card"><div class="wi">🌍</div><div class="wt">Молдова + ПМР</div><div class="wd">Единая база двух регионов. 13+ городов. Один портал для всего.</div></div>
-      <div class="why-card"><div class="wi">🔒</div><div class="wt">Проверенные агенты</div><div class="wd">Кабинет агента, личная страница, рейтинг. Только реальные предложения.</div></div>
-      <div class="why-card"><div class="wi">💰</div><div class="wt">Бесплатно</div><div class="wd">3 объявления бесплатно для частных лиц. Агентства от $15/мес.</div></div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ PRICING ═══ -->
-<section class="pricing" id="pricing">
-  <div class="sec-lbl" style="margin-bottom:8px">Тарифы</div>
-  <h2 class="sec-title">Начни бесплатно — <span>плати за результат</span></h2>
-  <div class="pricing-grid">
-    <div class="plan">
-      <div class="plan-icon">👤</div>
-      <div class="plan-name">Частное лицо</div>
-      <div class="plan-price"><sup>$</sup>0<sub>/мес</sub></div>
-      <div class="plan-desc">Для тех, кто продаёт своё жильё</div>
-      <div class="plan-feats">
-        <div class="plan-feat"><span class="fc-ok">✓</span> 3 активных объявления</div>
-        <div class="plan-feat"><span class="fc-ok">✓</span> До 8 фотографий</div>
-        <div class="plan-feat"><span class="fc-ok">✓</span> Заявки на почту</div>
-        <div class="plan-feat"><span class="fc-no">—</span> <span style="color:var(--muted)">VIP продвижение</span></div>
-      </div>
-      <button class="plan-btn plan-btn-o" onclick="openModal('register')">Начать бесплатно</button>
-    </div>
-    <div class="plan feat">
-      <div class="plan-badge">ПОПУЛЯРНЫЙ</div>
-      <div class="plan-icon">🏢</div>
-      <div class="plan-name">Агентство</div>
-      <div class="plan-price"><sup>$</sup>15<sub>/мес</sub></div>
-      <div class="plan-desc">Для риэлторов и агентств</div>
-      <div class="plan-feats">
-        <div class="plan-feat"><span class="fc-ok">✓</span> Неограниченные объявления</div>
-        <div class="plan-feat"><span class="fc-ok">✓</span> До 20 фото на объект</div>
-        <div class="plan-feat"><span class="fc-ok">✓</span> Telegram уведомления</div>
-        <div class="plan-feat"><span class="fc-ok">✓</span> Страница агента</div>
-        <div class="plan-feat"><span class="fc-ok">✓</span> 1 VIP в месяц бесплатно</div>
-      </div>
-      <button class="plan-btn plan-btn-s" onclick="openModal('register')">Подключить за $15</button>
-    </div>
-    <div class="plan">
-      <div class="plan-icon">⭐</div>
-      <div class="plan-name">VIP</div>
-      <div class="plan-price"><sup>$</sup>5<sub>/объявл.</sub></div>
-      <div class="plan-desc">Продвинь на первую позицию</div>
-      <div class="plan-feats">
-        <div class="plan-feat"><span class="fc-ok">✓</span> Топ-1 в выдаче 30 дней</div>
-        <div class="plan-feat"><span class="fc-ok">✓</span> Значок ⭐ VIP</div>
-        <div class="plan-feat"><span class="fc-ok">✓</span> Пост в Telegram канале</div>
-        <div class="plan-feat"><span class="fc-ok">✓</span> Оплата USDT / перевод</div>
-      </div>
-      <button class="plan-btn plan-btn-o" onclick="vipTg()">Оплатить VIP — $5</button>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ FOOTER ═══ -->
-<footer class="footer">
-  <div class="footer-in">
-    <div class="footer-grid">
-      <div>
-        <div class="f-logo">ESTA<span>.</span></div>
-        <p class="f-desc">Первый AI-портал недвижимости Молдовы и Приднестровья. Честные цены, проверенные агенты.</p>
-        <div class="f-contacts">
-          <a href="tel:+37377772473">📞 +373 777 72 473 — Виталий</a>
-          <a href="https://t.me/solei3337" target="_blank">✈️ @solei3337 — Telegram</a>
-          <a href="#">📍 ул. Восстания 10, Тирасполь</a>
-        </div>
-      </div>
-      <div class="f-col">
-        <h4>Купить</h4>
-        <a href="#" onclick="filterType('квартира')">Квартиры</a>
-        <a href="#" onclick="filterType('дом')">Дома и дачи</a>
-        <a href="#" onclick="filterType('участок')">Участки</a>
-        <a href="#" onclick="filterType('коммерция')">Коммерция</a>
-      </div>
-      <div class="f-col">
-        <h4>Агентам</h4>
-        <a href="agent.html">Кабинет агента</a>
-        <a href="#pricing">Тарифы</a>
-        <a href="dashboard.html">Панель управления</a>
-      </div>
-      <div class="f-col">
-        <h4>Города</h4>
-        <a href="#" onclick="filterCity('тирасполь',null)">Тирасполь</a>
-        <a href="#" onclick="filterCity('кишинёв',null)">Кишинёв</a>
-        <a href="#" onclick="filterCity('бельцы',null)">Бельцы</a>
-        <a href="#" onclick="filterCity('бендеры',null)">Бендеры</a>
-        <a href="#" onclick="filterCity('рыбница',null)">Рыбница</a>
-      </div>
-    </div>
-    <div class="footer-bot">
-      <span>© 2025 ESTA · Недвижимость Молдовы и ПМР</span>
-      <span>Тирасполь, ул. Восстания 10 · +373 777 72 473</span>
-    </div>
-  </div>
-</footer>
-
-<!-- ═══ MODAL ═══ -->
-<div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal()">×</button>
-    <div id="modal-auth">
-      <div class="mtabs">
-        <button class="mtab on" id="tab-l" onclick="switchTab('l')">Войти</button>
-        <button class="mtab" id="tab-r" onclick="switchTab('r')">Регистрация</button>
-      </div>
-      <!-- Login -->
-      <div id="f-login">
-        <div class="mfld"><label>Email или телефон</label><input id="l-email" placeholder="email или +373..."></div>
-        <div class="mfld"><label>Пароль</label><input id="l-pass" type="password" placeholder="••••••••"></div>
-        <button class="m-btn" onclick="doLogin()">Войти</button>
-        <div class="m-or">или</div>
-        <button class="m-tg" onclick="loginTg()">✈️ Войти через Telegram</button>
-        <p style="font-size:11.5px;color:var(--muted);text-align:center;margin-top:12px">Нет аккаунта? <a href="#" onclick="switchTab('r')" style="color:var(--gold);font-weight:700">Зарегистрироваться</a></p>
-      </div>
-      <!-- Register -->
-      <div id="f-reg" style="display:none">
-        <div class="mrow2">
-          <div class="mfld"><label>Имя</label><input id="r-name" placeholder="Иван"></div>
-          <div class="mfld"><label>Фамилия</label><input id="r-sname" placeholder="Иванов"></div>
-        </div>
-        <div class="mfld"><label>Телефон *</label><input id="r-phone" placeholder="+373 777 00 000"></div>
-        <div class="mfld"><label>Email</label><input id="r-email" type="email" placeholder="email@mail.com"></div>
-        <div class="mfld"><label>Пароль *</label><input id="r-pass" type="password" placeholder="Минимум 6 символов"></div>
-        <div class="mfld"><label>Тип аккаунта</label>
-          <select id="r-type">
-            <option value="person">Частное лицо — бесплатно</option>
-            <option value="agent">Агент / Риэлтор — $15/мес</option>
-            <option value="agency">Агентство — $15/мес</option>
-          </select>
-        </div>
-        <button class="m-btn" onclick="doRegister()">Зарегистрироваться</button>
-        <div class="m-or">или</div>
-        <button class="m-tg" onclick="loginTg()">✈️ Регистрация через Telegram</button>
-      </div>
-    </div>
-    <!-- Lead form -->
-    <div id="modal-lead" style="display:none">
-      <h3 style="font-family:'Playfair Display',serif;font-size:20px;margin-bottom:6px">Оставить заявку</h3>
-      <p style="font-size:12.5px;color:var(--muted);margin-bottom:14px">Перезвоним в течение 30 минут</p>
-      <div class="lead-info" id="lead-info-txt"></div>
-      <div class="mfld"><label>Ваше имя</label><input id="ld-name" placeholder="Иван"></div>
-      <div class="mfld"><label>Телефон</label><input id="ld-phone" placeholder="+373 777 00 000"></div>
-      <div class="mrow2">
-        <div class="mfld"><label>Время</label><select id="ld-time"><option>Утром</option><option>Днём</option><option>Вечером</option><option>Любое</option></select></div>
-        <div class="mfld"><label>Связь</label><select id="ld-via"><option>Звонок</option><option>WhatsApp</option><option>Telegram</option></select></div>
-      </div>
-      <button class="m-btn" onclick="submitLead()">📤 Отправить заявку</button>
-    </div>
-    <!-- Success -->
-    <div class="m-success" id="modal-ok">
-      <div class="ms-ico">🎉</div>
-      <h3 class="ms-title">Готово!</h3>
-      <p class="ms-txt" id="ok-txt">Аккаунт создан.</p><br>
-      <button onclick="closeModal();window.location='agent.html'" style="background:var(--navy);color:#fff;border:none;padding:11px 24px;border-radius:9px;font-weight:700;cursor:pointer;font-size:13px">Кабинет агента</button>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<!-- ═══ SCRIPTS ═══ -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-// ══════════════════════════════════════════
-//   ESTA — Core JS
-//   Airtable direct integration + UI
-// ══════════════════════════════════════════
-
-// ─── AIRTABLE CONFIG ───
-// ⚠️ ЗАМЕНИ ТОКЕН: зайди на airtable.com/create/tokens
-const AT_TOKEN = 'pat1CuABZnjVvG7xl.6181e87045edc0a89a3a323b4c26869997aef55bfee97f626546cf0b2d7d3f19';   // pat...
-const AT_BASE  = 'appIQflEcagGQpjXQ';
-const AT_TABLE = 'tblfeiOA8mZPeE3Gw';
-
-// ─── DEMO DATA (показывается пока нет токена / ошибка API) ───
-const DEMO = [
-  {id:'d1',title:'4-комн. квартира, вид на город, 7/9эт',type:'квартира',city:'тирасполь',district:'центр',price:67000,area:95,rooms:4,floor:'7/9',is_vip:true,img:'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=700&q=60',desc:'Панорамный вид на город, два санузла, лоджия. Свежий ремонт.',lat:46.844,lng:29.605},
-  {id:'d2',title:'Дом 130м² Центр, гараж, уютный двор',type:'дом',city:'тирасполь',district:'центр',price:92000,area:130,rooms:4,is_vip:true,img:'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=700&q=60',desc:'Кирпичный дом 2008г. Евроремонт, тёплые полы, гараж.',lat:46.843,lng:29.600},
-  {id:'d3',title:'2-комн. квартира ул. Ленина, 3/5эт',type:'квартира',city:'тирасполь',district:'центр',price:38000,area:54,rooms:2,floor:'3/5',is_vip:false,img:'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=700&q=60',desc:'Светлая квартира с ремонтом, рядом парк.',lat:46.845,lng:29.607},
-  {id:'d4',title:'Дом 180м² на Балке, 10 соток сад',type:'дом',city:'тирасполь',district:'балка',price:115000,area:180,rooms:5,is_vip:true,img:'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=700&q=60',desc:'Двухэтажный дом, большой сад, беседка, баня.',lat:46.858,lng:29.620},
-  {id:'d5',title:'3-комн. квартира, Западный, 4/9эт',type:'квартира',city:'тирасполь',district:'западный',price:52000,area:72,rooms:3,floor:'4/9',is_vip:false,img:'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=700&q=60',desc:'После капремонта, застеклённая лоджия.',lat:46.840,lng:29.591},
-  {id:'d6',title:'Участок 8 соток, Суклея, все коммуникации',type:'участок',city:'тирасполь',district:'суклея',price:18000,is_vip:false,img:'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&q=60',desc:'Ровный участок, коммуникации подведены, документы готовы.',lat:46.830,lng:29.615},
-  {id:'d7',title:'Студия 32м², центр Тирасполя',type:'квартира',city:'тирасполь',district:'центр',price:24000,area:32,rooms:1,floor:'2/5',is_vip:false,img:'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=700&q=60',desc:'Дизайнерский ремонт, встроенная кухня.',lat:46.842,lng:29.603},
-  {id:'d8',title:'Коммерческое помещение 85м², центр',type:'коммерция',city:'тирасполь',district:'центр',price:78000,area:85,is_vip:false,img:'https://images.unsplash.com/photo-1497366216548-37526070297c?w=700&q=60',desc:'Первый этаж, отдельный вход, витрины.',lat:46.846,lng:29.598},
-  {id:'d9',title:'Дом 95м², Кировское, 12 соток',type:'дом',city:'тирасполь',district:'кировское',price:58000,area:95,rooms:3,is_vip:false,img:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=60',desc:'Газ, вода, свет. Сад 12 соток.',lat:46.862,lng:29.627},
-  {id:'d10',title:'Дача с садом 15 соток, Хутор',type:'дом',city:'тирасполь',district:'хутор',price:22000,area:45,rooms:2,is_vip:false,img:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=700&q=60',desc:'Плодовый сад, колодец, летняя кухня.',lat:46.835,lng:29.612},
-  {id:'d11',title:'2-комн. квартира, Кишинёв, Центр',type:'квартира',city:'кишинёв',district:'центр',price:62000,area:68,rooms:2,is_vip:false,img:'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=700&q=60',desc:'Современный ремонт, рядом метро.',lat:47.024,lng:28.832},
-  {id:'d12',title:'3-комн. квартира Бельцы, новостройка',type:'квартира',city:'бельцы',district:'центр',price:45000,area:78,rooms:3,is_vip:false,img:'https://images.unsplash.com/photo-1460317442991-0ec209397118?w=700&q=60',desc:'Новый дом 2023г, черновая отделка.',lat:47.760,lng:27.929},
-];
-
-// ─── STATE ───
-let all = [], filtered = [], curView = 'grid', offset = 0, curProp = '';
-let favs = JSON.parse(localStorage.getItem('esta_favs') || '[]');
-let curUser = JSON.parse(localStorage.getItem('esta_user') || 'null');
-let mapObj, mapMarkers = [];
-let usingDemo = false;
-
-const PAGE = 12;
-
-// ─── HELPERS ───
-function typeNormalize(t) {
-  if (!t) return '';
-  if (t.includes('apart') || t.includes('квартир') || t.includes('flat')) return 'квартира';
-  if (t.includes('house') || t.includes('дом') || t.includes('дач') || t.includes('cottage')) return 'дом';
-  if (t.includes('land') || t.includes('участ') || t.includes('plot')) return 'участок';
-  if (t.includes('commerc') || t.includes('коммерц') || t.includes('office') || t.includes('shop')) return 'коммерция';
-  return t;
-}
-
-// ─── AIRTABLE LOAD ───
-
-async function loadListings(){
-
-try{
-
-let res = await fetch(
-"https://realinvest-api-production.up.railway.app/listings"
-);
-
-let data = await res.json();
-
-all = data.listings || data;
-
-}catch(e){
-
-console.log("API error",e);
-
-
-  }
-}
-
-// ─── INIT ───
-window.addEventListener('load', async () => {
-  updateNavUser();
-  showSkeletons();
-  const atData = await loadFromAirtable();
-  if (atData && atData.length > 0) {
-    all = atData;
-    document.getElementById('notice').style.display = 'none';
-  } else {
-    all = DEMO;
-    usingDemo = true;
-    if (AT_TOKEN === 'ВСТАВЬ_ТОКЕН_ЗДЕСЬ') {
-      document.getElementById('notice').textContent = '⚠️ Airtable токен не настроен — показываем демо-объявления. Добавь токен в index.html строка AT_TOKEN.';
-    } else {
-      document.getElementById('notice').textContent = '⚠️ Ошибка подключения к Airtable — показываем демо-объявления.';
-    }
-    document.getElementById('notice').classList.add('show');
-  }
-  document.getElementById('h-count').textContent = all.length;
-  document.getElementById('h-vip').textContent = all.filter(l => l.is_vip).length;
-  updateCityCounts();
-  applyFilters();
-  initMap();
-});
-
-function showSkeletons() {
-  document.getElementById('cards-cont').innerHTML = Array(6).fill('<div class="skel skel-card"></div>').join('');
-}
-
-// ─── FILTERS ───
-function applyFilters() {
-  const type  = gv('f-type') || gv('s-type') || '';
-  const city  = gv('f-city') || gv('s-city') || '';
-  const rooms = gv('f-rooms') || '';
-  const pmin  = gn('f-pmin');
-  const pmax  = gn('f-pmax') || gn('s-price');
-  const area  = gn('f-area') || gn('s-area');
-  const vip   = gc('f-vip');
-  const photo = gc('f-photo');
-  const sort  = gv('sort-s') || 'vip';
-
-  filtered = all.filter(l => {
-    if (type && l.type !== type) return false;
-    if (city) {
-      const hay = ((l.city||'') + ' ' + (l.district||'')).toLowerCase();
-      if (!hay.includes(city)) return false;
-    }
-    if (pmin && l.price < pmin) return false;
-    if (pmax && l.price > pmax) return false;
-    if (rooms) {
-      if (rooms === '4') { if ((l.rooms||0) < 4) return false; }
-      else if (l.rooms && String(l.rooms) !== rooms) return false;
-    }
-    if (area && (l.area||0) < area) return false;
-    if (vip && !l.is_vip) return false;
-    if (photo && !l.img) return false;
-    return true;
-  });
-
-  if (sort === 'cheap') filtered.sort((a,b) => a.price - b.price);
-  else if (sort === 'dear') filtered.sort((a,b) => b.price - a.price);
-  else if (sort === 'area') filtered.sort((a,b) => (b.area||0) - (a.area||0));
-  else if (sort === 'new') filtered.sort((a,b) => new Date(b.created||0) - new Date(a.created||0));
-  // VIP always top
-  filtered.sort((a,b) => (b.is_vip?1:0) - (a.is_vip?1:0));
-
-  offset = 0;
-  document.getElementById('shown-n').textContent = filtered.length;
-  renderCards(true);
-  updateMapMarkers();
-}
-
-function gv(id) { const e = document.getElementById(id); return e ? e.value.trim() : ''; }
-function gn(id) { const e = document.getElementById(id); return e && e.value ? parseInt(e.value) : 0; }
-function gc(id) { const e = document.getElementById(id); return e ? e.checked : false; }
-
-function resetFilters() {
-  ['f-type','f-city','f-rooms','s-type','s-city'].forEach(id => { const e = document.getElementById(id); if(e) e.value=''; });
-  ['f-pmin','f-pmax','f-area','s-price','s-area'].forEach(id => { const e = document.getElementById(id); if(e) e.value=''; });
-  ['f-vip','f-photo'].forEach(id => { const e = document.getElementById(id); if(e) e.checked=false; });
-  applyFilters();
-}
-
-function filterCity(city, el) {
-  document.querySelectorAll('.city-chip').forEach(b => b.classList.remove('on'));
-  if (el) el.classList.add('on');
-  const fc = document.getElementById('f-city'); if(fc) fc.value = city;
-  const sc = document.getElementById('s-city'); if(sc) sc.value = city;
-  applyFilters();
-  document.querySelector('.main').scrollIntoView({ behavior: 'smooth' });
-}
-
-function filterType(type) {
-  const ft = document.getElementById('f-type'); if(ft) ft.value = type;
-  applyFilters();
-  document.querySelector('.main').scrollIntoView({ behavior: 'smooth' });
-}
-
-function quickSearch(q) {
-  const val = q.toLowerCase().trim();
-  if (!val) { filtered = [...all]; }
-  else { filtered = all.filter(l => ((l.title||'') + ' ' + (l.district||'') + ' ' + (l.city||'') + ' ' + (l.desc||'')).toLowerCase().includes(val)); }
-  offset = 0;
-  document.getElementById('shown-n').textContent = filtered.length;
-  renderCards(true);
-}
-
-// ─── RENDER CARDS ───
-function renderCards(reset = false) {
-  const cont = document.getElementById('cards-cont');
-  if (reset) { cont.innerHTML = ''; cont.className = curView === 'grid' ? 'grid-view' : 'list-view'; }
-
-  if (!filtered.length) {
-    cont.innerHTML = `<div class="empty"><div class="ei">🏚️</div><h3>Ничего не найдено</h3><p>Попробуй изменить фильтры или посмотреть в другом городе</p></div>`;
-    document.getElementById('more-btn').style.display = 'none';
-    return;
+  :root {
+    --ink: #0f0e0d;
+    --cream: #f5f0e8;
+    --gold: #c9a84c;
+    --gold-light: #e8d4a0;
+    --rust: #b85c3a;
+    --sage: #4a6741;
+    --slate: #3a4a5c;
+    --mist: #e8edf2;
+    --white: #ffffff;
+    --card-bg: #faf8f4;
+    --border: #e0d8cc;
   }
 
-  const slice = filtered.slice(offset, offset + PAGE);
-  slice.forEach((l, i) => {
-    const fav = favs.includes(l.id);
-    const price = '$' + Number(l.price).toLocaleString('ru');
-    const sub = '≈ ' + Math.round(l.price * 18).toLocaleString('ru') + ' руб.';
-    const meta = [
-      l.district ? '📍 ' + l.district : '',
-      l.area ? '📐 ' + l.area + 'м²' : '',
-      l.rooms ? '🚪 ' + l.rooms + 'к' : '',
-      l.floor ? '↑ ' + l.floor : ''
-    ].filter(Boolean).join('  ·  ');
-    const ts = (l.title||'').replace(/['"]/g,'');
-    const imgs = l.images || (l.img ? [l.img] : []);
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-let imgH = '';
+  html { scroll-behavior: smooth; }
 
-if(imgs.length){
-
-imgH = `
-<div class="gallery">
-
-<img id="img-${l.id}" src="${imgs[0]}" loading="lazy">
-
-${imgs.length>1 ? `<button class="g-left" onclick="prevImg('${l.id}')">‹</button>` : ""}
-
-${imgs.length>1 ? `<button class="g-right" onclick="nextImg('${l.id}')">›</button>` : ""}
-
-</div>
-`;
-
-}9
-
-    if (curView === 'grid') {
-      const el = document.createElement('div');
-      el.className = 'prop-card';
-      el.style.animationDelay = (i * .04) + 's';
-      el.innerHTML = `
-        <div class="card-img">
-          ${imgH}
-          <div class="badges">
-            ${l.is_vip ? '<span class="badge b-vip">⭐ VIP</span>' : ''}
-            ${l.type ? '<span class="badge b-type">' + l.type + '</span>' : ''}
-          </div>
-          <button class="fav ${fav?'on':''}" onclick="event.stopPropagation();toggleFav('${l.id}',this)">${fav?'❤️':'🤍'}</button>
-        </div>
-        <div class="card-body">
-          <div class="card-title">${l.title||''}</div>
-          <div class="card-meta">${meta}</div>
-          <div class="card-price">${price}</div>
-          <div class="card-sub">${sub}</div>
-          <div class="card-btns">
-            <button class="cbtn2" onclick="openLead('${ts}')">📞 Заявка</button>
-            <button class="cbtn2 prim" onclick="openLead('${ts}')">Подробнее →</button>
-          </div>
-        </div>`;
-      cont.appendChild(el);
-    } else {
-      const el = document.createElement('div');
-      el.className = 'prop-card list-card';
-      el.style.animationDelay = (i * .04) + 's';
-      el.innerHTML = `
-        <div class="card-img" style="width:200px;min-height:140px">
-          ${imgH}
-          <div class="badges">${l.is_vip ? '<span class="badge b-vip">⭐ VIP</span>' : ''}</div>
-        </div>
-        <div class="card-body" style="padding:14px 18px;display:flex;flex-direction:column;justify-content:space-between;">
-          <div>
-            <div class="card-title" style="-webkit-line-clamp:1">${l.title||''}</div>
-            <div class="card-meta">${meta}</div>
-            <div class="card-desc">${l.desc||''}</div>
-          </div>
-          <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:8px">
-            <div><div class="card-price">${price}</div><div class="card-sub">${sub}</div></div>
-            <div class="card-btns" style="flex-shrink:0">
-              <button class="cbtn2" onclick="openLead('${ts}')">📞</button>
-              <button class="cbtn2 prim" onclick="openLead('${ts}')">Подробнее →</button>
-            </div>
-          </div>
-        </div>`;
-      cont.appendChild(el);
-    }
-  });
-
-  offset += PAGE;
-  document.getElementById('more-btn').style.display = offset < filtered.length ? 'block' : 'none';
-}
-
-function loadMore() { renderCards(false); }
-
-function setView(v) {
-  curView = v;
-  document.getElementById('vb-g').classList.toggle('on', v === 'grid');
-  document.getElementById('vb-l').classList.toggle('on', v === 'list');
-  renderCards(true);
-}
-
-function toggleFav(id, btn) {
-  const i = favs.indexOf(id);
-  if (i >= 0) { favs.splice(i,1); btn.textContent='🤍'; btn.classList.remove('on'); }
-  else { favs.push(id); btn.textContent='❤️'; btn.classList.add('on'); }
-  localStorage.setItem('esta_favs', JSON.stringify(favs));
-  showToast(i >= 0 ? 'Убрано из избранного' : '❤️ Добавлено в избранное');
-}
-
-function updateCityCounts() {
-  document.getElementById('cc-all').textContent = all.length ? '(' + all.length + ')' : '';
-  const map2 = { tir:'тирасполь', kis:'кишинёв', ben:'бендеры', ryb:'рыбница', bal:'бельцы', dub:'дубоссары' };
-  Object.entries(map2).forEach(([k,q]) => {
-    const cnt = all.filter(l => ((l.city||'')+(l.district||'')).toLowerCase().includes(q)).length;
-    const el = document.getElementById('cc-' + k);
-    if (el) el.textContent = cnt ? '(' + cnt + ')' : '';
-  });
-}
-
-// ─── MAP ───
-function initMap() {
-  mapObj = L.map('map').setView([46.9, 29.2], 9);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '© CartoDB',
-    maxZoom: 18
-  }).addTo(mapObj);
-  updateMapMarkers();
-}
-
-function updateMapMarkers() {
-  if (!mapObj) return;
-  mapMarkers.forEach(m => mapObj.removeLayer(m));
-  mapMarkers = [];
-  filtered.slice(0, 80).forEach(l => {
-    if (!l.lat && !l.lng) return;
-    const lat = l.lat || (46.843 + (Math.random()-.5)*.08);
-    const lng = l.lng || (29.620 + (Math.random()-.5)*.12);
-    const color = l.is_vip ? '#c9953e' : '#0d1b2a';
-    const size  = l.is_vip ? 18 : 12;
-    const icon = L.divIcon({
-      className: '',
-      html: `<div style="width:${size}px;height:${size}px;border-radius:50%;background:${color};border:2.5px solid #fff;box-shadow:0 2px 10px rgba(0,0,0,.35)"></div>`,
-      iconSize: [size, size],
-      iconAnchor: [size/2, size/2]
-    });
-    const m = L.marker([lat, lng], { icon }).addTo(mapObj);
-    m.bindPopup(`
-      <div style="min-width:180px;font-family:Outfit,sans-serif">
-        <b style="font-family:'Playfair Display',serif;font-size:13px">${l.title||''}</b><br>
-        <span style="font-size:17px;font-weight:700;color:#c9953e;font-family:'Playfair Display',serif">$${Number(l.price).toLocaleString()}</span><br>
-        <small style="color:#888">${l.district||l.city||''}</small><br>
-        <button onclick="openLead('${(l.title||'').replace(/['"]/g,'')}');document.getElementById('overlay').classList.add('open')"
-          style="margin-top:8px;background:#0d1b2a;color:#fff;border:none;padding:6px 14px;border-radius:6px;font-size:11.5px;cursor:pointer;font-family:Outfit,sans-serif">
-          📞 Заявка
-        </button>
-      </div>
-    `);
-    mapMarkers.push(m);
-  });
-}
-
-// ─── AI SEARCH ───
-function toggleAI() {
-  const p = document.getElementById('aiPanel');
-  p.classList.toggle('open');
-  if (p.classList.contains('open')) {
-    setTimeout(() => { p.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); document.getElementById('aiQ').focus(); }, 100);
-  }
-}
-
-function runChip(t) {
-  document.getElementById('aiQ').value = t;
-  document.getElementById('aiPanel').classList.add('open');
-  aiSearch();
-}
-
-async function aiSearch() {
-  const q = document.getElementById('aiQ').value.trim();
-  if (!q) { showToast('Напиши запрос'); return; }
-
-  const btn = document.getElementById('aiGoBtn');
-  btn.textContent = '...'; btn.disabled = true;
-
-  document.getElementById('aiResultBox').style.display = 'block';
-  document.getElementById('aiComment').textContent = '';
-  document.getElementById('aiCards').innerHTML = '<div class="ai-spin"><div class="spinner"></div>AI анализирует запрос...</div>';
-
-  // Local AI filtering with smart scoring
-  const ql = q.toLowerCase();
-  const keywords = {
-    квартира: ['квартир', 'комнат', 'студ', 'однушк', 'двушк', 'трёшк'],
-    дом:      ['дом', 'дач', 'коттедж', 'усадьб'],
-    участок:  ['участ', 'земл', 'сотк'],
-    коммерция:['коммерц', 'офис', 'магазин', 'склад', 'помещ'],
-  };
-  const cities = { тирасполь:['тирасп','тир'], кишинёв:['кишинёв','кишин'], бельцы:['бельц','бэлць'], бендеры:['бендер','тигин'], рыбница:['рыбниц'] };
-
-  let priceLimit = 0;
-  const priceMatch = ql.match(/\$?\s*(\d[\d\s]*(?:\.\d+)?)\s*к?/);
-  if (priceMatch) {
-    let v = parseFloat(priceMatch[1].replace(/\s/g,''));
-    if (v < 1000) v *= 1000;
-    priceLimit = v;
+  body {
+    font-family: 'Manrope', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    overflow-x: hidden;
   }
 
-  let detectedType = '';
-  for (const [type, kws] of Object.entries(keywords)) {
-    if (kws.some(k => ql.includes(k))) { detectedType = type; break; }
+  /* ─── NAVBAR ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 40px;
+    height: 64px;
+    background: rgba(245,240,232,0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
   }
-  let detectedCity = '';
-  for (const [city, kws] of Object.entries(cities)) {
-    if (kws.some(k => ql.includes(k))) { detectedCity = city; break; }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem; font-weight: 900;
+    color: var(--ink); text-decoration: none;
+    letter-spacing: -1px;
   }
-
-  const scored = all.map(l => {
-    let score = 0;
-    if (detectedType && l.type === detectedType) score += 30;
-    if (detectedCity && ((l.city||'') + ' ' + (l.district||'')).toLowerCase().includes(detectedCity)) score += 20;
-    if (priceLimit && l.price <= priceLimit) score += 15;
-    if (priceLimit && l.price <= priceLimit * .85) score += 10;
-    if (l.is_vip) score += 5;
-    // keyword matching in title/desc
-    const body = ((l.title||'') + ' ' + (l.desc||'') + ' ' + (l.district||'')).toLowerCase();
-    const words = ql.split(/\s+/);
-    words.forEach(w => { if(w.length > 3 && body.includes(w)) score += 8; });
-    return { ...l, score };
-  }).filter(l => l.score > 0).sort((a,b) => b.score - a.score).slice(0, 4);
-
-  await new Promise(r => setTimeout(r, 600)); // brief delay for UX
-
-  let comment = `Нашёл ${scored.length} вариантов по запросу «${q}».`;
-  if (detectedType) comment += ` Тип: ${detectedType}.`;
-  if (priceLimit) comment += ` Бюджет: до $${priceLimit.toLocaleString()}.`;
-  if (detectedCity) comment += ` Город: ${detectedCity}.`;
-  if (!scored.length) comment = `По запросу «${q}» ничего не найдено в базе. Попробуй изменить запрос или свяжись с нами — подберём вручную.`;
-
-  document.getElementById('aiComment').textContent = comment;
-  document.getElementById('aiCards').innerHTML = scored.map(l => `
-    <div class="ai-card" onclick="openLead('${(l.title||'').replace(/['"]/g,'')}')">
-      ${l.img ? `<img src="${l.img}" loading="lazy" onerror="this.style.display='none'">` : ''}
-      <div class="ai-cb">
-        <div class="ai-ct">${l.title||''}</div>
-        <div class="ai-cp">$${Number(l.price).toLocaleString('ru')}</div>
-        <div class="ai-cr">${l.district||l.city||''} · ${l.area?l.area+'м² · ':''}${l.rooms?l.rooms+'к':''}</div>
-        <button class="ai-cbtn">📞 Заявка</button>
-      </div>
-    </div>
-  `).join('') || '<div style="color:rgba(255,255,255,.4);font-size:13px;padding:10px 0">Попробуй другой запрос или свяжись напрямую: @solei3337</div>';
-
-  btn.textContent = 'Найти ✦'; btn.disabled = false;
-}
-
-// ─── MODAL ───
-function openModal(mode) {
-  document.getElementById('modal-auth').style.display = '';
-  document.getElementById('modal-lead').style.display = 'none';
-  document.getElementById('modal-ok').classList.remove('show');
-  switchTab(mode === 'register' ? 'r' : 'l');
-  document.getElementById('overlay').classList.add('open');
-}
-function closeModal() { document.getElementById('overlay').classList.remove('open'); }
-function switchTab(t) {
-  document.getElementById('f-login').style.display = t === 'l' ? '' : 'none';
-  document.getElementById('f-reg').style.display   = t === 'r' ? '' : 'none';
-  document.getElementById('tab-l').classList.toggle('on', t === 'l');
-  document.getElementById('tab-r').classList.toggle('on', t === 'r');
-}
-function loginTg() { window.open('https://t.me/realinvest_pmr_bot?start=login','_blank'); showToast('Напиши боту /start — получи ссылку'); closeModal(); }
-
-function doLogin() {
-  const e = document.getElementById('l-email').value.trim();
-  const p = document.getElementById('l-pass').value;
-  if (!e || !p) { showToast('⚠️ Заполни все поля'); return; }
-  const user = { name: e.split('@')[0], email: e };
-  localStorage.setItem('esta_user', JSON.stringify(user)); curUser = user;
-  updateNavUser();
-  document.getElementById('modal-auth').style.display = 'none';
-  document.getElementById('modal-ok').classList.add('show');
-  document.getElementById('ok-txt').textContent = 'Добро пожаловать!';
-}
-
-function doRegister() {
-  const phone = document.getElementById('r-phone').value.trim();
-  const pass  = document.getElementById('r-pass').value;
-  const name  = document.getElementById('r-name').value.trim();
-  const type  = document.getElementById('r-type').value;
-  if (!phone || !pass) { showToast('⚠️ Заполни телефон и пароль'); return; }
-  if (pass.length < 6) { showToast('⚠️ Пароль минимум 6 символов'); return; }
-  const user = { name: name || phone, phone, type };
-  localStorage.setItem('esta_user', JSON.stringify(user)); curUser = user;
-  updateNavUser();
-  saveLead({ name: name||phone, phone, listing: 'Новая регистрация: ' + type, contact_via: 'Сайт' });
-  document.getElementById('modal-auth').style.display = 'none';
-  document.getElementById('modal-ok').classList.add('show');
-  document.getElementById('ok-txt').textContent = type === 'person'
-    ? 'Аккаунт создан! Можешь добавить до 3 объявлений бесплатно.'
-    : 'Аккаунт создан! Для активации тарифа напиши @solei3337';
-}
-
-function updateNavUser() {
-  if (curUser) {
-    const btn = document.getElementById('loginBtn');
-    if (btn) { btn.textContent = '👤 ' + (curUser.name||'').split(' ')[0]; btn.onclick = () => window.location = 'agent.html'; }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 32px; align-items: center; }
+  .nav-links a {
+    text-decoration: none; color: var(--ink);
+    font-size: 0.85rem; font-weight: 500;
+    letter-spacing: 0.05em; text-transform: uppercase;
+    opacity: 0.7; transition: opacity 0.2s;
   }
-}
+  .nav-links a:hover { opacity: 1; }
+  .nav-right { display: flex; gap: 12px; align-items: center; }
+  .btn-nav {
+    padding: 8px 20px; border-radius: 40px;
+    font-size: 0.82rem; font-weight: 600; cursor: pointer;
+    transition: all 0.2s; border: none;
+    font-family: 'Manrope', sans-serif;
+  }
+  .btn-outline { background: transparent; border: 1.5px solid var(--ink); color: var(--ink); }
+  .btn-outline:hover { background: var(--ink); color: var(--cream); }
+  .btn-gold { background: var(--gold); color: var(--white); }
+  .btn-gold:hover { background: #b8943c; transform: translateY(-1px); }
+  .btn-ai {
+    background: var(--ink); color: var(--gold);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .btn-ai:hover { background: #2a2a2a; }
 
-function openLead(prop) {
-  curProp = prop;
-  document.getElementById('modal-auth').style.display = 'none';
-  document.getElementById('modal-lead').style.display = '';
-  document.getElementById('modal-ok').classList.remove('show');
-  document.getElementById('lead-info-txt').textContent = prop || 'Общий вопрос';
-  document.getElementById('overlay').classList.add('open');
-}
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    padding: 80px 40px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: 
+      radial-gradient(ellipse 80% 60% at 20% 40%, rgba(201,168,76,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 80% 60%, rgba(74,103,65,0.08) 0%, transparent 60%),
+      var(--cream);
+  }
+  .hero-noise {
+    position: absolute; inset: 0; opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  }
+  .hero-content { position: relative; text-align: center; max-width: 900px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--ink); color: var(--gold);
+    padding: 6px 16px; border-radius: 40px;
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; margin-bottom: 28px;
+    animation: fadeDown 0.6s ease both;
+  }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 900; line-height: 1.05;
+    letter-spacing: -2px;
+    margin-bottom: 20px;
+    animation: fadeDown 0.6s 0.1s ease both;
+  }
+  .hero-title em { color: var(--gold); font-style: italic; }
+  .hero-subtitle {
+    font-size: 1.05rem; color: #5a5248;
+    line-height: 1.7; margin-bottom: 48px;
+    animation: fadeDown 0.6s 0.2s ease both;
+  }
+  .hero-stats {
+    display: flex; gap: 48px; justify-content: center;
+    margin-bottom: 52px;
+    animation: fadeDown 0.6s 0.3s ease both;
+  }
+  .hero-stat { text-align: center; }
+  .hero-stat .num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem; font-weight: 900; color: var(--ink);
+    display: block;
+  }
+  .hero-stat .lbl { font-size: 0.8rem; color: #8a7e6a; text-transform: uppercase; letter-spacing: 0.1em; }
 
-async function submitLead() {
-  const name  = document.getElementById('ld-name').value.trim();
-  const phone = document.getElementById('ld-phone').value.trim();
-  if (!name || !phone) { showToast('⚠️ Заполни имя и телефон'); return; }
-  await saveLead({
-    name, phone,
-    listing:      curProp,
-    contact_time: document.getElementById('ld-time').value,
-    contact_via:  document.getElementById('ld-via').value
-  });
-  document.getElementById('modal-lead').style.display = 'none';
-  document.getElementById('modal-ok').classList.add('show');
-  document.getElementById('ok-txt').textContent = 'Свяжемся в течение 30 минут. Или напишите: @solei3337';
-}
+  /* ─── SEARCH BOX ─── */
+  .search-box {
+    background: var(--white);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(15,14,13,0.12), 0 4px 16px rgba(15,14,13,0.06);
+    padding: 28px 32px;
+    width: 100%; max-width: 860px;
+    animation: fadeUp 0.6s 0.4s ease both;
+  }
+  .search-tabs {
+    display: flex; gap: 4px; margin-bottom: 20px;
+    background: var(--mist); border-radius: 10px; padding: 4px;
+  }
+  .search-tab {
+    flex: 1; padding: 8px 16px; border-radius: 8px; border: none;
+    font-family: 'Manrope', sans-serif; font-size: 0.85rem; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; background: transparent; color: #6a6a6a;
+  }
+  .search-tab.active { background: var(--white); color: var(--ink); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  .search-row { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr auto; gap: 12px; align-items: end; }
+  .search-field label { display: block; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #8a7e6a; margin-bottom: 6px; }
+  .search-field select, .search-field input {
+    width: 100%; padding: 10px 14px; border-radius: 10px;
+    border: 1.5px solid var(--border); background: var(--cream);
+    font-family: 'Manrope', sans-serif; font-size: 0.9rem; color: var(--ink);
+    outline: none; transition: border-color 0.2s;
+  }
+  .search-field select:focus, .search-field input:focus { border-color: var(--gold); }
+  .btn-search {
+    padding: 10px 28px; background: var(--ink); color: var(--cream);
+    border: none; border-radius: 10px; cursor: pointer;
+    font-family: 'Manrope', sans-serif; font-size: 0.9rem; font-weight: 700;
+    transition: all 0.2s; white-space: nowrap;
+  }
+  .btn-search:hover { background: #2a2a2a; transform: translateY(-1px); }
+  .ai-hint {
+    margin-top: 14px; display: flex; align-items: center; gap: 10px;
+    padding: 10px 16px; background: linear-gradient(135deg, #0f0e0d, #2a2a2a);
+    border-radius: 10px; cursor: pointer; transition: opacity 0.2s;
+  }
+  .ai-hint:hover { opacity: 0.9; }
+  .ai-hint span { color: var(--gold); font-size: 0.82rem; }
+  .ai-hint .ai-text { color: rgba(255,255,255,0.7); font-size: 0.82rem; }
+  .ai-hint .ai-cta { color: var(--gold); font-weight: 700; font-size: 0.82rem; margin-left: auto; }
 
-// ─── SAVE LEAD TO AIRTABLE ───
-async function saveLead(data) {
-  if (AT_TOKEN === 'ВСТАВЬ_ТОКЕН_ЗДЕСЬ' || !AT_TOKEN.startsWith('pat')) return;
-  try {
-    await fetch(`https://api.airtable.com/v0/${AT_BASE}/Заявки`, {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${AT_TOKEN}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        records: [{ fields: {
-          Имя:     data.name || '',
-          Телефон: data.phone || '',
-          Объект:  data.listing || '',
-          Связь:   data.contact_via || '',
-          Время:   data.contact_time || '',
-          Дата:    new Date().toLocaleDateString('ru')
-        }}]
-      })
-    });
-  } catch (e) { console.warn('Lead save error:', e); }
-}
+  /* ─── LISTINGS ─── */
+  .section { padding: 80px 40px; max-width: 1300px; margin: 0 auto; }
+  .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 36px; }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem; font-weight: 700; letter-spacing: -1px;
+  }
+  .section-title span { color: var(--gold); }
+  .section-link { color: var(--gold); font-size: 0.85rem; font-weight: 600; text-decoration: none; }
+  .section-link:hover { text-decoration: underline; }
 
-// ─── MISC ───
-function vipTg() { showToast('Для VIP пиши @solei3337 или +373 777 72 473'); setTimeout(() => window.open('https://t.me/solei3337'), 1200); }
-function setLang(l, btn) { document.querySelectorAll('.lb').forEach(b => b.classList.remove('on')); btn.classList.add('on'); }
-function setSPTabEl(btn) { document.querySelectorAll('.sbt').forEach(b => b.classList.remove('on')); btn.classList.add('on'); }
-function setSPTab(name, btn) { document.querySelectorAll('.nt').forEach(b => b.classList.remove('active')); btn.classList.add('active'); }
-function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3200); }
-const galleryIndex = {};
+  .filters-bar {
+    display: flex; gap: 10px; flex-wrap: wrap;
+    margin-bottom: 28px; padding: 16px 20px;
+    background: var(--white); border-radius: 14px;
+    border: 1px solid var(--border);
+  }
+  .filter-chip {
+    padding: 6px 14px; border-radius: 40px;
+    border: 1.5px solid var(--border); background: transparent;
+    font-family: 'Manrope', sans-serif; font-size: 0.8rem; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; color: var(--ink);
+  }
+  .filter-chip.active { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+  .filter-chip:hover:not(.active) { border-color: var(--gold); color: var(--gold); }
 
-function getImages(p){
+  .listings-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
+  .listing-card {
+    background: var(--white); border-radius: 16px;
+    overflow: hidden; border: 1px solid var(--border);
+    transition: all 0.3s; cursor: pointer; position: relative;
+  }
+  .listing-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(15,14,13,0.12); border-color: var(--gold); }
+  .listing-photo {
+    height: 200px; overflow: hidden; position: relative;
+    background: linear-gradient(135deg, #e8e0d0, #d0c8b8);
+  }
+  .listing-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+  .listing-card:hover .listing-photo img { transform: scale(1.05); }
+  .listing-photo-placeholder {
+    width: 100%; height: 100%; display: flex; align-items: center;
+    justify-content: center; font-size: 3rem; opacity: 0.4;
+  }
+  .badge-vip {
+    position: absolute; top: 12px; left: 12px;
+    background: var(--gold); color: var(--white);
+    padding: 3px 10px; border-radius: 20px;
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em;
+  }
+  .badge-new {
+    position: absolute; top: 12px; right: 12px;
+    background: var(--sage); color: var(--white);
+    padding: 3px 10px; border-radius: 20px;
+    font-size: 0.7rem; font-weight: 700;
+  }
+  .listing-body { padding: 18px 20px; }
+  .listing-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; font-weight: 700; color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .listing-price span { font-size: 1rem; color: #8a7e6a; font-family: 'Manrope', sans-serif; font-weight: 400; }
+  .listing-title { font-size: 0.9rem; font-weight: 600; margin-bottom: 10px; color: var(--ink); }
+  .listing-meta { display: flex; gap: 14px; font-size: 0.78rem; color: #8a7e6a; flex-wrap: wrap; }
+  .listing-meta span { display: flex; align-items: center; gap: 4px; }
+  .listing-footer { padding: 12px 20px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .agent-mini { display: flex; align-items: center; gap: 8px; }
+  .agent-ava {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--gold-light); display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem; font-weight: 700;
+  }
+  .agent-name { font-size: 0.75rem; color: #6a6a6a; }
+  .btn-call {
+    padding: 6px 14px; border-radius: 20px;
+    background: var(--sage); color: var(--white);
+    border: none; font-size: 0.75rem; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+    font-family: 'Manrope', sans-serif;
+  }
+  .btn-call:hover { background: #3a5631; }
 
-if(p.images && p.images.length>0){
-return p.images;
-}
+  /* ─── AI MODAL ─── */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 2000;
+    background: rgba(15,14,13,0.7); backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .ai-modal {
+    background: var(--white); border-radius: 24px;
+    width: 90%; max-width: 640px; max-height: 80vh;
+    display: flex; flex-direction: column;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.3);
+    transform: translateY(20px); transition: transform 0.3s;
+    overflow: hidden;
+  }
+  .modal-overlay.open .ai-modal { transform: translateY(0); }
+  .ai-modal-header {
+    padding: 24px 28px 20px;
+    background: linear-gradient(135deg, #0f0e0d, #1a1a1a);
+    color: var(--white);
+  }
+  .ai-modal-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; margin-bottom: 4px;
+  }
+  .ai-modal-header h2 span { color: var(--gold); }
+  .ai-modal-header p { font-size: 0.82rem; opacity: 0.6; }
+  .ai-modal-body { padding: 24px 28px; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
+  .ai-message {
+    display: flex; gap: 12px; align-items: flex-start;
+    animation: fadeUp 0.3s ease both;
+  }
+  .ai-message.user { flex-direction: row-reverse; }
+  .ai-avatar {
+    width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 1rem;
+  }
+  .ai-avatar.bot { background: var(--ink); color: var(--gold); font-size: 0.8rem; font-weight: 700; }
+  .ai-avatar.user { background: var(--gold); }
+  .ai-bubble {
+    padding: 12px 16px; border-radius: 16px; max-width: 80%;
+    font-size: 0.88rem; line-height: 1.6;
+  }
+  .ai-bubble.bot { background: var(--mist); color: var(--ink); border-radius: 4px 16px 16px 16px; }
+  .ai-bubble.user { background: var(--ink); color: var(--cream); border-radius: 16px 4px 16px 16px; }
+  .ai-typing { display: flex; gap: 4px; padding: 12px 16px; }
+  .ai-typing span { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); animation: typing 1s infinite; }
+  .ai-typing span:nth-child(2) { animation-delay: 0.15s; }
+  .ai-typing span:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes typing { 0%, 60%, 100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-6px); opacity: 1; } }
+  .ai-quick-btns { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .ai-quick-btn {
+    padding: 6px 14px; border-radius: 20px;
+    border: 1.5px solid var(--border); background: var(--cream);
+    font-size: 0.78rem; font-weight: 500; cursor: pointer;
+    transition: all 0.2s; font-family: 'Manrope', sans-serif;
+  }
+  .ai-quick-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .ai-input-row { padding: 16px 28px 24px; display: flex; gap: 10px; border-top: 1px solid var(--border); }
+  .ai-input {
+    flex: 1; padding: 12px 16px; border-radius: 12px;
+    border: 1.5px solid var(--border); background: var(--cream);
+    font-family: 'Manrope', sans-serif; font-size: 0.9rem;
+    outline: none; transition: border-color 0.2s;
+  }
+  .ai-input:focus { border-color: var(--gold); }
+  .ai-send {
+    padding: 12px 20px; border-radius: 12px;
+    background: var(--ink); color: var(--gold);
+    border: none; cursor: pointer; font-size: 1rem;
+    transition: all 0.2s; font-family: 'Manrope', sans-serif;
+  }
+  .ai-send:hover { background: #2a2a2a; }
+  .ai-send:disabled { opacity: 0.4; cursor: not-allowed; }
+  .close-modal {
+    position: absolute; top: 16px; right: 16px;
+    background: rgba(255,255,255,0.1); border: none; color: var(--white);
+    width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
+    font-size: 1rem; display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+  }
+  .close-modal:hover { background: rgba(255,255,255,0.2); }
 
-if(p.img){
-return [p.img];
-}
+  /* ─── LISTING MODAL ─── */
+  .listing-modal { max-width: 800px; overflow-y: auto; max-height: 90vh; }
+  .listing-modal-gallery { position: relative; height: 300px; background: var(--mist); overflow: hidden; }
+  .listing-modal-gallery img { width: 100%; height: 100%; object-fit: cover; }
+  .listing-modal-gallery .placeholder-big { display: flex; align-items: center; justify-content: center; height: 100%; font-size: 5rem; opacity: 0.3; }
+  .listing-modal-body { padding: 28px 32px; }
+  .listing-modal-price { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; margin-bottom: 8px; }
+  .listing-modal-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 16px; color: #4a4a4a; }
+  .listing-modal-tags { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+  .tag { padding: 4px 12px; border-radius: 20px; background: var(--mist); font-size: 0.78rem; font-weight: 600; color: var(--slate); }
+  .listing-modal-desc { font-size: 0.9rem; line-height: 1.7; color: #4a4a4a; margin-bottom: 24px; }
+  .listing-modal-contact {
+    background: linear-gradient(135deg, var(--ink), #2a2a2a);
+    border-radius: 14px; padding: 20px 24px; color: var(--white);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .contact-info h4 { font-size: 0.9rem; margin-bottom: 4px; }
+  .contact-info p { font-size: 0.82rem; opacity: 0.6; }
+  .contact-phone { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--gold); font-weight: 700; }
+  .btn-contact {
+    padding: 10px 24px; border-radius: 40px;
+    background: var(--gold); color: var(--white);
+    border: none; font-family: 'Manrope', sans-serif; font-size: 0.85rem; font-weight: 700;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .btn-contact:hover { background: #b8943c; }
 
-return ["https://via.placeholder.com/400x260"];
+  /* ─── WHY ESTA ─── */
+  .why-section {
+    padding: 80px 40px;
+    background: var(--ink);
+    color: var(--white);
+  }
+  .why-inner { max-width: 1200px; margin: 0 auto; }
+  .why-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem; font-weight: 700; text-align: center;
+    margin-bottom: 16px; letter-spacing: -1px;
+  }
+  .why-title span { color: var(--gold); font-style: italic; }
+  .why-sub { text-align: center; opacity: 0.5; font-size: 0.9rem; margin-bottom: 52px; }
+  .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; }
+  .why-card {
+    padding: 28px 24px;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    background: rgba(255,255,255,0.03);
+    transition: all 0.3s;
+  }
+  .why-card:hover { background: rgba(201,168,76,0.08); border-color: rgba(201,168,76,0.3); transform: translateY(-4px); }
+  .why-icon { font-size: 2rem; margin-bottom: 16px; }
+  .why-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+  .why-card p { font-size: 0.83rem; opacity: 0.55; line-height: 1.6; }
 
-}
+  /* ─── PRICING ─── */
+  .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 900px; margin: 0 auto; }
+  .pricing-card {
+    background: var(--white); border-radius: 20px; padding: 32px 28px;
+    border: 2px solid var(--border); position: relative; transition: all 0.3s;
+  }
+  .pricing-card:hover { border-color: var(--gold); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
+  .pricing-card.popular { border-color: var(--gold); }
+  .popular-badge {
+    position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+    background: var(--gold); color: var(--white);
+    padding: 4px 20px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; white-space: nowrap;
+  }
+  .pricing-plan { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #8a7e6a; margin-bottom: 8px; }
+  .pricing-price { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 700; margin-bottom: 4px; }
+  .pricing-price sup { font-size: 1rem; }
+  .pricing-period { font-size: 0.8rem; color: #8a7e6a; margin-bottom: 24px; }
+  .pricing-features { list-style: none; margin-bottom: 28px; }
+  .pricing-features li {
+    padding: 7px 0; font-size: 0.85rem; border-bottom: 1px solid var(--border);
+    display: flex; gap: 8px; align-items: flex-start;
+  }
+  .pricing-features li:last-child { border: none; }
+  .pricing-features .check { color: var(--sage); font-weight: 700; }
+  .pricing-features .no { color: #ccc; font-weight: 700; }
+  .btn-pricing {
+    width: 100%; padding: 12px; border-radius: 12px;
+    font-family: 'Manrope', sans-serif; font-size: 0.9rem; font-weight: 700;
+    cursor: pointer; transition: all 0.2s; border: none;
+  }
+  .btn-pricing-outline { background: transparent; border: 2px solid var(--ink); color: var(--ink); }
+  .btn-pricing-outline:hover { background: var(--ink); color: var(--cream); }
+  .btn-pricing-gold { background: var(--gold); color: var(--white); }
+  .btn-pricing-gold:hover { background: #b8943c; }
 
-function prevImg(id){
-
-let p = allListings.find(x=>x.id==id);
-
-let imgs = getImages(p);
-
-if(!galleryIndex[id]) galleryIndex[id]=0;
-
-galleryIndex[id]--;
-
-if(galleryIndex[id] < 0){
-galleryIndex[id] = imgs.length-1;
-}
-
-document.getElementById("img-"+id).src = imgs[galleryIndex[id]];
-
-}
-
-function nextImg(id){
-
-let p = allListings.find(x=>x.id==id);
-
-let imgs = getImages(p);
-
-if(!galleryIndex[id]) galleryIndex[id]=0;
-
-galleryIndex[id]++;
-
-if(galleryIndex[id] >= imgs.length){
-galleryIndex[id]=0;
-}
-
-document.getElementById("img-"+id).src = imgs[galleryIndex[id]];
-const galleryIndex = {};
-
-function getImages(p){
-
-if(p.images && p.images.length>0){
-return p.images;
-}
-
-if(p.img){
-return [p.img];
-}
-
-return ["https://via.placeholder.com/400x260"];
-
-}
-
-function prevImg(id){
-
-let p = all.find(x=>x.id==id);
-
-let imgs = getImages(p);
-
-if(!galleryIndex[id]) galleryIndex[id]=0;
-
-galleryIndex[id]--;
-
-if(galleryIndex[id] < 0){
-galleryIndex[id] = imgs.length-1;
-}
-
-document.getElementById("img-"+id).src = imgs[galleryIndex[id]];
-
-}
-
-function nextImg(id){
-
-let p = all.find(x=>x.id==id);
-
-let imgs = getImages(p);
-
-if(!galleryIndex[id]) galleryIndex[id]=0;
-
-galleryIndex[id]++;
-
-if(galleryIndex[id] >= imgs.length){
-galleryIndex[id]=0;
-}
-
-document.getElementById("img-"+id).src = imgs[galleryIndex[id]];
-
-   }
-}</script>
-</body>
-</html>
+  /* ─── CITIES ─── */
+  .cities-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+  .city-card {
+    padding: 24px 20px; border-radius: 14px;
+    border: 1.5px solid var(--border); background: var(--white);
+    cursor: pointer; transition: all 0.2s; text-align: center;
+  
