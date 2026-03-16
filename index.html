@@ -436,4 +436,806 @@
     padding: 24px 20px; border-radius: 14px;
     border: 1.5px solid var(--border); background: var(--white);
     cursor: pointer; transition: all 0.2s; text-align: center;
-  
+  }
+  .city-card:hover { border-color: var(--gold); transform: translateY(-2px); background: var(--card-bg); }
+  .city-flag { font-size: 2rem; margin-bottom: 8px; }
+  .city-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; }
+  .city-count { font-size: 0.78rem; color: #8a7e6a; }
+
+  /* ─── LOGIN MODAL ─── */
+  .login-modal {
+    max-width: 420px; width: 90%; background: var(--white);
+    border-radius: 24px; overflow: hidden;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.3);
+    transform: translateY(20px); transition: transform 0.3s;
+  }
+  .modal-overlay.open .login-modal { transform: translateY(0); }
+  .login-header {
+    background: linear-gradient(135deg, #0f0e0d 0%, #2a2015 100%);
+    padding: 28px 32px; text-align: center;
+  }
+  .login-header .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 900; color: var(--white);
+    margin-bottom: 4px;
+  }
+  .login-header .logo span { color: var(--gold); }
+  .login-header p { font-size: 0.82rem; color: rgba(255,255,255,0.5); }
+  .login-tabs-toggle { display: flex; border-bottom: 1px solid var(--border); }
+  .login-tab-btn {
+    flex: 1; padding: 14px; background: none; border: none;
+    font-family: 'Manrope', sans-serif; font-size: 0.85rem; font-weight: 600;
+    cursor: pointer; color: #8a7e6a; border-bottom: 2px solid transparent; margin-bottom: -1px;
+    transition: all 0.2s;
+  }
+  .login-tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+  .login-form { padding: 24px 32px 32px; }
+  .form-group { margin-bottom: 16px; }
+  .form-group label { display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #8a7e6a; margin-bottom: 6px; }
+  .form-group input, .form-group select {
+    width: 100%; padding: 11px 14px; border-radius: 10px;
+    border: 1.5px solid var(--border); background: var(--cream);
+    font-family: 'Manrope', sans-serif; font-size: 0.9rem; color: var(--ink);
+    outline: none; transition: border-color 0.2s;
+  }
+  .form-group input:focus, .form-group select:focus { border-color: var(--gold); }
+  .btn-submit {
+    width: 100%; padding: 13px; border-radius: 12px;
+    background: var(--ink); color: var(--cream);
+    border: none; font-family: 'Manrope', sans-serif; font-size: 0.95rem; font-weight: 700;
+    cursor: pointer; transition: all 0.2s; margin-top: 4px;
+  }
+  .btn-submit:hover { background: #2a2a2a; }
+  .tg-btn {
+    width: 100%; padding: 11px; border-radius: 12px; margin-top: 10px;
+    background: #229ED9; color: var(--white);
+    border: none; font-family: 'Manrope', sans-serif; font-size: 0.9rem; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .tg-btn:hover { background: #1a8fc0; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--ink); color: var(--white);
+    padding: 60px 40px 32px;
+  }
+  .footer-inner { max-width: 1200px; margin: 0 auto; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+  .footer-brand .logo-big {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 900; color: var(--white); margin-bottom: 12px;
+  }
+  .footer-brand .logo-big span { color: var(--gold); }
+  .footer-brand p { font-size: 0.82rem; opacity: 0.5; line-height: 1.6; max-width: 260px; }
+  .footer-contacts { margin-top: 20px; display: flex; flex-direction: column; gap: 8px; }
+  .footer-contacts a { color: var(--gold); font-size: 0.85rem; text-decoration: none; }
+  .footer-col h4 { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #6a6a6a; margin-bottom: 16px; }
+  .footer-col a { display: block; color: rgba(255,255,255,0.6); font-size: 0.83rem; text-decoration: none; margin-bottom: 8px; transition: color 0.2s; }
+  .footer-col a:hover { color: var(--gold); }
+  .footer-bottom { padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; }
+  .footer-bottom p { font-size: 0.78rem; opacity: 0.3; }
+
+  /* ─── TOAST ─── */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+    background: var(--ink); color: var(--cream);
+    padding: 14px 20px; border-radius: 12px;
+    font-size: 0.85rem; font-weight: 500;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    transform: translateY(100px); opacity: 0;
+    transition: all 0.3s;
+    display: flex; align-items: center; gap: 10px;
+    max-width: 320px;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast .toast-icon { font-size: 1.1rem; }
+
+  /* ─── UTILS ─── */
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+  .loading-spin {
+    width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.2);
+    border-top-color: var(--gold); border-radius: 50%;
+    animation: spin 0.6s linear infinite; display: inline-block;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .empty-state {
+    grid-column: 1/-1; text-align: center; padding: 60px 20px;
+    color: #8a7e6a;
+  }
+  .empty-state .empty-icon { font-size: 3rem; margin-bottom: 12px; opacity: 0.5; }
+  .empty-state p { font-size: 0.9rem; }
+
+  .skeleton {
+    background: linear-gradient(90deg, #e8e0d0 25%, #f0e8d8 50%, #e8e0d0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.2s infinite;
+    border-radius: 8px;
+  }
+  @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+  @media (max-width: 900px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    .hero { padding: 80px 20px 40px; }
+    .search-row { grid-template-columns: 1fr 1fr; }
+    .section { padding: 60px 20px; }
+    .pricing-grid { grid-template-columns: 1fr; max-width: 360px; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+    .listing-modal-contact { flex-direction: column; gap: 14px; align-items: flex-start; }
+  }
+  @media (max-width: 600px) {
+    .search-row { grid-template-columns: 1fr; }
+    .hero-stats { gap: 24px; }
+    .footer-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── NAVBAR ─── -->
+<nav>
+  <a href="#" class="nav-logo">EST<span>A</span></a>
+  <div class="nav-links">
+    <a href="#listings">Купить</a>
+    <a href="#listings">Снять</a>
+    <a href="#pricing">Агентам</a>
+    <a href="#cities">Города</a>
+  </div>
+  <div class="nav-right">
+    <button class="btn-nav btn-ai" onclick="openAI()">✦ AI Поиск</button>
+    <button class="btn-nav btn-outline" onclick="openLogin()">Войти</button>
+    <button class="btn-nav btn-gold" onclick="openLogin()">Разместить</button>
+  </div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-noise"></div>
+  <div class="hero-content">
+    <div class="hero-badge">✦ Первый AI-портал недвижимости</div>
+    <h1 class="hero-title">
+      Найди дом,<br>который <em>ждёт тебя</em>
+    </h1>
+    <p class="hero-subtitle">
+      Тирасполь, Кишинёв, Бельцы, Бендеры, Рыбница.<br>
+      Честные цены, проверенные агенты. Молдова и ПМР — один портал.
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="num" id="stat-count">247</span>
+        <span class="lbl">Объявлений</span>
+      </div>
+      <div class="hero-stat">
+        <span class="num">13</span>
+        <span class="lbl">Городов</span>
+      </div>
+      <div class="hero-stat">
+        <span class="num">38</span>
+        <span class="lbl">Агентов</span>
+      </div>
+      <div class="hero-stat">
+        <span class="num">⭐ VIP</span>
+        <span class="lbl">Продвижение</span>
+      </div>
+    </div>
+
+    <!-- SEARCH BOX -->
+    <div class="search-box">
+      <div class="search-tabs">
+        <button class="search-tab active" onclick="setTab(this,'buy')">Купить</button>
+        <button class="search-tab" onclick="setTab(this,'rent')">Снять</button>
+        <button class="search-tab" onclick="setTab(this,'sell')">Продать</button>
+        <button class="search-tab" onclick="setTab(this,'land')">Участки</button>
+      </div>
+      <div class="search-row">
+        <div class="search-field">
+          <label>Город</label>
+          <select id="s-city">
+            <option value="">Все города</option>
+            <option>Тирасполь</option>
+            <option>Бендеры</option>
+            <option>Рыбница</option>
+            <option>Дубоссары</option>
+            <option>Слободзея</option>
+            <option>Кишинёв</option>
+            <option>Бельцы</option>
+            <option>Оргеев</option>
+            <option>Сорока</option>
+          </select>
+        </div>
+        <div class="search-field">
+          <label>Тип</label>
+          <select id="s-type">
+            <option value="">Все типы</option>
+            <option>Квартира</option>
+            <option>Дом / Дача</option>
+            <option>Участок</option>
+            <option>Коммерция</option>
+          </select>
+        </div>
+        <div class="search-field">
+          <label>Цена до ($)</label>
+          <input type="number" id="s-price" placeholder="100 000">
+        </div>
+        <div class="search-field">
+          <label>Комнат</label>
+          <select id="s-rooms">
+            <option value="">Любое</option>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4+</option>
+          </select>
+        </div>
+        <button class="btn-search" onclick="doSearch()">🔍 Найти</button>
+      </div>
+      <div class="ai-hint" onclick="openAI()">
+        <span>✦</span>
+        <span class="ai-text">AI поиск: «дом для семьи до $80к, тихий район»</span>
+        <span class="ai-cta">Попробовать →</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── LISTINGS ─── -->
+<div class="section" id="listings">
+  <div class="section-header">
+    <h2 class="section-title">Свежие <span>объявления</span></h2>
+    <a href="#" class="section-link" onclick="loadMore(event)">Смотреть все →</a>
+  </div>
+  <div class="filters-bar">
+    <button class="filter-chip active" onclick="filterChip(this,'')">Все</button>
+    <button class="filter-chip" onclick="filterChip(this,'Квартира')">🏢 Квартиры</button>
+    <button class="filter-chip" onclick="filterChip(this,'Дом / Дача')">🏡 Дома</button>
+    <button class="filter-chip" onclick="filterChip(this,'Участок')">🌿 Участки</button>
+    <button class="filter-chip" onclick="filterChip(this,'Коммерция')">🏪 Коммерция</button>
+    <button class="filter-chip" onclick="filterChip(this,'vip')">⭐ VIP</button>
+  </div>
+  <div class="listings-grid" id="listings-grid">
+    <!-- cards injected by JS -->
+  </div>
+  <div style="text-align:center;margin-top:36px;">
+    <button class="btn-nav btn-outline" style="padding:12px 36px;font-size:0.9rem;" onclick="loadMore(event)">Загрузить ещё</button>
+  </div>
+</div>
+
+<!-- ─── WHY ESTA ─── -->
+<section class="why-section">
+  <div class="why-inner">
+    <h2 class="why-title">Почему <span>ESTA</span>?</h2>
+    <p class="why-sub">Первый AI-портал недвижимости Молдовы и Приднестровья</p>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">✦</div>
+        <h3>AI Поиск</h3>
+        <p>Пишешь своими словами — AI понимает. Такого нет ни на makler.md, ни на 999.md.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🌍</div>
+        <h3>Молдова + ПМР</h3>
+        <p>Единая база двух регионов. 13+ городов. Один портал для всего.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🔒</div>
+        <h3>Проверенные агенты</h3>
+        <p>Кабинет агента, личная страница, рейтинг. Только реальные предложения.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">💰</div>
+        <h3>Бесплатно</h3>
+        <p>3 объявления бесплатно для частных лиц. Агентства от $15/мес.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">📱</div>
+        <h3>Telegram уведомления</h3>
+        <p>Новые объявления — сразу в мессенджер. Никаких лишних писем.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">📈</div>
+        <h3>Аналитика цен</h3>
+        <p>Честная рыночная аналитика по районам и типам жилья.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CITIES ─── -->
+<div class="section" id="cities">
+  <div class="section-header">
+    <h2 class="section-title">Города <span>и регионы</span></h2>
+  </div>
+  <div class="cities-grid">
+    <div class="city-card" onclick="filterCity('Тирасполь')"><div class="city-flag">🏙️</div><div class="city-name">Тирасполь</div><div class="city-count">94 объявления</div></div>
+    <div class="city-card" onclick="filterCity('Кишинёв')"><div class="city-flag">🌆</div><div class="city-name">Кишинёв</div><div class="city-count">68 объявлений</div></div>
+    <div class="city-card" onclick="filterCity('Бендеры')"><div class="city-flag">🏛️</div><div class="city-name">Бендеры</div><div class="city-count">41 объявление</div></div>
+    <div class="city-card" onclick="filterCity('Бельцы')"><div class="city-flag">🏗️</div><div class="city-name">Бельцы</div><div class="city-count">23 объявления</div></div>
+    <div class="city-card" onclick="filterCity('Рыбница')"><div class="city-flag">🏘️</div><div class="city-name">Рыбница</div><div class="city-count">18 объявлений</div></div>
+    <div class="city-card" onclick="filterCity('Дубоссары')"><div class="city-flag">🌊</div><div class="city-name">Дубоссары</div><div class="city-count">11 объявлений</div></div>
+    <div class="city-card" onclick="filterCity('Слободзея')"><div class="city-flag">🌾</div><div class="city-name">Слободзея</div><div class="city-count">7 объявлений</div></div>
+    <div class="city-card" onclick="filterCity('Оргеев')"><div class="city-flag">🏔️</div><div class="city-name">Оргеев</div><div class="city-count">9 объявлений</div></div>
+  </div>
+</div>
+
+<!-- ─── PRICING ─── -->
+<div class="section" id="pricing">
+  <div class="section-header" style="justify-content:center;text-align:center;flex-direction:column;gap:8px;">
+    <h2 class="section-title">Начни <span>бесплатно</span> — плати за результат</h2>
+    <p style="color:#8a7e6a;font-size:0.9rem;">Без скрытых комиссий. Прозрачные тарифы.</p>
+  </div>
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="pricing-plan">👤 Частное лицо</div>
+      <div class="pricing-price"><sup>$</sup>0</div>
+      <div class="pricing-period">в месяц, навсегда бесплатно</div>
+      <ul class="pricing-features">
+        <li><span class="check">✓</span> 3 активных объявления</li>
+        <li><span class="check">✓</span> До 8 фотографий</li>
+        <li><span class="check">✓</span> Заявки на email</li>
+        <li><span class="no">—</span> VIP продвижение</li>
+        <li><span class="no">—</span> Telegram уведомления</li>
+      </ul>
+      <button class="btn-pricing btn-pricing-outline" onclick="openLogin()">Начать бесплатно</button>
+    </div>
+    <div class="pricing-card popular">
+      <div class="popular-badge">⭐ ПОПУЛЯРНЫЙ</div>
+      <div class="pricing-plan">🏢 Агентство</div>
+      <div class="pricing-price"><sup>$</sup>15</div>
+      <div class="pricing-period">в месяц</div>
+      <ul class="pricing-features">
+        <li><span class="check">✓</span> Неограниченные объявления</li>
+        <li><span class="check">✓</span> До 20 фото на объект</li>
+        <li><span class="check">✓</span> Telegram уведомления</li>
+        <li><span class="check">✓</span> Личная страница агента</li>
+        <li><span class="check">✓</span> 1 VIP в месяц бесплатно</li>
+      </ul>
+      <button class="btn-pricing btn-pricing-gold" onclick="openLogin()">Подключить за $15</button>
+    </div>
+    <div class="pricing-card">
+      <div class="pricing-plan">⭐ VIP объявление</div>
+      <div class="pricing-price"><sup>$</sup>5</div>
+      <div class="pricing-period">за объявление, 30 дней</div>
+      <ul class="pricing-features">
+        <li><span class="check">✓</span> Топ-1 в выдаче 30 дней</li>
+        <li><span class="check">✓</span> Значок ⭐ VIP</li>
+        <li><span class="check">✓</span> Пост в Telegram канале</li>
+        <li><span class="check">✓</span> Оплата USDT / перевод</li>
+        <li><span class="check">✓</span> Приоритет в AI-поиске</li>
+      </ul>
+      <button class="btn-pricing btn-pricing-outline" onclick="showToast('📞 Свяжитесь: +373 777 72 473 для оплаты VIP','info')">Оплатить VIP — $5</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo-big">EST<span>A</span></div>
+        <p>Первый AI-портал недвижимости Молдовы и Приднестровья. Честные цены, проверенные агенты.</p>
+        <div class="footer-contacts">
+          <a href="tel:+37377772473">📞 +373 777 72 473 — Виталий</a>
+          <a href="https://t.me/solei3337">✈️ @solei3337 — Telegram</a>
+          <a href="#">📍 ул. Восстания 10, Тирасполь</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Купить</h4>
+        <a href="#" onclick="filterChip(null,'Квартира')">Квартиры</a>
+        <a href="#" onclick="filterChip(null,'Дом / Дача')">Дома и дачи</a>
+        <a href="#" onclick="filterChip(null,'Участок')">Участки</a>
+        <a href="#" onclick="filterChip(null,'Коммерция')">Коммерция</a>
+      </div>
+      <div class="footer-col">
+        <h4>Агентам</h4>
+        <a href="#" onclick="openLogin()">Кабинет агента</a>
+        <a href="#pricing">Тарифы</a>
+        <a href="#" onclick="openLogin()">Панель управления</a>
+        <a href="https://t.me/solei3337">Поддержка</a>
+      </div>
+      <div class="footer-col">
+        <h4>Города</h4>
+        <a href="#" onclick="filterCity('Тирасполь')">Тирасполь</a>
+        <a href="#" onclick="filterCity('Кишинёв')">Кишинёв</a>
+        <a href="#" onclick="filterCity('Бельцы')">Бельцы</a>
+        <a href="#" onclick="filterCity('Бендеры')">Бендеры</a>
+        <a href="#" onclick="filterCity('Рыбница')">Рыбница</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 ESTA · Недвижимость Молдовы и ПМР · Тирасполь, ул. Восстания 10 · +373 777 72 473</p>
+      <p>Сделано с ♥ для Молдовы и ПМР</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ─── AI MODAL ─── -->
+<div class="modal-overlay" id="ai-modal">
+  <div class="ai-modal" style="position:relative;">
+    <button class="close-modal" onclick="closeAI()">✕</button>
+    <div class="ai-modal-header">
+      <h2>✦ AI <span>Поиск</span></h2>
+      <p>Пишите своими словами — AI найдёт подходящую недвижимость</p>
+    </div>
+    <div class="ai-modal-body" id="ai-chat">
+      <div class="ai-message">
+        <div class="ai-avatar bot">AI</div>
+        <div class="ai-bubble bot">
+          Привет! Я AI-ассистент ESTA 👋<br><br>
+          Опишите, что ищете — я подберу варианты. Например: <em>«2-комнатная квартира в Тирасполе до $40к»</em> или <em>«дом с садом для семьи»</em>.
+          <div class="ai-quick-btns" style="margin-top:12px;">
+            <button class="ai-quick-btn" onclick="sendQuick('Квартира до $40к в Тирасполе')">🏢 Квартира до $40к</button>
+            <button class="ai-quick-btn" onclick="sendQuick('Дом для семьи с садом')">🏡 Дом для семьи</button>
+            <button class="ai-quick-btn" onclick="sendQuick('Участок под строительство')">🌿 Участок</button>
+            <button class="ai-quick-btn" onclick="sendQuick('Инвестиция до $50к')">📈 Инвестиция</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ai-input-row">
+      <input class="ai-input" id="ai-input" placeholder="Опишите что ищете..." onkeydown="if(event.key==='Enter')sendAI()">
+      <button class="ai-send" id="ai-send-btn" onclick="sendAI()">→</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── LISTING DETAIL MODAL ─── -->
+<div class="modal-overlay" id="listing-modal">
+  <div class="ai-modal listing-modal" style="position:relative;">
+    <button class="close-modal" style="top:12px;right:12px;background:rgba(0,0,0,0.3);z-index:1;" onclick="closeListing()">✕</button>
+    <div id="listing-modal-content"></div>
+  </div>
+</div>
+
+<!-- ─── LOGIN MODAL ─── -->
+<div class="modal-overlay" id="login-modal">
+  <div class="login-modal">
+    <div class="login-header">
+      <div class="logo">EST<span>A</span></div>
+      <p>Портал недвижимости Молдовы и ПМР</p>
+    </div>
+    <div class="login-tabs-toggle">
+      <button class="login-tab-btn active" onclick="switchLoginTab(this,'login')">Войти</button>
+      <button class="login-tab-btn" onclick="switchLoginTab(this,'reg')">Регистрация</button>
+    </div>
+    <div class="login-form" id="login-panel">
+      <div class="form-group"><label>Email или телефон</label><input type="text" placeholder="example@mail.com"></div>
+      <div class="form-group"><label>Пароль</label><input type="password" placeholder="••••••••"></div>
+      <button class="btn-submit" onclick="fakeLogin()">Войти</button>
+      <button class="tg-btn" onclick="fakeLogin()">✈️ Войти через Telegram</button>
+      <p style="text-align:center;margin-top:12px;font-size:0.78rem;color:#8a7e6a;">
+        <a href="#" onclick="closeLogin()" style="color:var(--gold);">Забыли пароль?</a>
+      </p>
+    </div>
+    <div class="login-form" id="reg-panel" style="display:none;">
+      <div class="form-group"><label>Имя</label><input type="text" placeholder="Иван"></div>
+      <div class="form-group"><label>Телефон *</label><input type="tel" placeholder="+373 777 00 000"></div>
+      <div class="form-group"><label>Email</label><input type="email" placeholder="example@mail.com"></div>
+      <div class="form-group"><label>Пароль *</label><input type="password" placeholder="••••••••"></div>
+      <div class="form-group">
+        <label>Тип аккаунта</label>
+        <select>
+          <option>Частное лицо — бесплатно</option>
+          <option>Агент / Риэлтор — $15/мес</option>
+          <option>Агентство — $15/мес</option>
+        </select>
+      </div>
+      <button class="btn-submit" onclick="fakeLogin()">Зарегистрироваться</button>
+      <button class="tg-btn" onclick="fakeLogin()">✈️ Регистрация через Telegram</button>
+    </div>
+    <button onclick="closeLogin()" style="position:absolute;top:12px;right:12px;background:rgba(255,255,255,0.1);border:none;color:white;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:0.85rem;">✕</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span class="toast-icon">✓</span>
+  <span id="toast-msg">Готово!</span>
+</div>
+
+<script>
+// ─── DATA ───
+const LISTINGS = [
+  { id:1, vip:true, title:'2-комн. квартира, ул. Ленина', city:'Тирасполь', type:'Квартира', price:38000, rooms:2, area:52, district:'Центр', phone:'+373 777 72 473', agent:'Виталий К.', desc:'Отличная квартира в центре Тирасполя. Свежий ремонт, новая сантехника, встроенная кухня. Тихий двор, охраняемая парковка. Рядом школа, садик, магазины.', photo:'', new:true },
+  { id:2, vip:false, title:'3-комн. квартира, Бородино', city:'Тирасполь', type:'Квартира', price:47500, rooms:3, area:72, district:'Бородино', phone:'+373 777 11 222', agent:'Марина С.', desc:'Просторная трёхкомнатная квартира. Лоджия, кладовка. Не угловая. Этаж 5/9. Состояние жилое, возможен торг.', photo:'', new:false },
+  { id:3, vip:true, title:'Дом с участком 6 соток', city:'Бендеры', type:'Дом / Дача', price:62000, rooms:4, area:110, district:'Северный', phone:'+373 555 33 444', agent:'Андрей В.', desc:'Добротный кирпичный дом 110 кв.м. Участок 6 соток с садом. Гараж, баня. Все коммуникации. Тихая улица, близко к рынку.', photo:'', new:true },
+  { id:4, vip:false, title:'1-комн. квартира, Кишинёв', city:'Кишинёв', type:'Квартира', price:29000, rooms:1, area:34, district:'Рышкановка', phone:'+373 69 123 456', agent:'Ион М.', desc:'Уютная однокомнатная квартира в Кишинёве. Свежий косметический ремонт. Этаж 3/5. Рядом транспорт.', photo:'', new:false },
+  { id:5, vip:false, title:'Участок 12 соток, под строительство', city:'Тирасполь', type:'Участок', price:15000, rooms:0, area:1200, district:'Западный', phone:'+373 777 55 000', agent:'Сергей Д.', desc:'Ровный участок 12 соток в спокойном районе. Подъездные пути, рядом газ и электричество. Правоустанавливающие документы в порядке.', photo:'', new:false },
+  { id:6, vip:false, title:'Коммерческое помещение 85 кв.м', city:'Кишинёв', type:'Коммерция', price:120000, rooms:0, area:85, district:'Центр', phone:'+373 68 789 000', agent:'Елена Р.', desc:'Первый этаж, отдельный вход с улицы. Витринные окна. Идеально под магазин или офис. Высокая проходимость.', photo:'', new:true },
+  { id:7, vip:false, title:'2-комн. квартира, новострой', city:'Бельцы', type:'Квартира', price:31000, rooms:2, area:58, district:'Центр', phone:'+373 231 12 345', agent:'Оксана Н.', desc:'Квартира в новострое 2022 года. Черновая отделка. 6-й этаж. Вид на город. Удобная планировка.', photo:'', new:true },
+  { id:8, vip:false, title:'Дом, дача 70 кв.м', city:'Рыбница', type:'Дом / Дача', price:22000, rooms:3, area:70, district:'Пригород', phone:'+373 555 98 765', agent:'Вадим К.', desc:'Тёплый дом на берегу реки. Большой участок 20 соток, фруктовый сад. Вода, свет, газ — всё есть. Спокойное место для отдыха.', photo:'', new:false },
+  { id:9, vip:true, title:'4-комн. квартира, ул. Октябрьская', city:'Тирасполь', type:'Квартира', price:55000, rooms:4, area:92, district:'Центр', phone:'+373 777 72 473', agent:'Виталий К.', desc:'Элитная четырёхкомнатная квартира с евроремонтом. Два санузла, большая гостиная, гардеробная. Закрытый двор, консьерж.', photo:'', new:false },
+  { id:10, vip:false, title:'Участок 8 соток, Слободзея', city:'Слободзея', type:'Участок', price:8500, rooms:0, area:800, district:'Пригород', phone:'+373 777 00 111', agent:'Наталья П.', desc:'Хороший участок под дачу или строительство. ИЖС. Все документы готовы. Удобный подъезд.', photo:'', new:false },
+  { id:11, vip:false, title:'Офис 45 кв.м, центр', city:'Тирасполь', type:'Коммерция', price:55000, rooms:0, area:45, district:'Центр', phone:'+373 777 88 123', agent:'Роман И.', desc:'Офисное помещение на 2-м этаже бизнес-центра. Ремонт, кондиционеры, интернет. Парковка для сотрудников. Аренда возможна.', photo:'', new:true },
+  { id:12, vip:false, title:'1-комн. квартира, Оргеев', city:'Оргеев', type:'Квартира', price:18000, rooms:1, area:28, district:'Центр', phone:'+373 235 11 999', agent:'Лариса Д.', desc:'Небольшая тёплая квартира. Идеально для молодой семьи или инвестиции. Центральное отопление, лоджия.', photo:'', new:false },
+];
+
+const EMOJIS = { 'Квартира':'🏢','Дом / Дача':'🏡','Участок':'🌿','Коммерция':'🏪' };
+let currentFilter = '';
+let currentCity = '';
+let visibleCount = 9;
+
+// ─── RENDER ───
+function renderListings(list) {
+  const grid = document.getElementById('listings-grid');
+  if (!list.length) {
+    grid.innerHTML = `<div class="empty-state"><div class="empty-icon">🔍</div><p>Ничего не найдено. Попробуйте изменить фильтры или воспользуйтесь AI-поиском.</p></div>`;
+    return;
+  }
+  grid.innerHTML = list.slice(0, visibleCount).map(l => `
+    <div class="listing-card" onclick="openListing(${l.id})">
+      <div class="listing-photo">
+        <div class="listing-photo-placeholder">${EMOJIS[l.type]||'🏠'}</div>
+        ${l.vip ? '<div class="badge-vip">⭐ VIP</div>' : ''}
+        ${l.new ? '<div class="badge-new">НОВОЕ</div>' : ''}
+      </div>
+      <div class="listing-body">
+        <div class="listing-price">$${l.price.toLocaleString()} ${l.type==='Участок'?'<span>за участок</span>':l.rooms?'<span>'+l.rooms+'-комн.</span>':''}</div>
+        <div class="listing-title">${l.title}</div>
+        <div class="listing-meta">
+          <span>📍 ${l.city}</span>
+          ${l.area ? `<span>📐 ${l.area} м²</span>` : ''}
+          ${l.district ? `<span>🏘️ ${l.district}</span>` : ''}
+        </div>
+      </div>
+      <div class="listing-footer">
+        <div class="agent-mini">
+          <div class="agent-ava">${l.agent.charAt(0)}</div>
+          <span class="agent-name">${l.agent}</span>
+        </div>
+        <button class="btn-call" onclick="event.stopPropagation();callAgent('${l.phone}')">📞 Позвонить</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function getFiltered() {
+  return LISTINGS.filter(l => {
+    if (currentFilter === 'vip') return l.vip;
+    if (currentFilter && l.type !== currentFilter) return false;
+    if (currentCity && l.city !== currentCity) return false;
+    return true;
+  });
+}
+
+renderListings(getFiltered());
+
+// ─── FILTER CHIP ───
+function filterChip(el, type) {
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  if (el) el.classList.add('active');
+  currentFilter = type;
+  visibleCount = 9;
+  renderListings(getFiltered());
+  document.getElementById('listings').scrollIntoView({behavior:'smooth'});
+}
+
+function filterCity(city) {
+  currentCity = city;
+  currentFilter = '';
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  document.querySelector('.filter-chip').classList.add('active');
+  visibleCount = 9;
+  renderListings(getFiltered());
+  document.getElementById('listings').scrollIntoView({behavior:'smooth'});
+}
+
+// ─── SEARCH ───
+function doSearch(ev) {
+  if(ev) ev.preventDefault();
+  const city = document.getElementById('s-city').value;
+  const type = document.getElementById('s-type').value;
+  const price = +document.getElementById('s-price').value;
+  const rooms = document.getElementById('s-rooms').value;
+  currentCity = city;
+  currentFilter = '';
+  visibleCount = 9;
+  const results = LISTINGS.filter(l => {
+    if (city && l.city !== city) return false;
+    if (type && l.type !== type) return false;
+    if (price && l.price > price) return false;
+    if (rooms && rooms !== '4+' && l.rooms !== +rooms) return false;
+    if (rooms === '4+' && l.rooms < 4) return false;
+    return true;
+  });
+  renderListings(results);
+  document.getElementById('listings').scrollIntoView({behavior:'smooth'});
+  showToast(`🔍 Найдено: ${results.length} объявлений`, 'info');
+}
+
+function setTab(el, tab) {
+  document.querySelectorAll('.search-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function loadMore(ev) {
+  if(ev) ev.preventDefault();
+  visibleCount += 6;
+  renderListings(getFiltered());
+}
+
+// ─── LISTING DETAIL ───
+function openListing(id) {
+  const l = LISTINGS.find(x => x.id === id);
+  if (!l) return;
+  document.getElementById('listing-modal-content').innerHTML = `
+    <div class="listing-modal-gallery">
+      <div class="placeholder-big">${EMOJIS[l.type]||'🏠'}</div>
+      ${l.vip ? '<div class="badge-vip" style="position:absolute;top:12px;left:12px;">⭐ VIP</div>' : ''}
+    </div>
+    <div class="listing-modal-body">
+      <div class="listing-modal-price">$${l.price.toLocaleString()}</div>
+      <div class="listing-modal-title">${l.title}</div>
+      <div class="listing-modal-tags">
+        <span class="tag">📍 ${l.city}</span>
+        <span class="tag">${l.type}</span>
+        ${l.rooms ? `<span class="tag">${l.rooms} комнаты</span>` : ''}
+        ${l.area ? `<span class="tag">${l.area} м²</span>` : ''}
+        ${l.district ? `<span class="tag">${l.district}</span>` : ''}
+        ${l.vip ? '<span class="tag" style="background:#fff8e8;color:#b8943c;">⭐ VIP</span>' : ''}
+      </div>
+      <div class="listing-modal-desc">${l.desc}</div>
+      <div class="listing-modal-contact">
+        <div class="contact-info">
+          <h4>Агент: ${l.agent}</h4>
+          <p>Ответит в течение 30 минут</p>
+          <div class="contact-phone">${l.phone}</div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn-contact" onclick="callAgent('${l.phone}')">📞 Позвонить</button>
+          <button class="btn-contact" style="background:#229ED9;" onclick="showToast('✈️ Открываем Telegram...','info')">✈️ Telegram</button>
+        </div>
+      </div>
+    </div>
+  `;
+  document.getElementById('listing-modal').classList.add('open');
+}
+function closeListing() { document.getElementById('listing-modal').classList.remove('open'); }
+document.getElementById('listing-modal').addEventListener('click', function(e){ if(e.target===this) closeListing(); });
+
+// ─── AI MODAL ───
+let aiHistory = [];
+let aiTyping = false;
+
+function openAI() { document.getElementById('ai-modal').classList.add('open'); }
+function closeAI() { document.getElementById('ai-modal').classList.remove('open'); }
+document.getElementById('ai-modal').addEventListener('click', function(e){ if(e.target===this) closeAI(); });
+
+function sendQuick(text) {
+  document.getElementById('ai-input').value = text;
+  sendAI();
+}
+
+async function sendAI() {
+  const input = document.getElementById('ai-input');
+  const text = input.value.trim();
+  if (!text || aiTyping) return;
+  input.value = '';
+  aiTyping = true;
+  document.getElementById('ai-send-btn').disabled = true;
+
+  const chat = document.getElementById('ai-chat');
+  // user bubble
+  chat.innerHTML += `
+    <div class="ai-message user" style="animation-delay:0s">
+      <div class="ai-avatar user">👤</div>
+      <div class="ai-bubble user">${text}</div>
+    </div>`;
+
+  // typing indicator
+  const typingId = 'typing-' + Date.now();
+  chat.innerHTML += `
+    <div class="ai-message" id="${typingId}">
+      <div class="ai-avatar bot">AI</div>
+      <div class="ai-bubble bot" style="padding:12px 20px;">
+        <div class="ai-typing"><span></span><span></span><span></span></div>
+      </div>
+    </div>`;
+  chat.scrollTop = chat.scrollHeight;
+
+  aiHistory.push({ role: 'user', content: text });
+
+  // build listing context
+  const listingCtx = LISTINGS.map(l =>
+    `ID:${l.id} | ${l.title} | ${l.city} | ${l.type} | $${l.price} | ${l.rooms||0} комн. | ${l.area||0}м² | ${l.district}`
+  ).join('\n');
+
+  const systemPrompt = `Ты — AI-ассистент портала недвижимости ESTA (Молдова и ПМР). Помогаешь найти недвижимость.
+Отвечай на русском, кратко и дружелюбно. 
+Вот доступные объявления:
+${listingCtx}
+
+Когда пользователь ищет недвижимость — подбери подходящие по ID и опиши их (цена, тип, город, комнаты, площадь). 
+Формат: список 2-4 вариантов с эмодзи, цена жирным текстом, краткое описание.
+Если не нашёл подходящего — скажи об этом и предложи похожее.
+Всегда заканчивай предложением связаться: "Позвоните: +373 777 72 473"`;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: systemPrompt,
+        messages: aiHistory
+      })
+    });
+    const data = await resp.json();
+    const reply = data.content?.map(b => b.text||'').join('\n') || 'Извините, не смог обработать запрос.';
+    aiHistory.push({ role: 'assistant', content: reply });
+
+    document.getElementById(typingId).outerHTML = `
+      <div class="ai-message" style="animation:fadeUp 0.3s ease both">
+        <div class="ai-avatar bot">AI</div>
+        <div class="ai-bubble bot" style="white-space:pre-line;">${reply}</div>
+      </div>`;
+  } catch(e) {
+    document.getElementById(typingId).outerHTML = `
+      <div class="ai-message">
+        <div class="ai-avatar bot">AI</div>
+        <div class="ai-bubble bot">Ошибка подключения. Попробуйте позже или позвоните: <strong>+373 777 72 473</strong></div>
+      </div>`;
+  }
+
+  chat.scrollTop = chat.scrollHeight;
+  aiTyping = false;
+  document.getElementById('ai-send-btn').disabled = false;
+}
+
+// ─── LOGIN ───
+function openLogin() { document.getElementById('login-modal').classList.add('open'); }
+function closeLogin() { document.getElementById('login-modal').classList.remove('open'); }
+document.getElementById('login-modal').addEventListener('click', function(e){ if(e.target===this) closeLogin(); });
+
+function switchLoginTab(el, tab) {
+  document.querySelectorAll('.login-tab-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('login-panel').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('reg-panel').style.display = tab === 'reg' ? 'block' : 'none';
+}
+
+function fakeLogin() {
+  closeLogin();
+  showToast('✅ Добро пожаловать в ESTA! Кабинет в разработке.', 'success');
+}
+
+// ─── CALL ───
+function callAgent(phone) {
+  window.location.href = 'tel:' + phone.replace(/\s/g,'');
+  showToast('📞 Звоним: ' + phone, 'info');
+}
+
+// ─── TOAST ───
+function showToast(msg, type='success') {
+  const t = document.getElementById('toast');
+  const icon = type === 'success' ? '✓' : type === 'info' ? 'ℹ️' : '⚠️';
+  t.querySelector('.toast-icon').textContent = icon;
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+// ─── COUNTER ANIMATION ───
+function animateCount(el, target, duration=1500) {
+  let start = 0;
+  const step = Math.ceil(target / (duration / 16));
+  const timer = setInterval(() => {
+    start = Math.min(start + step, target);
+    el.textContent = start;
+    if (start >= target) clearInterval(timer);
+  }, 16);
+}
+const statEl = document.getElementById('stat-count');
+const obs = new IntersectionObserver(entries => {
+  if (entries[0].isIntersecting) { animateCount(statEl, 247); obs.disconnect(); }
+});
+obs.observe(statEl);
+</script>
+</body>
+</html>
