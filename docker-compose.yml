@@ -1,0 +1,104 @@
+version: '3.9'
+
+services:
+
+  # ── POSTGRESQL ──
+  db:
+    image: postgres:16-alpine
+    container_name: esta_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB:       ${POSTGRES_DB:-esta}
+      POSTGRES_USER:     ${POSTGRES_USER:-esta_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - esta_pgdata:/var/lib/postgresql/data
+      - ./schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+    networks:
+      - esta_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-esta_user} -d ${POSTGRES_DB:-esta}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── REST API ──
+  api:
+    build:
+      context: ./esta_bot
+      dockerfile: Dockerfile.api
+    container_name: esta_api
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-esta_user}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-esta}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - esta_net
+    expose:
+      - "8000"
+
+  # ── TELEGRAM BOT ──
+  bot:
+    build:
+      context: ./esta_bot
+      dockerfile: Dockerfile
+    container_name: esta_bot
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-esta_user}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-esta}
+    volumes:
+      - esta_db:/app/data
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - esta_net
+
+  # ── PARSER (каждые 30 мин) ──
+  parser:
+    build:
+      context: ./esta_bot
+      dockerfile: Dockerfile.parser
+    container_name: esta_parser
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-esta_user}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-esta}
+    volumes:
+      - esta_db:/app/data
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - esta_net
+
+  # ── NGINX ──
+  nginx:
+    image: nginx:alpine
+    container_name: esta_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./esta_landing.html:/usr/share/nginx/html/index.html
+      - ./admin.html:/usr/share/nginx/html/admin/index.html
+      - esta_ssl:/etc/letsencrypt
+    depends_on:
+      - api
+    networks:
+      - esta_net
+
+volumes:
+  esta_pgdata:
+  esta_db:
+  esta_ssl:
+
+networks:
+  esta_net:
+    driver: bridge
