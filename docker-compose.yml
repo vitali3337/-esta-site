@@ -86,7 +86,7 @@ services:
       - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - ./esta_landing.html:/usr/share/nginx/html/index.html
+      - ./index.html:/usr/share/nginx/html/index.html
       - ./admin.html:/usr/share/nginx/html/admin/index.html
       - esta_ssl:/etc/letsencrypt
     depends_on:
