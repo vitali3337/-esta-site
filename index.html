@@ -263,4 +263,596 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:40px
 
 <!-- MARQUEE -->
 <div class="marquee-wrap"><div class="marquee-track">
-  <div class="marquee-item"><span>◆</span>Квартиры</div><div class="marquee-item"><span>◆</span>Дома</div><div class="marquee-item"><span>◆</span>Участки</div><div class="marquee-item"><span>◆</span>Коммерция</div><div class="marquee-item"><span>
+  <div class="marquee-item"><span>◆</span>Квартиры</div><div class="marquee-item"><span>◆</span>Дома</div><div class="marquee-item"><span>◆</span>Участки</div><div class="marquee-item"><span>◆</span>Коммерция</div><div class="marquee-item"><span>◆</span>Тирасполь</div><div class="marquee-item"><span>◆</span>Кишинёв</div><div class="marquee-item"><span>◆</span>Бендеры</div><div class="marquee-item"><span>◆</span>Аренда</div><div class="marquee-item"><span>◆</span>Новостройки</div><div class="marquee-item"><span>◆</span>Гаражи</div>
+  <div class="marquee-item"><span>◆</span>Квартиры</div><div class="marquee-item"><span>◆</span>Дома</div><div class="marquee-item"><span>◆</span>Участки</div><div class="marquee-item"><span>◆</span>Коммерция</div><div class="marquee-item"><span>◆</span>Тирасполь</div><div class="marquee-item"><span>◆</span>Кишинёв</div><div class="marquee-item"><span>◆</span>Бендеры</div><div class="marquee-item"><span>◆</span>Аренда</div><div class="marquee-item"><span>◆</span>Новостройки</div><div class="marquee-item"><span>◆</span>Гаражи</div>
+</div></div>
+
+<!-- ████████ AI SEARCH SECTION ████████ -->
+<section class="ai-section" id="ai-search">
+  <div class="ai-wrap">
+    <div class="ai-label">Claude AI · Умный поиск</div>
+    <h2 class="ai-title">Опишите <em>словами</em> — AI найдёт</h2>
+    <p class="ai-sub">Пишите как обычно на русском. AI поймёт город, бюджет, тип жилья и найдёт лучшие варианты из базы.</p>
+
+    <div class="ai-input-row">
+      <input class="ai-input" id="aiInput" type="text"
+        placeholder="хочу 2-комнатную до 40000 в Тирасполе..."
+        onkeydown="if(event.key==='Enter') runAISearch()">
+      <button class="ai-btn" id="aiBtn" onclick="runAISearch()">Найти с AI</button>
+    </div>
+
+    <div class="ai-suggestions" id="aiSuggestions">
+      <div class="ai-sug" onclick="setAIQuery(this.textContent)">хочу 2к до 40000 в Тирасполе</div>
+      <div class="ai-sug" onclick="setAIQuery(this.textContent)">снять квартиру центр Тирасполь</div>
+      <div class="ai-sug" onclick="setAIQuery(this.textContent)">дом с участком до 60000</div>
+      <div class="ai-sug" onclick="setAIQuery(this.textContent)">3к Кишинёв Ботаника</div>
+      <div class="ai-sug" onclick="setAIQuery(this.textContent)">офис в аренду центр</div>
+      <div class="ai-sug" onclick="setAIQuery(this.textContent)">однушка недорого Бендеры</div>
+    </div>
+
+    <div class="ai-thinking" id="aiThinking">
+      <div class="ai-thinking-label"><div class="think-dot"></div>Claude AI анализирует запрос</div>
+      <div class="ai-thinking-text" id="aiThinkingText"></div>
+    </div>
+
+    <div class="ai-intent-row" id="aiIntentRow"></div>
+
+    <div class="ai-explain" id="aiExplain" style="display:none">
+      <div class="ai-explain-label">🧠 Claude AI</div>
+      <div id="aiExplainText"></div>
+    </div>
+
+    <div class="ai-error" id="aiError"></div>
+  </div>
+</section>
+
+<!-- FILTERS -->
+<div class="search-section">
+  <div class="search-wrap">
+    <div class="search-title">Найти <span>объект</span></div>
+    <div class="filters">
+      <div class="filter-group"><label class="filter-label">Тип сделки</label>
+        <select class="filter-select" id="fDeal"><option value="">Все</option><option value="sale">Продажа</option><option value="rent">Аренда</option></select></div>
+      <div class="filter-group"><label class="filter-label">Тип объекта</label>
+        <select class="filter-select" id="fType"><option value="">Все типы</option><option value="apartment">Квартира</option><option value="house">Дом/Дача</option><option value="land">Участок</option><option value="commercial">Коммерция</option><option value="garage">Гараж</option></select></div>
+      <div class="filter-group"><label class="filter-label">Город</label>
+        <select class="filter-select" id="fCity"><option value="">Все города</option><option value="Тирасполь">Тирасполь</option><option value="Бендеры">Бендеры</option><option value="Рыбница">Рыбница</option><option value="Дубоссары">Дубоссары</option><option value="Кишинёв">Кишинёв</option><option value="Бельцы">Бельцы</option></select></div>
+      <div class="filter-group"><label class="filter-label">Макс. цена $</label>
+        <input class="filter-input" id="fPrice" type="number" placeholder="Без ограничений"></div>
+      <button class="search-btn" onclick="applyFilters()">Найти</button>
+    </div>
+  </div>
+</div>
+
+<!-- TYPES -->
+<section class="types-section" id="types">
+  <div style="max-width:1400px;margin:0 auto">
+    <h2 class="section-title" style="margin-bottom:0">Типы <em>объектов</em></h2>
+    <div class="types-grid">
+      <div class="type-tile" onclick="filterByType('apartment',this)"><span class="type-icon">🏢</span><div class="type-name">Квартиры</div><div class="type-count" id="cnt-apartment">—</div></div>
+      <div class="type-tile" onclick="filterByType('house',this)"><span class="type-icon">🏡</span><div class="type-name">Дома/Дачи</div><div class="type-count" id="cnt-house">—</div></div>
+      <div class="type-tile" onclick="filterByType('land',this)"><span class="type-icon">🌱</span><div class="type-name">Участки</div><div class="type-count" id="cnt-land">—</div></div>
+      <div class="type-tile" onclick="filterByType('commercial',this)"><span class="type-icon">🏪</span><div class="type-name">Коммерция</div><div class="type-count" id="cnt-commercial">—</div></div>
+      <div class="type-tile" onclick="filterByType('garage',this)"><span class="type-icon">🚗</span><div class="type-name">Гаражи</div><div class="type-count" id="cnt-garage">—</div></div>
+      <div class="type-tile active" onclick="filterByType('',this)"><span class="type-icon">🏠</span><div class="type-name">Все типы</div><div class="type-count" id="cnt-all">—</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CITIES -->
+<div class="cities-section" id="cities">
+  <h3 style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:300;color:var(--grey)">Выбери <em style="color:var(--gold)">город</em></h3>
+  <div class="cities-grid">
+    <button class="city-btn active" onclick="filterByCity('',this)">Все города</button>
+    <button class="city-btn" onclick="filterByCity('Тирасполь',this)">Тирасполь</button>
+    <button class="city-btn" onclick="filterByCity('Бендеры',this)">Бендеры</button>
+    <button class="city-btn" onclick="filterByCity('Рыбница',this)">Рыбница</button>
+    <button class="city-btn" onclick="filterByCity('Дубоссары',this)">Дубоссары</button>
+    <button class="city-btn" onclick="filterByCity('Кишинёв',this)">Кишинёв</button>
+    <button class="city-btn" onclick="filterByCity('Бельцы',this)">Бельцы</button>
+  </div>
+</div>
+
+<!-- LISTINGS -->
+<section class="listings-section" id="listings">
+  <div class="section-header">
+    <h2 class="section-title">Актуальные <em>объявления</em></h2>
+    <div class="section-count" id="listingsCount"></div>
+  </div>
+  <div id="listingsGrid" class="listings-grid">
+    <div class="loading"><div class="spinner"></div> Загружаем...</div>
+  </div>
+  <div class="pagination" id="pagination"></div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">ESTA</div>
+  <div class="footer-copy">© 2025 ESTA · AI Real Estate Platform</div>
+  <div class="footer-markets">
+    <div class="mkt">🇲🇩 Молдова</div>
+    <div class="mkt">🏛 ПМР</div>
+  </div>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// DATA — замени BACKEND_URL на свой реальный backend
+// или оставь SAMPLE_DATA как основной источник
+// ═══════════════════════════════════════════════════════════
+
+const BACKEND_URL = ''; // например: 'https://api.esta-realty.md' — если пусто, используем SAMPLE_DATA
+
+// Тестовые данные — работают без backend
+const SAMPLE_DATA = [
+  {id:'1',title:'2-комнатная квартира, центр',city:'Тирасполь',district:'Центр',type:'apartment',deal_type:'sale',price:38000,currency:'USD',rooms:2,area_m2:54.5,floor:2,floors_total:9,description:'Светлая квартира с хорошим ремонтом. Новые окна, кухонный гарнитур. Рядом парк, школа, транспорт.',icon:'🏢',promoted:false},
+  {id:'2',title:'3-комнатная, ул. Ленина, хороший ремонт',city:'Тирасполь',district:'Ленинский р-н',type:'apartment',deal_type:'sale',price:52000,currency:'USD',rooms:3,area_m2:74,floor:5,floors_total:9,description:'Просторная 3-комнатная квартира. Кухня 12м², лоджия. Торг уместен.',icon:'🏢',promoted:true},
+  {id:'3',title:'1-комнатная, аренда, мебель+техника',city:'Тирасполь',district:'Красный Октябрь',type:'apartment',deal_type:'rent',price:200,currency:'USD',rooms:1,area_m2:35,floor:3,floors_total:5,description:'Сдаётся уютная квартира, полностью меблирована, вся техника. Коммунальные отдельно.',icon:'🏠',promoted:false},
+  {id:'4',title:'Дом 120м², участок 10 соток',city:'Слободзея',district:'',type:'house',deal_type:'sale',price:45000,currency:'USD',rooms:4,area_m2:120,floor:null,floors_total:2,description:'Кирпичный дом, 4 комнаты, гараж, баня, колодец. Тихий район.',icon:'🏡',promoted:false},
+  {id:'5',title:'Офис в аренду, центр, 45м²',city:'Тирасполь',district:'Центр',type:'commercial',deal_type:'rent',price:350,currency:'USD',rooms:null,area_m2:45,floor:1,floors_total:3,description:'Офисное помещение в деловом центре. Отдельный вход, парковка, охрана 24/7.',icon:'🏪',promoted:false},
+  {id:'6',title:'2-комнатная, Ботаника, евроремонт',city:'Кишинёв',district:'Ботаника',type:'apartment',deal_type:'sale',price:95000,currency:'USD',rooms:2,area_m2:68,floor:4,floors_total:12,description:'Апартамент с евроремонтом, встроенная кухня, гардероб, паркинг.',icon:'🏢',promoted:false},
+  {id:'7',title:'3-комнатная, Рышкановка',city:'Кишинёв',district:'Рышкановка',type:'apartment',deal_type:'sale',price:75000,currency:'USD',rooms:3,area_m2:85,floor:7,floors_total:9,description:'3к квартира в тихом районе, хорошая транспортная развязка, рядом школа и парк.',icon:'🏢',promoted:false},
+  {id:'8',title:'Дом в Бендерах, 150м²',city:'Бендеры',district:'',type:'house',deal_type:'sale',price:55000,currency:'USD',rooms:5,area_m2:150,floor:null,floors_total:2,description:'Добротный дом, 5 комнат, газ, вода, канализация, хороший ремонт, фруктовый сад.',icon:'🏡',promoted:false},
+  {id:'9',title:'Студия в аренду, центр',city:'Тирасполь',district:'Центр',type:'apartment',deal_type:'rent',price:180,currency:'USD',rooms:1,area_m2:28,floor:8,floors_total:9,description:'Современная студия с дизайнерским ремонтом. Высокий этаж, панорамный вид.',icon:'🏠',promoted:false},
+  {id:'10',title:'Участок 6 соток, Дубоссары',city:'Дубоссары',district:'',type:'land',deal_type:'sale',price:8000,currency:'USD',rooms:null,area_m2:600,floor:null,floors_total:null,description:'Ровный участок под строительство, все коммуникации рядом, хорошая дорога.',icon:'🌿',promoted:false},
+  {id:'11',title:'4-комнатная, элитный дом, центр',city:'Тирасполь',district:'Центр',type:'apartment',deal_type:'sale',price:89000,currency:'USD',rooms:4,area_m2:115,floor:3,floors_total:7,description:'Престижный жилой комплекс. Консьерж, подземный паркинг, закрытая территория.',icon:'🏢',promoted:true},
+  {id:'12',title:'1-комнатная, Рыбница, новый дом',city:'Рыбница',district:'',type:'apartment',deal_type:'sale',price:22000,currency:'USD',rooms:1,area_m2:42,floor:2,floors_total:5,description:'Новостройка 2020 года, черновая отделка, свободная планировка. Ипотека возможна.',icon:'🏢',promoted:false},
+  {id:'13',title:'Гараж в центре, 24м²',city:'Тирасполь',district:'Центр',type:'garage',deal_type:'sale',price:7500,currency:'USD',rooms:null,area_m2:24,floor:null,floors_total:null,description:'Кирпичный гараж, металлические ворота, яма, хороший подъезд.',icon:'🚗',promoted:false},
+  {id:'14',title:'Коммерческое, 120м², Кишинёв',city:'Кишинёв',district:'Центр',type:'commercial',deal_type:'rent',price:1200,currency:'USD',rooms:null,area_m2:120,floor:1,floors_total:1,description:'Помещение под магазин/ресторан/офис. Витринные окна, высокий трафик.',icon:'🏪',promoted:false},
+];
+
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+let allListings = [];
+let filteredListings = [];
+let currentPage = 1;
+const PER_PAGE = 9;
+let activeFilter = { deal:'', type:'', city:'', price:'' };
+let aiMatchIds = new Set();
+let aiMatchReasons = {};
+
+// ═══════════════════════════════════════════════════════════
+// LOAD DATA
+// ═══════════════════════════════════════════════════════════
+async function loadListings() {
+  try {
+    if (BACKEND_URL) {
+      const r = await fetch(`${BACKEND_URL}/api/v1/listings?per_page=100`);
+      const data = await r.json();
+      allListings = data.data?.items || data.items || [];
+    }
+    if (!allListings.length) allListings = SAMPLE_DATA;
+  } catch(e) {
+    allListings = SAMPLE_DATA;
+  }
+  filteredListings = [...allListings];
+  updateStats();
+  updateTypeCounts();
+  renderListings();
+}
+
+function updateStats() {
+  const sale = allListings.filter(l => l.deal_type === 'sale').length;
+  const rent = allListings.filter(l => l.deal_type === 'rent').length;
+  animateNum('statTotal', allListings.length);
+  animateNum('statSale', sale);
+  animateNum('statRent', rent);
+}
+
+function animateNum(id, target) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  let cur = 0;
+  const step = Math.ceil(target / 30);
+  const t = setInterval(() => {
+    cur = Math.min(cur + step, target);
+    el.textContent = cur;
+    if (cur >= target) clearInterval(t);
+  }, 40);
+}
+
+function updateTypeCounts() {
+  const types = ['apartment','house','land','commercial','garage'];
+  types.forEach(t => {
+    const el = document.getElementById('cnt-' + t);
+    if (el) el.textContent = allListings.filter(l => l.type === t).length + ' объектов';
+  });
+  const all = document.getElementById('cnt-all');
+  if (all) all.textContent = allListings.length + ' объектов';
+}
+
+// ═══════════════════════════════════════════════════════════
+// RENDER CARDS
+// ═══════════════════════════════════════════════════════════
+function renderListings() {
+  const grid = document.getElementById('listingsGrid');
+  const count = document.getElementById('listingsCount');
+  currentPage = 1;
+
+  // Sort: promoted first
+  const sorted = [...filteredListings].sort((a,b) => (b.promoted?1:0) - (a.promoted?1:0));
+
+  // If AI search active — put AI matches first
+  if (aiMatchIds.size) {
+    sorted.sort((a,b) => {
+      const aM = aiMatchIds.has(a.id) ? 1 : 0;
+      const bM = aiMatchIds.has(b.id) ? 1 : 0;
+      return bM - aM;
+    });
+  }
+
+  if (!sorted.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+      <div class="empty-icon">🔍</div>
+      <div class="empty-title">Ничего не найдено</div>
+      <div>Попробуйте изменить параметры поиска</div>
+    </div>`;
+    count.textContent = '';
+    document.getElementById('pagination').innerHTML = '';
+    return;
+  }
+
+  count.textContent = `${sorted.length} объектов`;
+  renderPage(sorted, 1);
+}
+
+function renderPage(items, page) {
+  const grid = document.getElementById('listingsGrid');
+  const start = (page-1) * PER_PAGE;
+  const pageItems = items.slice(start, start + PER_PAGE);
+
+  grid.innerHTML = pageItems.map((l,i) => {
+    const isAI = aiMatchIds.has(l.id);
+    const reason = aiMatchReasons[l.id] || '';
+    const priceStr = l.price >= 1000
+      ? `${(l.price/1000).toFixed(0)}K`
+      : l.price;
+    const currency = l.currency === 'EUR' ? '€' : '$';
+    const dealLabel = l.deal_type === 'rent' ? '/мес' : '';
+    const typeLabel = {apartment:'Квартира',house:'Дом',land:'Участок',commercial:'Коммерция',garage:'Гараж'}[l.type] || l.type;
+
+    return `<div class="property-card${isAI?' ai-match':''}" onclick="openModal('${l.id}')"
+      style="animation:fadeUp .4s ease ${i*0.05}s both">
+      <div class="card-img">
+        <div class="card-img-placeholder">${l.icon||'🏠'}</div>
+        <div class="card-badge ${l.deal_type==='rent'?'badge-rent':'badge-sale'}">${l.deal_type==='rent'?'Аренда':'Продажа'}</div>
+        ${l.promoted ? '<div class="badge-vip">★ ТОП</div>' : ''}
+      </div>
+      <div class="card-body">
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey2);margin-bottom:6px">${typeLabel}</div>
+        <div class="card-title">${l.title}</div>
+        <div class="card-location">📍 ${l.city}${l.district?', '+l.district:''}</div>
+        <div class="card-meta">
+          ${l.rooms ? `<span class="meta-item">🛏 ${l.rooms} комн.</span>` : ''}
+          ${l.area_m2 ? `<span class="meta-item">📐 ${l.area_m2} м²</span>` : ''}
+          ${l.floor ? `<span class="meta-item">🏗 ${l.floor}/${l.floors_total} эт.</span>` : ''}
+        </div>
+        <div class="card-footer">
+          <div class="card-price">${priceStr} ${currency}<span>${dealLabel}</span></div>
+        </div>
+        ${isAI && reason ? `<div class="card-match-reason"><span>💡 AI:</span> ${reason}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+
+  // Pagination
+  const total = items.length;
+  const pages = Math.ceil(total / PER_PAGE);
+  const pag = document.getElementById('pagination');
+  if (pages <= 1) { pag.innerHTML = ''; return; }
+
+  pag.innerHTML = Array.from({length:pages}, (_,i) =>
+    `<button class="page-btn${i+1===page?' active':''}" onclick="goPage(${i+1})">${i+1}</button>`
+  ).join('');
+
+  currentPage = page;
+}
+
+function goPage(p) {
+  const sorted = [...filteredListings].sort((a,b)=>(b.promoted?1:0)-(a.promoted?1:0));
+  renderPage(sorted, p);
+  document.getElementById('listings').scrollIntoView({behavior:'smooth'});
+}
+
+// Fade animation
+const styleAnim = document.createElement('style');
+styleAnim.textContent = `@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}`;
+document.head.appendChild(styleAnim);
+
+// ═══════════════════════════════════════════════════════════
+// FILTERS
+// ═══════════════════════════════════════════════════════════
+function applyFilters() {
+  aiMatchIds.clear();
+  aiMatchReasons = {};
+  hideAIResults();
+
+  const deal = document.getElementById('fDeal').value;
+  const type = document.getElementById('fType').value;
+  const city = document.getElementById('fCity').value;
+  const price = parseFloat(document.getElementById('fPrice').value) || 0;
+
+  filteredListings = allListings.filter(l => {
+    if (deal && l.deal_type !== deal) return false;
+    if (type && l.type !== type) return false;
+    if (city && l.city !== city) return false;
+    if (price && l.price > price) return false;
+    return true;
+  });
+
+  renderListings();
+  document.getElementById('listings').scrollIntoView({behavior:'smooth'});
+}
+
+function filterByType(type, el) {
+  document.querySelectorAll('.type-tile').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('fType').value = type;
+  applyFilters();
+}
+
+function filterByCity(city, el) {
+  document.querySelectorAll('.city-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('fCity').value = city;
+  applyFilters();
+}
+
+function hideAIResults() {
+  document.getElementById('aiExplain').style.display = 'none';
+  document.getElementById('aiIntentRow').innerHTML = '';
+}
+
+// ═══════════════════════════════════════════════════════════
+// ████ AI SEARCH — CLAUDE API ████
+// ═══════════════════════════════════════════════════════════
+
+// ⚠️ ВАЖНО: для продакшена вынеси API вызов на сервер (Vercel serverless)
+// Сейчас ключ читается из window.ESTA_AI_KEY
+// Установи его через: <script>window.ESTA_AI_KEY = '{{ENV_KEY}}'</script>
+// или используй Vercel Edge Functions
+
+const AI_KEY = window.ESTA_AI_KEY || '';
+
+function setAIQuery(text) {
+  document.getElementById('aiInput').value = text;
+  runAISearch();
+}
+
+async function runAISearch() {
+  const query = document.getElementById('aiInput').value.trim();
+  if (!query) return;
+
+  if (!AI_KEY) {
+    // Фолбэк: локальный NLU поиск без API
+    localAISearch(query);
+    return;
+  }
+
+  const btn = document.getElementById('aiBtn');
+  btn.disabled = true;
+  btn.textContent = '...';
+
+  const thinking = document.getElementById('aiThinking');
+  const thinkText = document.getElementById('aiThinkingText');
+  const errorEl = document.getElementById('aiError');
+
+  thinking.classList.add('show');
+  errorEl.classList.remove('show');
+  hideAIResults();
+  aiMatchIds.clear();
+  aiMatchReasons = {};
+
+  const dbSummary = allListings.map(l =>
+    `id:${l.id}|"${l.title}"|${l.city}|${l.type}|${l.deal_type}|${l.price}${l.currency}|${l.rooms||''}к|${l.area_m2||''}м²`
+  ).join('\n');
+
+  const systemPrompt = `Ты — AI-ассистент ESTA Realty (Молдова и Приднестровье).
+База объявлений:\n${dbSummary}
+Отвечай ТОЛЬКО JSON без markdown:
+{"intent":{"city":null,"type":null,"deal_type":"sale","rooms":null,"max_price":null,"min_price":null},"matched_ids":[],"explanation":"","match_reasons":{}}`;
+
+  try {
+    let fullText = '';
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','anthropic-version':'2023-06-01','x-api-key':AI_KEY},
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: systemPrompt,
+        messages: [{role:'user', content: query}],
+        stream: true
+      })
+    });
+
+    const reader = res.body.getReader();
+    const dec = new TextDecoder();
+
+    while (true) {
+      const {done, value} = await reader.read();
+      if (done) break;
+      for (const line of dec.decode(value).split('\n')) {
+        if (!line.startsWith('data: ')) continue;
+        const raw = line.slice(6);
+        if (raw === '[DONE]') continue;
+        try {
+          const ev = JSON.parse(raw);
+          if (ev.type === 'content_block_delta' && ev.delta?.text) {
+            fullText += ev.delta.text;
+            thinkText.textContent = '...' + fullText.slice(-120);
+          }
+        } catch {}
+      }
+    }
+
+    const parsed = JSON.parse(fullText.replace(/```json|```/g,'').trim());
+    applyAIResults(parsed, query);
+
+  } catch(e) {
+    // API недоступен — используем локальный NLU
+    localAISearch(query);
+  } finally {
+    thinking.classList.remove('show');
+    btn.disabled = false;
+    btn.textContent = 'Найти с AI';
+  }
+}
+
+function applyAIResults(parsed, query) {
+  // Intent chips
+  const intent = parsed.intent || {};
+  const intentRow = document.getElementById('aiIntentRow');
+  intentRow.innerHTML = [
+    intent.city && `<span class="intent-chip chip-city">📍 ${intent.city}</span>`,
+    intent.rooms && `<span class="intent-chip chip-rooms">🛏 ${intent.rooms} комн.</span>`,
+    intent.max_price && `<span class="intent-chip chip-price">💰 до ${intent.max_price.toLocaleString()}</span>`,
+    intent.min_price && `<span class="intent-chip chip-price">💰 от ${intent.min_price.toLocaleString()}</span>`,
+    intent.type && `<span class="intent-chip chip-type">🏠 ${{apartment:'Квартира',house:'Дом',land:'Участок',commercial:'Коммерция'}[intent.type]||intent.type}</span>`,
+    intent.deal_type && `<span class="intent-chip chip-deal">${intent.deal_type==='rent'?'Аренда':'Продажа'}</span>`,
+  ].filter(Boolean).join('');
+
+  // Store AI matches
+  (parsed.matched_ids || []).forEach(id => aiMatchIds.add(id));
+  aiMatchReasons = parsed.match_reasons || {};
+
+  // Apply as filter
+  filteredListings = aiMatchIds.size
+    ? allListings.filter(l => aiMatchIds.has(l.id))
+    : allListings;
+
+  // Show explanation
+  if (parsed.explanation) {
+    document.getElementById('aiExplain').style.display = 'block';
+    document.getElementById('aiExplainText').textContent = parsed.explanation;
+  }
+
+  renderListings();
+  document.getElementById('listings').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// ─── Local NLU fallback (без API ключа) ──────────────────
+function localAISearch(query) {
+  const q = query.toLowerCase();
+
+  const intent = {};
+
+  // City
+  const cityMap = {
+    'тирасполь':'Тирасполь','тирасполе':'Тирасполь','тирасполя':'Тирасполь',
+    'кишинёв':'Кишинёв','кишинев':'Кишинёв','кишинёве':'Кишинёв',
+    'бендер':'Бендеры','бендеры':'Бендеры',
+    'рыбниц':'Рыбница','дубоссар':'Дубоссары',
+    'слободзе':'Слободзея','бельц':'Бельцы',
+  };
+  for (const [k,v] of Object.entries(cityMap)) if (q.includes(k)) { intent.city=v; break; }
+
+  // Rooms
+  const roomsMap = {'однокомнат':1,'1-комнат':1,'двухкомнат':2,'2-комнат':2,'2к ':2,'трёхкомнат':3,'трехкомнат':3,'3-комнат':3,'3к ':3,'четырёх':4,'4-комнат':4,'4к ':4};
+  for (const [k,v] of Object.entries(roomsMap)) if (q.includes(k)) { intent.rooms=v; break; }
+
+  // Price
+  const priceMatch = q.match(/до\s*(\d[\d\s]*)/);
+  if (priceMatch) intent.max_price = parseInt(priceMatch[1].replace(/\s/g,''));
+
+  // Type
+  if (/квартир|апартамент/.test(q)) intent.type='apartment';
+  else if (/дом|дач|коттедж/.test(q)) intent.type='house';
+  else if (/участок|земл/.test(q)) intent.type='land';
+  else if (/офис|магазин|коммерц/.test(q)) intent.type='commercial';
+  else if (/гараж/.test(q)) intent.type='garage';
+
+  // Deal
+  intent.deal_type = /аренд|снять|сниму/.test(q) ? 'rent' : 'sale';
+
+  // Filter
+  filteredListings = allListings.filter(l => {
+    if (intent.city && !l.city.includes(intent.city)) return false;
+    if (intent.type && l.type !== intent.type) return false;
+    if (intent.deal_type && l.deal_type !== intent.deal_type) return false;
+    if (intent.rooms && l.rooms !== intent.rooms) return false;
+    if (intent.max_price && l.price > intent.max_price) return false;
+    return true;
+  });
+
+  // Show intent chips
+  const intentRow = document.getElementById('aiIntentRow');
+  intentRow.innerHTML = [
+    intent.city && `<span class="intent-chip chip-city">📍 ${intent.city}</span>`,
+    intent.rooms && `<span class="intent-chip chip-rooms">🛏 ${intent.rooms} комн.</span>`,
+    intent.max_price && `<span class="intent-chip chip-price">💰 до ${intent.max_price.toLocaleString()}</span>`,
+    intent.type && `<span class="intent-chip chip-type">🏠 ${{apartment:'Квартира',house:'Дом',land:'Участок',commercial:'Коммерция',garage:'Гараж'}[intent.type]}</span>`,
+    `<span class="intent-chip chip-deal">${intent.deal_type==='rent'?'Аренда':'Продажа'}</span>`,
+  ].filter(Boolean).join('');
+
+  document.getElementById('aiExplain').style.display = 'block';
+  document.getElementById('aiExplainText').textContent =
+    `Найдено ${filteredListings.length} объектов по запросу «${query}» (локальный поиск). Для полного AI-поиска подключи Claude API.`;
+
+  document.getElementById('aiThinking').classList.remove('show');
+  document.getElementById('aiBtn').disabled = false;
+  document.getElementById('aiBtn').textContent = 'Найти с AI';
+
+  renderListings();
+  document.getElementById('listings').scrollIntoView({behavior:'smooth'});
+}
+
+// ═══════════════════════════════════════════════════════════
+// MODAL
+// ═══════════════════════════════════════════════════════════
+function openModal(id) {
+  const l = allListings.find(x => x.id == id);
+  if (!l) return;
+
+  document.getElementById('modalImgs').innerHTML = `<div style="font-size:72px">${l.icon||'🏠'}</div>`;
+  document.getElementById('modalBadge').textContent = l.deal_type==='rent' ? 'Аренда' : 'Продажа';
+  document.getElementById('modalBadge').className = `modal-badge ${l.deal_type==='rent'?'badge-rent':'badge-sale'}`;
+  document.getElementById('modalTitle').textContent = l.title;
+  document.getElementById('modalLocation').textContent = `📍 ${l.city}${l.district?', '+l.district:''}`;
+
+  const specs = [
+    l.rooms && {v:l.rooms+' комн.',l:'Комнаты'},
+    l.area_m2 && {v:l.area_m2+' м²',l:'Площадь'},
+    l.floor && {v:`${l.floor}/${l.floors_total}`,l:'Этаж'},
+  ].filter(Boolean);
+
+  document.getElementById('modalSpecs').innerHTML = specs.map(s=>
+    `<div class="spec-item"><div class="spec-value">${s.v}</div><div class="spec-label">${s.l}</div></div>`
+  ).join('');
+
+  document.getElementById('modalDesc').textContent = l.description || '';
+  const sym = l.currency==='EUR'?'€':'$';
+  const sfx = l.deal_type==='rent'?' / мес':'';
+  document.getElementById('modalPrice').textContent = `${l.price.toLocaleString()} ${sym}${sfx}`;
+  document.getElementById('modalActions').innerHTML = `
+    <a href="https://t.me/esta_realty_bot" class="btn-gold" target="_blank">Написать агенту</a>
+    <button class="btn-outline" onclick="closeModal()">Закрыть</button>`;
+
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('modal')) closeModal();
+});
+
+// ═══════════════════════════════════════════════════════════
+// NAV SCROLL
+// ═══════════════════════════════════════════════════════════
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+loadListings();
+</script>
+</body>
+</html>
