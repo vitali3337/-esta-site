@@ -3,237 +3,244 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ESTA — Недвижимость Молдовы и Приднестровья</title>
-<meta name="description" content="Крупнейшая база недвижимости Молдовы и Приднестровья. AI-поиск квартир, домов, коммерции в Тирасполе, Кишинёве, Бендерах.">
+<title>ESTA — AI Real Estate · Moldova &amp; Transnistria</title>
+<meta name="description" content="AI платформа недвижимости Молдовы и Приднестровья. Умный поиск, CRM для агентов.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-:root{--black:#080a0d;--dark:#0d1117;--surface:#121820;--surface2:#1a2030;--border:#1e2a3a;--gold:#c9a84c;--gold2:#e8cc80;--white:#f0ece4;--grey:#8a96a8;--grey2:#4a5568;--green:#4caf82}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:'Outfit',sans-serif;background:var(--black);color:var(--white);overflow-x:hidden}
+body{font-family:'Outfit',sans-serif;background:#080a0d;color:#f0ece4;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button,input,select{font-family:inherit}
 
-/* ── NAV ── */
-nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:20px 40px;display:flex;align-items:center;justify-content:space-between;transition:all .3s}
-nav.scrolled{background:rgba(8,10,13,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-.logo{display:flex;align-items:center;gap:12px;text-decoration:none}
-.logo-box{width:38px;height:38px;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--black)}
-.logo-name{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--gold);letter-spacing:4px}
-.nav-links{display:flex;gap:32px;list-style:none}
-.nav-links a{color:var(--grey);text-decoration:none;font-size:13px;letter-spacing:1px;text-transform:uppercase;transition:color .2s}
-.nav-links a:hover{color:var(--gold)}
-.nav-tg{padding:9px 24px;border:1px solid var(--gold);color:var(--gold);font-size:12px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;transition:all .2s}
-.nav-tg:hover{background:var(--gold);color:var(--black)}
+:root{
+--bg:#080a0d;--dark:#0d1117;--s1:#121820;--s2:#1a2030;
+--border:#1e2a3a;--gold:#c9a84c;--gold2:#e8cc80;
+--grey:#8a96a8;--grey2:#4a5568;--green:#4caf82;--teal:#14b8a6;
+}
 
-/* ── HERO ── */
-.hero{min-height:100vh;display:flex;align-items:center;padding:100px 40px 60px;position:relative;overflow:hidden}
-.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 65% 40%,rgba(201,168,76,.07) 0%,transparent 60%),linear-gradient(180deg,var(--black) 0%,var(--dark) 100%)}
-.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(201,168,76,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,.04) 1px,transparent 1px);background-size:80px 80px;mask-image:radial-gradient(ellipse at center,black 30%,transparent 80%)}
-.hero-content{position:relative;max-width:700px;z-index:1}
-.hero-badge{display:inline-flex;align-items:center;gap:10px;padding:8px 20px;border:1px solid rgba(201,168,76,.3);margin-bottom:32px}
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:900;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;transition:all .3s}
+.nav.fx{background:rgba(8,10,13,.96);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-sq{width:36px;height:36px;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:#080a0d}
+.logo-txt{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--gold);letter-spacing:4px}
+.nav-ul{display:flex;gap:28px;list-style:none}
+.nav-ul a{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey);transition:color .2s}
+.nav-ul a:hover{color:var(--gold)}
+.nav-tg{padding:8px 22px;border:1px solid var(--gold);color:var(--gold);font-size:11px;letter-spacing:2px;text-transform:uppercase;transition:all .2s}
+.nav-tg:hover{background:var(--gold);color:#080a0d}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;padding:120px 40px 80px;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 65% 40%,rgba(201,168,76,.07),transparent 60%),linear-gradient(180deg,var(--bg),var(--dark))}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(201,168,76,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,.035) 1px,transparent 1px);background-size:80px 80px;mask-image:radial-gradient(ellipse at 60% 40%,black 20%,transparent 70%)}
+.hero-c{position:relative;z-index:1;max-width:680px}
+.badge{display:inline-flex;align-items:center;gap:10px;padding:7px 18px;border:1px solid rgba(201,168,76,.3);margin-bottom:28px}
 .badge-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.badge-text{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
-.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(48px,7vw,88px);font-weight:300;line-height:1.05;letter-spacing:-1px;margin-bottom:28px}
-.hero h1 em{font-style:italic;color:var(--gold)}
-.hero p{font-size:17px;color:var(--grey);line-height:1.7;max-width:480px;margin-bottom:48px;font-weight:300}
-.hero-btns{display:flex;gap:16px;flex-wrap:wrap}
-.btn-gold{padding:15px 36px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--black);font-size:13px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;font-weight:600;transition:all .3s;border:none;cursor:pointer;font-family:'Outfit',sans-serif}
-.btn-gold:hover{transform:translateY(-2px);box-shadow:0 16px 48px rgba(201,168,76,.3)}
-.btn-outline{padding:15px 36px;border:1px solid var(--border);color:var(--grey);font-size:13px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;transition:all .2s}
-.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
-.hero-stats{position:absolute;bottom:60px;right:40px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px}
-.stat-item{text-align:center}
-.stat-num{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:600;color:var(--gold);line-height:1}
-.stat-label{font-size:10px;color:var(--grey);letter-spacing:2px;text-transform:uppercase;margin-top:4px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.badge-txt{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);font-family:'JetBrains Mono',monospace}
+h1{font-family:'Cormorant Garamond',serif;font-size:clamp(52px,8vw,96px);font-weight:300;line-height:.97;letter-spacing:-1px;margin-bottom:24px}
+h1 em{font-style:italic;color:var(--gold)}
+.hero-p{font-size:16px;color:var(--grey);line-height:1.75;max-width:440px;margin-bottom:44px;font-weight:300}
+.btns{display:flex;gap:14px;flex-wrap:wrap}
+.btn-g{padding:14px 34px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#080a0d;font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:600;border:none;cursor:pointer;transition:all .3s}
+.btn-g:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(201,168,76,.3)}
+.btn-o{padding:14px 34px;border:1px solid var(--border);color:var(--grey);font-size:12px;letter-spacing:2px;text-transform:uppercase;background:none;cursor:pointer;transition:all .2s}
+.btn-o:hover{border-color:var(--gold);color:var(--gold)}
+.stats{position:absolute;bottom:60px;right:40px;display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.st{text-align:center}
+.st-n{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:600;color:var(--gold);line-height:1}
+.st-l{font-size:9px;color:var(--grey2);letter-spacing:2px;text-transform:uppercase;margin-top:5px}
 
-/* ── MARQUEE ── */
-.marquee-wrap{padding:16px 0;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden}
-.marquee-track{display:flex;animation:marquee 22s linear infinite;white-space:nowrap}
-.marquee-item{display:flex;align-items:center;gap:24px;padding:0 24px;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--grey2)}
-.marquee-item span{color:var(--gold);font-size:14px}
-@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+/* TICKER */
+.ticker{overflow:hidden;background:var(--s1);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:14px 0}
+.ticker-t{display:flex;animation:tick 24s linear infinite;white-space:nowrap}
+.ti{display:flex;align-items:center;gap:20px;padding:0 20px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--grey2)}
+.ti b{color:var(--gold);font-size:13px}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-/* ── AI SEARCH ── */
-.ai-section{padding:64px 40px;background:var(--dark);border-bottom:1px solid var(--border)}
-.ai-wrap{max-width:800px;margin:0 auto}
-.ai-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;display:flex;align-items:center;gap:10px}
-.ai-label::before{content:'';width:24px;height:1px;background:var(--gold)}
-.ai-title{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,3vw,40px);font-weight:300;margin-bottom:8px}
-.ai-title em{font-style:italic;color:var(--gold)}
-.ai-sub{font-size:14px;color:var(--grey);margin-bottom:28px;line-height:1.6}
-.ai-input-row{display:flex;gap:0;position:relative}
-.ai-input{flex:1;padding:16px 20px;background:var(--surface);border:1px solid var(--border);border-right:none;color:var(--white);font-family:'Outfit',sans-serif;font-size:15px;outline:none;transition:border-color .2s}
-.ai-input:focus{border-color:var(--gold)}
-.ai-input::placeholder{color:var(--grey2)}
-.ai-btn{padding:16px 32px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--black);font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:600;border:none;cursor:pointer;font-family:'Outfit',sans-serif;white-space:nowrap;transition:opacity .2s}
-.ai-btn:disabled{opacity:.5;cursor:not-allowed}
-.ai-thinking{margin-top:16px;padding:14px 18px;background:rgba(201,168,76,.04);border:1px solid rgba(201,168,76,.15);display:none}
-.ai-thinking.show{display:block}
-.ai-thinking-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;display:flex;align-items:center;gap:8px}
-.think-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:pulse 1s infinite}
-.ai-thinking-text{font-size:13px;color:var(--grey);font-family:'Outfit',monospace;line-height:1.6}
-.ai-intent-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-.intent-chip{font-size:10px;letter-spacing:1px;padding:4px 12px;border-radius:2px}
-.chip-city{background:rgba(59,130,246,.1);color:#60a5fa;border:1px solid rgba(59,130,246,.2)}
-.chip-rooms{background:rgba(20,184,166,.1);color:#2dd4bf;border:1px solid rgba(20,184,166,.2)}
-.chip-price{background:rgba(201,168,76,.1);color:var(--gold);border:1px solid rgba(201,168,76,.2)}
-.chip-type{background:rgba(168,85,247,.1);color:#c084fc;border:1px solid rgba(168,85,247,.2)}
-.chip-deal{background:rgba(76,175,130,.1);color:var(--green);border:1px solid rgba(76,175,130,.2)}
-.ai-explain{margin-top:16px;padding:14px 18px;background:rgba(76,175,130,.04);border:1px solid rgba(76,175,130,.15);font-size:13px;color:var(--grey);line-height:1.7}
-.ai-explain-label{font-size:10px;letter-spacing:2px;color:var(--green);margin-bottom:6px}
-.ai-suggestions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
-.ai-sug{font-size:12px;color:var(--grey);background:var(--surface);border:1px solid var(--border);padding:7px 14px;cursor:pointer;transition:all .15s;letter-spacing:.5px}
-.ai-sug:hover{border-color:rgba(201,168,76,.4);color:var(--gold)}
-.ai-error{margin-top:12px;padding:12px 16px;background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);font-size:13px;color:#f87171;display:none}
-.ai-error.show{display:block}
+/* SECTIONS */
+.sec{padding:80px 40px;max-width:1360px;margin:0 auto}
+.sec-full{padding:80px 40px;background:var(--dark)}
+.sec-full .in{max-width:1360px;margin:0 auto}
+.sec-lbl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-family:'JetBrains Mono',monospace;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.sec-lbl::before{content:'';width:20px;height:1px;background:var(--gold)}
+h2{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,4vw,52px);font-weight:300;line-height:1.1;margin-bottom:6px}
+h2 em{font-style:italic;color:var(--gold)}
 
-/* ── FILTERS ── */
-.search-section{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:48px 40px}
-.search-wrap{max-width:1000px;margin:0 auto}
-.search-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--white);margin-bottom:24px;text-align:center}
-.search-title span{color:var(--gold)}
-.filters{display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:12px;align-items:end}
-.filter-group{display:flex;flex-direction:column;gap:8px}
-.filter-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey2)}
-.filter-select,.filter-input{padding:12px 16px;background:var(--dark);border:1px solid var(--border);color:var(--white);font-family:'Outfit',sans-serif;font-size:14px;outline:none;transition:border-color .2s;-webkit-appearance:none;width:100%}
-.filter-select:focus,.filter-input:focus{border-color:var(--gold)}
-.filter-select option{background:var(--dark)}
-.search-btn{padding:12px 32px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--black);font-size:13px;letter-spacing:2px;text-transform:uppercase;font-weight:600;border:none;cursor:pointer;font-family:'Outfit',sans-serif;white-space:nowrap}
+/* AI BOX */
+.ai-wrap{max-width:760px}
+.ai-row{position:relative;margin-top:28px}
+.ai-in{width:100%;padding:18px 120px 18px 20px;background:var(--s1);border:1px solid var(--border);color:#f0ece4;font-size:15px;outline:none;transition:border-color .2s}
+.ai-in:focus{border-color:var(--gold)}
+.ai-in::placeholder{color:var(--grey2)}
+.ai-btn{position:absolute;right:0;top:0;bottom:0;padding:0 28px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#080a0d;font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:600;border:none;cursor:pointer}
+.ai-btn:disabled{opacity:.45;cursor:not-allowed}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chip{font-size:11px;color:var(--grey);background:var(--s1);border:1px solid var(--border);padding:6px 14px;cursor:pointer;transition:all .15s;font-family:'JetBrains Mono',monospace}
+.chip:hover{border-color:rgba(201,168,76,.5);color:var(--gold)}
+.ai-think{margin-top:16px;padding:14px 18px;background:rgba(201,168,76,.03);border:1px solid rgba(201,168,76,.12);display:none}
+.ai-think.on{display:block}
+.tl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-family:'JetBrains Mono',monospace;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.td{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:pulse 1s infinite}
+.tt{font-size:12px;color:var(--grey);font-family:'JetBrains Mono',monospace;line-height:1.6}
+.ic-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
+.ic{font-size:10px;padding:4px 11px;font-family:'JetBrains Mono',monospace}
+.ic-city{background:rgba(59,130,246,.1);color:#60a5fa;border:1px solid rgba(59,130,246,.2)}
+.ic-rooms{background:rgba(20,184,166,.1);color:#2dd4bf;border:1px solid rgba(20,184,166,.2)}
+.ic-price{background:rgba(201,168,76,.1);color:var(--gold);border:1px solid rgba(201,168,76,.2)}
+.ic-type{background:rgba(168,85,247,.1);color:#c084fc;border:1px solid rgba(168,85,247,.2)}
+.ic-deal{background:rgba(76,175,130,.1);color:var(--green);border:1px solid rgba(76,175,130,.2)}
+.ai-exp{margin-top:14px;padding:14px 18px;background:rgba(20,184,166,.04);border:1px solid rgba(20,184,166,.12);font-size:13px;color:var(--grey);line-height:1.7;display:none}
+.ai-exp.on{display:block}
+.ai-exp-l{font-size:9px;letter-spacing:2px;color:var(--teal);font-family:'JetBrains Mono',monospace;margin-bottom:6px}
 
-/* ── TYPES ── */
-.types-section{padding:80px 40px;background:var(--dark)}
-.types-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:2px;margin-top:40px}
-.type-tile{background:var(--surface);padding:32px 24px;cursor:pointer;transition:all .3s;border:1px solid transparent;text-align:center}
-.type-tile:hover,.type-tile.active{background:var(--surface2);border-color:rgba(201,168,76,.4)}
-.type-icon{font-size:36px;margin-bottom:16px;display:block}
-.type-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;margin-bottom:8px}
-.type-count{font-size:12px;color:var(--grey)}
+/* FILTER */
+.fbar{background:var(--s1);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:36px 40px}
+.fin{max-width:1000px;margin:0 auto}
+.ftitle{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;text-align:center;margin-bottom:20px}
+.ftitle span{color:var(--gold)}
+.fgrid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:10px;align-items:end}
+.fg{display:flex;flex-direction:column;gap:7px}
+.fg label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey2);font-family:'JetBrains Mono',monospace}
+.fg select,.fg input{padding:11px 14px;background:var(--dark);border:1px solid var(--border);color:#f0ece4;outline:none;-webkit-appearance:none;transition:border-color .2s}
+.fg select:focus,.fg input:focus{border-color:var(--gold)}
+.fg select option{background:var(--dark)}
+.fbtn{padding:11px 28px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#080a0d;font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:600;border:none;cursor:pointer;white-space:nowrap}
 
-/* ── CITIES ── */
-.cities-section{padding:60px 40px;max-width:1400px;margin:0 auto}
-.cities-grid{display:flex;flex-wrap:wrap;gap:10px;margin-top:32px}
-.city-btn{padding:10px 22px;border:1px solid var(--border);background:none;color:var(--grey);font-family:'Outfit',sans-serif;font-size:13px;cursor:pointer;transition:all .2s}
-.city-btn:hover,.city-btn.active{border-color:var(--gold);color:var(--gold)}
+/* TYPES */
+.tgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:2px;margin-top:36px}
+.ttile{background:var(--s1);padding:28px 20px;cursor:pointer;transition:all .25s;border:1px solid transparent;text-align:center}
+.ttile:hover,.ttile.on{background:var(--s2);border-color:rgba(201,168,76,.35)}
+.ticon{font-size:32px;margin-bottom:12px}
+.tname{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:600;margin-bottom:6px}
+.tcnt{font-size:11px;color:var(--grey);font-family:'JetBrains Mono',monospace}
 
-/* ── LISTINGS ── */
-.listings-section{padding:80px 40px;max-width:1400px;margin:0 auto}
-.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:40px}
-.section-title{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:300}
-.section-title em{font-style:italic;color:var(--gold)}
-.section-count{font-size:13px;color:var(--grey)}
-.listings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:2px}
-.property-card{background:var(--surface);position:relative;overflow:hidden;transition:background .3s;cursor:pointer}
-.property-card:hover{background:var(--surface2)}
-.card-img{height:220px;overflow:hidden;background:var(--dark);position:relative}
-.card-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
-.property-card:hover .card-img img{transform:scale(1.05)}
-.card-img-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;color:var(--grey2)}
-.card-badge{position:absolute;top:12px;left:12px;padding:4px 12px;font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:600}
-.badge-sale{background:var(--gold);color:var(--black)}
-.badge-rent{background:var(--surface2);color:var(--gold);border:1px solid var(--gold)}
-.badge-vip{position:absolute;top:12px;right:12px;padding:4px 10px;background:linear-gradient(135deg,var(--gold),var(--gold2));font-size:10px;color:var(--black);font-weight:700}
-.card-body{padding:20px 24px}
-.card-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;line-height:1.3;margin-bottom:8px}
-.card-location{font-size:12px;color:var(--grey);margin-bottom:12px}
-.card-meta{display:flex;gap:16px;margin-bottom:16px}
-.meta-item{font-size:12px;color:var(--grey)}
-.card-footer{display:flex;align-items:center;justify-content:space-between;padding-top:16px;border-top:1px solid var(--border)}
-.card-price{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--gold)}
-.card-price span{font-size:13px;color:var(--grey);font-family:'Outfit',sans-serif}
-.card-match-reason{margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:12px;color:var(--grey);font-style:italic;line-height:1.5}
-.card-match-reason span{color:var(--gold)}
+/* CITIES */
+.crow{display:flex;flex-wrap:wrap;gap:9px;margin-top:28px}
+.cbtn{padding:9px 20px;border:1px solid var(--border);background:none;color:var(--grey);font-size:12px;cursor:pointer;transition:all .2s}
+.cbtn:hover,.cbtn.on{border-color:var(--gold);color:var(--gold)}
 
-/* AI result highlight */
-.property-card.ai-match{border:1px solid rgba(201,168,76,.3)}
-.property-card.ai-match::before{content:'AI';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold2))}
+/* LISTINGS */
+.lhdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:36px}
+.lcnt{font-size:12px;color:var(--grey);font-family:'JetBrains Mono',monospace}
+.lcnt strong{color:var(--gold);font-size:15px}
+.lgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:2px}
 
-.loading{display:flex;align-items:center;justify-content:center;padding:80px;gap:12px;color:var(--grey)}
-.spinner{width:24px;height:24px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.empty-state{text-align:center;padding:80px 40px;color:var(--grey2)}
-.empty-icon{font-size:56px;margin-bottom:16px}
-.empty-title{font-family:'Cormorant Garamond',serif;font-size:24px;margin-bottom:8px;color:var(--grey)}
-.pagination{display:flex;justify-content:center;gap:8px;margin-top:48px}
-.page-btn{width:40px;height:40px;border:1px solid var(--border);background:none;color:var(--grey);cursor:pointer;font-family:'Outfit',sans-serif;font-size:14px;transition:all .2s}
-.page-btn:hover,.page-btn.active{border-color:var(--gold);color:var(--gold)}
+/* CARD */
+.card{background:var(--s1);position:relative;overflow:hidden;cursor:pointer;transition:background .25s;animation:cin .4s ease both}
+@keyframes cin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.card:hover{background:var(--s2)}
+.card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold2));transform:scaleX(0);transform-origin:left;transition:transform .25s}
+.card:hover::after{transform:scaleX(1)}
+.card.aip{border:1px solid rgba(201,168,76,.25)}
+.card.aip::after{transform:scaleX(1);background:linear-gradient(90deg,var(--teal),var(--gold))}
+.cthumb{height:200px;background:var(--dark);display:flex;align-items:center;justify-content:center;font-size:52px;position:relative;overflow:hidden}
+.cdeal{position:absolute;top:10px;left:10px;padding:3px 10px;font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:600}
+.ds{background:var(--gold);color:#080a0d}
+.dr{background:var(--s2);color:var(--gold);border:1px solid var(--gold)}
+.cvip{position:absolute;top:10px;right:10px;padding:3px 9px;background:linear-gradient(135deg,var(--gold),var(--gold2));font-size:9px;color:#080a0d;font-weight:700}
+.caib{position:absolute;bottom:10px;left:10px;padding:3px 9px;background:rgba(20,184,166,.9);font-size:9px;color:#fff;font-family:'JetBrains Mono',monospace}
+.cbody{padding:18px 22px}
+.ctl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey2);font-family:'JetBrains Mono',monospace;margin-bottom:5px}
+.ctitle{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;line-height:1.3;margin-bottom:7px}
+.cloc{font-size:11px;color:var(--grey);margin-bottom:11px}
+.cmeta{display:flex;gap:14px;margin-bottom:14px;flex-wrap:wrap}
+.cmeta span{font-size:11px;color:var(--grey)}
+.cfoot{display:flex;align-items:center;justify-content:space-between;padding-top:14px;border-top:1px solid var(--border)}
+.cprice{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--gold)}
+.cprice sub{font-size:12px;color:var(--grey);font-family:'Outfit',sans-serif}
+.creason{margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:11px;color:var(--grey);font-style:italic;line-height:1.5}
+.creason b{color:var(--teal)}
 
-/* ── MODAL ── */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:800;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px)}
-.modal-overlay.open{display:flex}
-.modal{background:var(--dark);border:1px solid var(--border);max-width:700px;width:100%;max-height:90vh;overflow-y:auto;position:relative}
-.modal-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--grey);font-size:20px;cursor:pointer;padding:8px;z-index:10}
-.modal-imgs{height:300px;background:var(--black);display:flex;align-items:center;justify-content:center;font-size:64px}
-.modal-imgs img{width:100%;height:100%;object-fit:cover}
-.modal-body{padding:32px}
-.modal-badge{display:inline-block;padding:4px 14px;margin-bottom:16px;font-size:11px;letter-spacing:2px;text-transform:uppercase}
-.modal-title{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600;line-height:1.2;margin-bottom:12px}
-.modal-location{font-size:14px;color:var(--grey);margin-bottom:20px}
-.modal-specs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:20px;background:var(--surface);margin-bottom:24px}
-.spec-item{text-align:center}
-.spec-value{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--gold)}
-.spec-label{font-size:11px;color:var(--grey);margin-top:4px}
-.modal-desc{font-size:14px;color:var(--grey);line-height:1.8;margin-bottom:24px}
-.modal-price{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:300;color:var(--gold);margin-bottom:24px}
-.modal-actions{display:flex;gap:12px}
+/* STATES */
+.sload{display:flex;align-items:center;justify-content:center;gap:12px;padding:80px;color:var(--grey);grid-column:1/-1}
+.spin{width:22px;height:22px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.sempty{text-align:center;padding:80px 20px;color:var(--grey2);grid-column:1/-1}
+.sempty-i{font-size:52px;margin-bottom:14px}
+.sempty-t{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--grey);margin-bottom:8px}
 
-/* ── FOOTER ── */
-footer{background:var(--surface);border-top:1px solid var(--border);padding:40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px}
-.footer-logo{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--gold);letter-spacing:4px}
-.footer-copy{font-size:12px;color:var(--grey2)}
-.footer-markets{display:flex;gap:12px}
-.mkt{padding:5px 12px;border:1px solid var(--border);font-size:10px;letter-spacing:2px;color:var(--grey2)}
+/* PAG */
+.pag{display:flex;justify-content:center;gap:6px;margin-top:48px}
+.pb{width:38px;height:38px;border:1px solid var(--border);background:none;color:var(--grey);cursor:pointer;font-size:13px;transition:all .2s}
+.pb:hover,.pb.on{border-color:var(--gold);color:var(--gold)}
 
-/* ── TG FLOAT ── */
-.tg-float{position:fixed;bottom:24px;right:24px;z-index:400;display:flex;align-items:center;gap:10px;padding:12px 22px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--black);text-decoration:none;font-size:13px;font-weight:600;box-shadow:0 8px 32px rgba(201,168,76,.4);animation:floatAnim 3s ease-in-out infinite}
-.tg-float svg{width:16px;height:16px;fill:var(--black)}
-@keyframes floatAnim{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+/* MODAL */
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(10px)}
+.mo.open{display:flex}
+.md{background:var(--dark);border:1px solid var(--border);max-width:680px;width:100%;max-height:90vh;overflow-y:auto;position:relative}
+.mx{position:absolute;top:14px;right:14px;background:none;border:none;color:var(--grey);font-size:18px;cursor:pointer;padding:8px;z-index:10;transition:color .2s}
+.mx:hover{color:#f0ece4}
+.mth{height:280px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:68px}
+.mbody{padding:30px}
+.mdeal{display:inline-block;padding:4px 12px;margin-bottom:14px;font-size:10px;letter-spacing:2px;text-transform:uppercase}
+.mt{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:600;line-height:1.2;margin-bottom:10px}
+.ml{font-size:13px;color:var(--grey);margin-bottom:18px}
+.mspecs{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:18px;background:var(--s1);margin-bottom:22px}
+.ms{text-align:center}
+.ms-v{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--gold)}
+.ms-l{font-size:10px;color:var(--grey);margin-top:3px}
+.mdesc{font-size:13px;color:var(--grey);line-height:1.8;margin-bottom:22px}
+.mp{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:300;color:var(--gold);margin-bottom:22px}
+.mact{display:flex;gap:10px}
 
-/* ── RESPONSIVE ── */
+/* FLOAT */
+.tgf{position:fixed;bottom:22px;right:22px;z-index:500;display:flex;align-items:center;gap:9px;padding:11px 20px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#080a0d;font-size:12px;font-weight:600;box-shadow:0 8px 28px rgba(201,168,76,.4);animation:fl 3s ease-in-out infinite}
+.tgf svg{width:15px;height:15px;fill:#080a0d}
+@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+
+/* FOOTER */
+footer{background:var(--s1);border-top:1px solid var(--border);padding:36px 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.fl{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--gold);letter-spacing:4px}
+.fc{font-size:11px;color:var(--grey2)}
+.ft{display:flex;gap:10px}
+.ftg{padding:4px 11px;border:1px solid var(--border);font-size:9px;letter-spacing:2px;color:var(--grey2)}
+
 @media(max-width:768px){
-  nav{padding:16px 20px}.nav-links{display:none}
-  .hero{padding:80px 20px 160px}.hero h1{font-size:48px}
-  .hero-stats{right:20px;bottom:40px;gap:16px}.stat-num{font-size:28px}
-  .ai-section{padding:40px 20px}.ai-input-row{flex-direction:column}.ai-input{border-right:1px solid var(--border)}.ai-btn{width:100%}
-  .search-section{padding:32px 20px}.filters{grid-template-columns:1fr 1fr;gap:10px}.filters .filter-group:nth-child(4),.filters .search-btn{grid-column:1/-1}
-  .listings-section{padding:40px 20px}.listings-grid{grid-template-columns:1fr}
+  .nav{padding:14px 18px}.nav-ul{display:none}
+  .hero{padding:90px 18px 140px}
+  .stats{position:static;margin-top:48px;grid-template-columns:repeat(3,1fr);gap:16px}.st-n{font-size:32px}
+  .sec,.sec-full{padding:56px 18px}
+  .ai-row{display:flex;flex-direction:column}.ai-in{padding-right:20px}.ai-btn{position:static;width:100%;padding:14px;margin-top:8px}
+  .fgrid{grid-template-columns:1fr 1fr}.fgrid .fg:nth-child(4),.fgrid .fbtn{grid-column:1/-1}
+  .lgrid{grid-template-columns:1fr}
   footer{flex-direction:column;text-align:center}
 }
 </style>
 </head>
 <body>
 
-<!-- TG FLOAT -->
-<a href="https://t.me/esta_realty_bot" class="tg-float" target="_blank">
+<a href="https://t.me/esta_realty_bot" class="tgf" target="_blank" rel="noopener">
   <svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.547l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.978.012z"/></svg>
   AI-агент
 </a>
 
-<!-- MODAL -->
-<div class="modal-overlay" id="modal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal()">✕</button>
-    <div class="modal-imgs" id="modalImgs"></div>
-    <div class="modal-body">
-      <span class="modal-badge" id="modalBadge"></span>
-      <div class="modal-title" id="modalTitle"></div>
-      <div class="modal-location" id="modalLocation"></div>
-      <div class="modal-specs" id="modalSpecs"></div>
-      <div class="modal-desc" id="modalDesc"></div>
-      <div class="modal-price" id="modalPrice"></div>
-      <div class="modal-actions" id="modalActions"></div>
+<div class="mo" id="modal">
+  <div class="md">
+    <button class="mx" id="mclose">&#x2715;</button>
+    <div class="mth" id="mth"></div>
+    <div class="mbody">
+      <span class="mdeal" id="mdeal"></span>
+      <div class="mt" id="mtitle"></div>
+      <div class="ml" id="mloc"></div>
+      <div class="mspecs" id="mspecs"></div>
+      <div class="mdesc" id="mdesc"></div>
+      <div class="mp" id="mprice"></div>
+      <div class="mact" id="mact"></div>
     </div>
   </div>
 </div>
 
-<!-- NAV -->
-<nav id="nav">
+<nav class="nav" id="nav">
   <a href="#" class="logo">
-    <div class="logo-box">E</div>
-    <div class="logo-name">ESTA</div>
+    <div class="logo-sq">E</div>
+    <div class="logo-txt">ESTA</div>
   </a>
-  <ul class="nav-links">
-    <li><a href="#ai-search">AI Поиск</a></li>
+  <ul class="nav-ul">
+    <li><a href="#ai">AI Поиск</a></li>
     <li><a href="#listings">Объекты</a></li>
     <li><a href="#types">Типы</a></li>
     <li><a href="#cities">Города</a></li>
@@ -241,618 +248,324 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:40px
   <a href="https://t.me/esta_realty_bot" class="nav-tg" target="_blank">Telegram</a>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
-  <div class="hero-content">
-    <div class="hero-badge"><div class="badge-dot"></div><span class="badge-text">AI Платформа · Молдова & Приднестровье</span></div>
+  <div class="hero-c">
+    <div class="badge">
+      <div class="badge-dot"></div>
+      <span class="badge-txt">AI Platform &middot; Moldova &amp; Transnistria</span>
+    </div>
     <h1>Найди своё<br>идеальное<br><em>жильё</em></h1>
-    <p>Крупнейшая база недвижимости Молдовы и ПМР. Купля, продажа, аренда — квартиры, дома, коммерция, участки.</p>
-    <div class="hero-btns">
-      <a href="#listings" class="btn-gold">Смотреть объекты</a>
-      <a href="#ai-search" class="btn-outline">AI-поиск на сайте</a>
+    <p class="hero-p">Крупнейшая база недвижимости Молдовы и ПМР. AI-поиск, парсер 999.md, CRM для агентов.</p>
+    <div class="btns">
+      <a href="#listings" class="btn-g">Смотреть объекты</a>
+      <a href="#ai" class="btn-o">AI-поиск</a>
     </div>
   </div>
-  <div class="hero-stats">
-    <div class="stat-item"><div class="stat-num" id="statTotal">—</div><div class="stat-label">Объектов</div></div>
-    <div class="stat-item"><div class="stat-num" id="statSale">—</div><div class="stat-label">Продажа</div></div>
-    <div class="stat-item"><div class="stat-num" id="statRent">—</div><div class="stat-label">Аренда</div></div>
-  </div>
-</section>
-
-<!-- MARQUEE -->
-<div class="marquee-wrap"><div class="marquee-track">
-  <div class="marquee-item"><span>◆</span>Квартиры</div><div class="marquee-item"><span>◆</span>Дома</div><div class="marquee-item"><span>◆</span>Участки</div><div class="marquee-item"><span>◆</span>Коммерция</div><div class="marquee-item"><span>◆</span>Тирасполь</div><div class="marquee-item"><span>◆</span>Кишинёв</div><div class="marquee-item"><span>◆</span>Бендеры</div><div class="marquee-item"><span>◆</span>Аренда</div><div class="marquee-item"><span>◆</span>Новостройки</div><div class="marquee-item"><span>◆</span>Гаражи</div>
-  <div class="marquee-item"><span>◆</span>Квартиры</div><div class="marquee-item"><span>◆</span>Дома</div><div class="marquee-item"><span>◆</span>Участки</div><div class="marquee-item"><span>◆</span>Коммерция</div><div class="marquee-item"><span>◆</span>Тирасполь</div><div class="marquee-item"><span>◆</span>Кишинёв</div><div class="marquee-item"><span>◆</span>Бендеры</div><div class="marquee-item"><span>◆</span>Аренда</div><div class="marquee-item"><span>◆</span>Новостройки</div><div class="marquee-item"><span>◆</span>Гаражи</div>
-</div></div>
-
-<!-- ████████ AI SEARCH SECTION ████████ -->
-<section class="ai-section" id="ai-search">
-  <div class="ai-wrap">
-    <div class="ai-label">Claude AI · Умный поиск</div>
-    <h2 class="ai-title">Опишите <em>словами</em> — AI найдёт</h2>
-    <p class="ai-sub">Пишите как обычно на русском. AI поймёт город, бюджет, тип жилья и найдёт лучшие варианты из базы.</p>
-
-    <div class="ai-input-row">
-      <input class="ai-input" id="aiInput" type="text"
-        placeholder="хочу 2-комнатную до 40000 в Тирасполе..."
-        onkeydown="if(event.key==='Enter') runAISearch()">
-      <button class="ai-btn" id="aiBtn" onclick="runAISearch()">Найти с AI</button>
-    </div>
-
-    <div class="ai-suggestions" id="aiSuggestions">
-      <div class="ai-sug" onclick="setAIQuery(this.textContent)">хочу 2к до 40000 в Тирасполе</div>
-      <div class="ai-sug" onclick="setAIQuery(this.textContent)">снять квартиру центр Тирасполь</div>
-      <div class="ai-sug" onclick="setAIQuery(this.textContent)">дом с участком до 60000</div>
-      <div class="ai-sug" onclick="setAIQuery(this.textContent)">3к Кишинёв Ботаника</div>
-      <div class="ai-sug" onclick="setAIQuery(this.textContent)">офис в аренду центр</div>
-      <div class="ai-sug" onclick="setAIQuery(this.textContent)">однушка недорого Бендеры</div>
-    </div>
-
-    <div class="ai-thinking" id="aiThinking">
-      <div class="ai-thinking-label"><div class="think-dot"></div>Claude AI анализирует запрос</div>
-      <div class="ai-thinking-text" id="aiThinkingText"></div>
-    </div>
-
-    <div class="ai-intent-row" id="aiIntentRow"></div>
-
-    <div class="ai-explain" id="aiExplain" style="display:none">
-      <div class="ai-explain-label">🧠 Claude AI</div>
-      <div id="aiExplainText"></div>
-    </div>
-
-    <div class="ai-error" id="aiError"></div>
+  <div class="stats">
+    <div class="st"><div class="st-n" id="sTotal">0</div><div class="st-l">Объектов</div></div>
+    <div class="st"><div class="st-n" id="sSale">0</div><div class="st-l">Продажа</div></div>
+    <div class="st"><div class="st-n" id="sRent">0</div><div class="st-l">Аренда</div></div>
   </div>
 </section>
 
-<!-- FILTERS -->
-<div class="search-section">
-  <div class="search-wrap">
-    <div class="search-title">Найти <span>объект</span></div>
-    <div class="filters">
-      <div class="filter-group"><label class="filter-label">Тип сделки</label>
-        <select class="filter-select" id="fDeal"><option value="">Все</option><option value="sale">Продажа</option><option value="rent">Аренда</option></select></div>
-      <div class="filter-group"><label class="filter-label">Тип объекта</label>
-        <select class="filter-select" id="fType"><option value="">Все типы</option><option value="apartment">Квартира</option><option value="house">Дом/Дача</option><option value="land">Участок</option><option value="commercial">Коммерция</option><option value="garage">Гараж</option></select></div>
-      <div class="filter-group"><label class="filter-label">Город</label>
-        <select class="filter-select" id="fCity"><option value="">Все города</option><option value="Тирасполь">Тирасполь</option><option value="Бендеры">Бендеры</option><option value="Рыбница">Рыбница</option><option value="Дубоссары">Дубоссары</option><option value="Кишинёв">Кишинёв</option><option value="Бельцы">Бельцы</option></select></div>
-      <div class="filter-group"><label class="filter-label">Макс. цена $</label>
-        <input class="filter-input" id="fPrice" type="number" placeholder="Без ограничений"></div>
-      <button class="search-btn" onclick="applyFilters()">Найти</button>
+<div class="ticker">
+  <div class="ticker-t">
+    <span class="ti"><b>&#9670;</b>Квартиры</span><span class="ti"><b>&#9670;</b>Дома</span><span class="ti"><b>&#9670;</b>Участки</span><span class="ti"><b>&#9670;</b>Коммерция</span><span class="ti"><b>&#9670;</b>Тирасполь</span><span class="ti"><b>&#9670;</b>Кишинёв</span><span class="ti"><b>&#9670;</b>Бендеры</span><span class="ti"><b>&#9670;</b>Аренда</span><span class="ti"><b>&#9670;</b>999.md</span><span class="ti"><b>&#9670;</b>Claude AI</span>
+    <span class="ti"><b>&#9670;</b>Квартиры</span><span class="ti"><b>&#9670;</b>Дома</span><span class="ti"><b>&#9670;</b>Участки</span><span class="ti"><b>&#9670;</b>Коммерция</span><span class="ti"><b>&#9670;</b>Тирасполь</span><span class="ti"><b>&#9670;</b>Кишинёв</span><span class="ti"><b>&#9670;</b>Бендеры</span><span class="ti"><b>&#9670;</b>Аренда</span><span class="ti"><b>&#9670;</b>999.md</span><span class="ti"><b>&#9670;</b>Claude AI</span>
+  </div>
+</div>
+
+<div class="sec-full" id="ai">
+  <div class="in">
+    <div class="ai-wrap">
+      <div class="sec-lbl">Claude AI</div>
+      <h2>Опишите <em>словами</em> — AI найдёт</h2>
+      <p style="font-size:14px;color:var(--grey);margin-top:8px;line-height:1.7">Пишите на русском как обычно. AI поймёт город, бюджет и тип жилья.</p>
+      <div class="ai-row">
+        <input class="ai-in" id="aiQ" type="text" placeholder="хочу 2-комнатную до 40000 в Тирасполе...">
+        <button class="ai-btn" id="aiBtn">Найти с AI</button>
+      </div>
+      <div class="chips" id="chips">
+        <div class="chip">хочу 2к до 40000 в Тирасполе</div>
+        <div class="chip">снять квартиру центр Тирасполь</div>
+        <div class="chip">дом с участком до 60000</div>
+        <div class="chip">3к Кишинёв Ботаника</div>
+        <div class="chip">офис в аренду центр</div>
+        <div class="chip">однушка Бендеры недорого</div>
+      </div>
+      <div class="ai-think" id="aiThink">
+        <div class="tl"><div class="td"></div>Анализирую запрос</div>
+        <div class="tt" id="aiTT"></div>
+      </div>
+      <div class="ic-row" id="icRow"></div>
+      <div class="ai-exp" id="aiExp">
+        <div class="ai-exp-l">&#129504; Claude AI</div>
+        <div id="aiExpTxt"></div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- TYPES -->
-<section class="types-section" id="types">
-  <div style="max-width:1400px;margin:0 auto">
-    <h2 class="section-title" style="margin-bottom:0">Типы <em>объектов</em></h2>
-    <div class="types-grid">
-      <div class="type-tile" onclick="filterByType('apartment',this)"><span class="type-icon">🏢</span><div class="type-name">Квартиры</div><div class="type-count" id="cnt-apartment">—</div></div>
-      <div class="type-tile" onclick="filterByType('house',this)"><span class="type-icon">🏡</span><div class="type-name">Дома/Дачи</div><div class="type-count" id="cnt-house">—</div></div>
-      <div class="type-tile" onclick="filterByType('land',this)"><span class="type-icon">🌱</span><div class="type-name">Участки</div><div class="type-count" id="cnt-land">—</div></div>
-      <div class="type-tile" onclick="filterByType('commercial',this)"><span class="type-icon">🏪</span><div class="type-name">Коммерция</div><div class="type-count" id="cnt-commercial">—</div></div>
-      <div class="type-tile" onclick="filterByType('garage',this)"><span class="type-icon">🚗</span><div class="type-name">Гаражи</div><div class="type-count" id="cnt-garage">—</div></div>
-      <div class="type-tile active" onclick="filterByType('',this)"><span class="type-icon">🏠</span><div class="type-name">Все типы</div><div class="type-count" id="cnt-all">—</div></div>
+<div class="fbar">
+  <div class="fin">
+    <div class="ftitle">Найти <span>объект</span></div>
+    <div class="fgrid">
+      <div class="fg"><label>Тип сделки</label><select id="fDeal"><option value="">Все</option><option value="sale">Продажа</option><option value="rent">Аренда</option></select></div>
+      <div class="fg"><label>Тип объекта</label><select id="fType"><option value="">Все типы</option><option value="apartment">Квартира</option><option value="house">Дом/Дача</option><option value="land">Участок</option><option value="commercial">Коммерция</option><option value="garage">Гараж</option></select></div>
+      <div class="fg"><label>Город</label><select id="fCity"><option value="">Все города</option><option value="Тирасполь">Тирасполь</option><option value="Бендеры">Бендеры</option><option value="Рыбница">Рыбница</option><option value="Дубоссары">Дубоссары</option><option value="Кишинёв">Кишинёв</option><option value="Бельцы">Бельцы</option></select></div>
+      <div class="fg"><label>Макс. цена $</label><input id="fPrice" type="number" placeholder="Без ограничений"></div>
+      <button class="fbtn" id="fbtn">Найти</button>
     </div>
-  </div>
-</section>
-
-<!-- CITIES -->
-<div class="cities-section" id="cities">
-  <h3 style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:300;color:var(--grey)">Выбери <em style="color:var(--gold)">город</em></h3>
-  <div class="cities-grid">
-    <button class="city-btn active" onclick="filterByCity('',this)">Все города</button>
-    <button class="city-btn" onclick="filterByCity('Тирасполь',this)">Тирасполь</button>
-    <button class="city-btn" onclick="filterByCity('Бендеры',this)">Бендеры</button>
-    <button class="city-btn" onclick="filterByCity('Рыбница',this)">Рыбница</button>
-    <button class="city-btn" onclick="filterByCity('Дубоссары',this)">Дубоссары</button>
-    <button class="city-btn" onclick="filterByCity('Кишинёв',this)">Кишинёв</button>
-    <button class="city-btn" onclick="filterByCity('Бельцы',this)">Бельцы</button>
   </div>
 </div>
 
-<!-- LISTINGS -->
-<section class="listings-section" id="listings">
-  <div class="section-header">
-    <h2 class="section-title">Актуальные <em>объявления</em></h2>
-    <div class="section-count" id="listingsCount"></div>
+<div class="sec-full" id="types">
+  <div class="in">
+    <div class="sec-lbl">Категории</div>
+    <h2>Типы <em>объектов</em></h2>
+    <div class="tgrid">
+      <div class="ttile" data-t="apartment"><div class="ticon">&#127970;</div><div class="tname">Квартиры</div><div class="tcnt" id="tc-apartment">&#8212;</div></div>
+      <div class="ttile" data-t="house"><div class="ticon">&#127969;</div><div class="tname">Дома/Дачи</div><div class="tcnt" id="tc-house">&#8212;</div></div>
+      <div class="ttile" data-t="land"><div class="ticon">&#127807;</div><div class="tname">Участки</div><div class="tcnt" id="tc-land">&#8212;</div></div>
+      <div class="ttile" data-t="commercial"><div class="ticon">&#127978;</div><div class="tname">Коммерция</div><div class="tcnt" id="tc-commercial">&#8212;</div></div>
+      <div class="ttile" data-t="garage"><div class="ticon">&#128663;</div><div class="tname">Гаражи</div><div class="tcnt" id="tc-garage">&#8212;</div></div>
+      <div class="ttile on" data-t=""><div class="ticon">&#127968;</div><div class="tname">Все типы</div><div class="tcnt" id="tc-all">&#8212;</div></div>
+    </div>
   </div>
-  <div id="listingsGrid" class="listings-grid">
-    <div class="loading"><div class="spinner"></div> Загружаем...</div>
-  </div>
-  <div class="pagination" id="pagination"></div>
-</section>
+</div>
 
-<!-- FOOTER -->
+<div class="sec" id="cities">
+  <div class="sec-lbl">География</div>
+  <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--grey)">Выбери <em style="color:var(--gold)">город</em></h3>
+  <div class="crow">
+    <button class="cbtn on" data-c="">Все города</button>
+    <button class="cbtn" data-c="Тирасполь">Тирасполь</button>
+    <button class="cbtn" data-c="Бендеры">Бендеры</button>
+    <button class="cbtn" data-c="Рыбница">Рыбница</button>
+    <button class="cbtn" data-c="Дубоссары">Дубоссары</button>
+    <button class="cbtn" data-c="Кишинёв">Кишинёв</button>
+    <button class="cbtn" data-c="Бельцы">Бельцы</button>
+  </div>
+</div>
+
+<div class="sec" id="listings">
+  <div class="lhdr">
+    <div><div class="sec-lbl">База данных</div><h2>Актуальные <em>объявления</em></h2></div>
+    <div class="lcnt" id="lcnt"></div>
+  </div>
+  <div class="lgrid" id="lgrid"><div class="sload"><div class="spin"></div>&nbsp;Загружаем...</div></div>
+  <div class="pag" id="pag"></div>
+</div>
+
 <footer>
-  <div class="footer-logo">ESTA</div>
-  <div class="footer-copy">© 2025 ESTA · AI Real Estate Platform</div>
-  <div class="footer-markets">
-    <div class="mkt">🇲🇩 Молдова</div>
-    <div class="mkt">🏛 ПМР</div>
-  </div>
+  <div class="fl">ESTA</div>
+  <div class="fc">&#169; 2025 ESTA &middot; AI Real Estate Platform</div>
+  <div class="ft"><div class="ftg">&#127474;&#127465; Молдова</div><div class="ftg">&#127963; ПМР</div><div class="ftg">&#129504; Claude AI</div></div>
 </footer>
 
 <script>
-// ═══════════════════════════════════════════════════════════
-// DATA — замени BACKEND_URL на свой реальный backend
-// или оставь SAMPLE_DATA как основной источник
-// ═══════════════════════════════════════════════════════════
-
-const BACKEND_URL = ''; // например: 'https://api.esta-realty.md' — если пусто, используем SAMPLE_DATA
-
-// Тестовые данные — работают без backend
-const SAMPLE_DATA = [
-  {id:'1',title:'2-комнатная квартира, центр',city:'Тирасполь',district:'Центр',type:'apartment',deal_type:'sale',price:38000,currency:'USD',rooms:2,area_m2:54.5,floor:2,floors_total:9,description:'Светлая квартира с хорошим ремонтом. Новые окна, кухонный гарнитур. Рядом парк, школа, транспорт.',icon:'🏢',promoted:false},
-  {id:'2',title:'3-комнатная, ул. Ленина, хороший ремонт',city:'Тирасполь',district:'Ленинский р-н',type:'apartment',deal_type:'sale',price:52000,currency:'USD',rooms:3,area_m2:74,floor:5,floors_total:9,description:'Просторная 3-комнатная квартира. Кухня 12м², лоджия. Торг уместен.',icon:'🏢',promoted:true},
-  {id:'3',title:'1-комнатная, аренда, мебель+техника',city:'Тирасполь',district:'Красный Октябрь',type:'apartment',deal_type:'rent',price:200,currency:'USD',rooms:1,area_m2:35,floor:3,floors_total:5,description:'Сдаётся уютная квартира, полностью меблирована, вся техника. Коммунальные отдельно.',icon:'🏠',promoted:false},
-  {id:'4',title:'Дом 120м², участок 10 соток',city:'Слободзея',district:'',type:'house',deal_type:'sale',price:45000,currency:'USD',rooms:4,area_m2:120,floor:null,floors_total:2,description:'Кирпичный дом, 4 комнаты, гараж, баня, колодец. Тихий район.',icon:'🏡',promoted:false},
-  {id:'5',title:'Офис в аренду, центр, 45м²',city:'Тирасполь',district:'Центр',type:'commercial',deal_type:'rent',price:350,currency:'USD',rooms:null,area_m2:45,floor:1,floors_total:3,description:'Офисное помещение в деловом центре. Отдельный вход, парковка, охрана 24/7.',icon:'🏪',promoted:false},
-  {id:'6',title:'2-комнатная, Ботаника, евроремонт',city:'Кишинёв',district:'Ботаника',type:'apartment',deal_type:'sale',price:95000,currency:'USD',rooms:2,area_m2:68,floor:4,floors_total:12,description:'Апартамент с евроремонтом, встроенная кухня, гардероб, паркинг.',icon:'🏢',promoted:false},
-  {id:'7',title:'3-комнатная, Рышкановка',city:'Кишинёв',district:'Рышкановка',type:'apartment',deal_type:'sale',price:75000,currency:'USD',rooms:3,area_m2:85,floor:7,floors_total:9,description:'3к квартира в тихом районе, хорошая транспортная развязка, рядом школа и парк.',icon:'🏢',promoted:false},
-  {id:'8',title:'Дом в Бендерах, 150м²',city:'Бендеры',district:'',type:'house',deal_type:'sale',price:55000,currency:'USD',rooms:5,area_m2:150,floor:null,floors_total:2,description:'Добротный дом, 5 комнат, газ, вода, канализация, хороший ремонт, фруктовый сад.',icon:'🏡',promoted:false},
-  {id:'9',title:'Студия в аренду, центр',city:'Тирасполь',district:'Центр',type:'apartment',deal_type:'rent',price:180,currency:'USD',rooms:1,area_m2:28,floor:8,floors_total:9,description:'Современная студия с дизайнерским ремонтом. Высокий этаж, панорамный вид.',icon:'🏠',promoted:false},
-  {id:'10',title:'Участок 6 соток, Дубоссары',city:'Дубоссары',district:'',type:'land',deal_type:'sale',price:8000,currency:'USD',rooms:null,area_m2:600,floor:null,floors_total:null,description:'Ровный участок под строительство, все коммуникации рядом, хорошая дорога.',icon:'🌿',promoted:false},
-  {id:'11',title:'4-комнатная, элитный дом, центр',city:'Тирасполь',district:'Центр',type:'apartment',deal_type:'sale',price:89000,currency:'USD',rooms:4,area_m2:115,floor:3,floors_total:7,description:'Престижный жилой комплекс. Консьерж, подземный паркинг, закрытая территория.',icon:'🏢',promoted:true},
-  {id:'12',title:'1-комнатная, Рыбница, новый дом',city:'Рыбница',district:'',type:'apartment',deal_type:'sale',price:22000,currency:'USD',rooms:1,area_m2:42,floor:2,floors_total:5,description:'Новостройка 2020 года, черновая отделка, свободная планировка. Ипотека возможна.',icon:'🏢',promoted:false},
-  {id:'13',title:'Гараж в центре, 24м²',city:'Тирасполь',district:'Центр',type:'garage',deal_type:'sale',price:7500,currency:'USD',rooms:null,area_m2:24,floor:null,floors_total:null,description:'Кирпичный гараж, металлические ворота, яма, хороший подъезд.',icon:'🚗',promoted:false},
-  {id:'14',title:'Коммерческое, 120м², Кишинёв',city:'Кишинёв',district:'Центр',type:'commercial',deal_type:'rent',price:1200,currency:'USD',rooms:null,area_m2:120,floor:1,floors_total:1,description:'Помещение под магазин/ресторан/офис. Витринные окна, высокий трафик.',icon:'🏪',promoted:false},
+(function(){
+var DB=[
+{id:'1',title:'2-комнатная квартира, центр',city:'Тирасполь',dis:'Центр',type:'apartment',deal:'sale',price:38000,rooms:2,area:54.5,floor:2,floors:9,desc:'Светлая квартира с хорошим ремонтом. Новые окна, кухонный гарнитур. Рядом парк и школа.',icon:'&#127970;',vip:false},
+{id:'2',title:'3-комнатная, ул. Ленина, ремонт',city:'Тирасполь',dis:'Ленинский р-н',type:'apartment',deal:'sale',price:52000,rooms:3,area:74,floor:5,floors:9,desc:'Просторная квартира. Кухня 12м², лоджия, кладовка. Торг уместен.',icon:'&#127970;',vip:true},
+{id:'3',title:'1-комнатная в аренду, мебель',city:'Тирасполь',dis:'Красный Октябрь',type:'apartment',deal:'rent',price:200,rooms:1,area:35,floor:3,floors:5,desc:'Уютная квартира, полностью меблирована, вся техника. Коммунальные отдельно.',icon:'&#127968;',vip:false},
+{id:'4',title:'Дом 120м², участок 10 соток',city:'Слободзея',dis:'',type:'house',deal:'sale',price:45000,rooms:4,area:120,floor:null,floors:2,desc:'Кирпичный дом: 4 комнаты, гараж, баня, колодец. Тихий район.',icon:'&#127969;',vip:false},
+{id:'5',title:'Офис в аренду, центр, 45м²',city:'Тирасполь',dis:'Центр',type:'commercial',deal:'rent',price:350,rooms:null,area:45,floor:1,floors:3,desc:'Деловой центр, отдельный вход, парковка, охрана 24/7, интернет.',icon:'&#127978;',vip:false},
+{id:'6',title:'2-комнатная, Ботаника, евроремонт',city:'Кишинёв',dis:'Ботаника',type:'apartment',deal:'sale',price:95000,rooms:2,area:68,floor:4,floors:12,desc:'Евроремонт, встроенная кухня, гардероб, паркинг. Идеально для инвестиций.',icon:'&#127970;',vip:false},
+{id:'7',title:'3-комнатная, Рышкановка',city:'Кишинёв',dis:'Рышкановка',type:'apartment',deal:'sale',price:75000,rooms:3,area:85,floor:7,floors:9,desc:'Тихий район, транспортная развязка, рядом школа и парк.',icon:'&#127970;',vip:false},
+{id:'8',title:'Дом в Бендерах, 150м²',city:'Бендеры',dis:'',type:'house',deal:'sale',price:55000,rooms:5,area:150,floor:null,floors:2,desc:'5 комнат, газ, вода, канализация, хороший ремонт, фруктовый сад.',icon:'&#127969;',vip:false},
+{id:'9',title:'Студия в аренду, центр',city:'Тирасполь',dis:'Центр',type:'apartment',deal:'rent',price:180,rooms:1,area:28,floor:8,floors:9,desc:'Дизайнерский ремонт. Высокий этаж, панорамный вид на город.',icon:'&#127968;',vip:false},
+{id:'10',title:'Участок 6 соток, Дубоссары',city:'Дубоссары',dis:'',type:'land',deal:'sale',price:8000,rooms:null,area:600,floor:null,floors:null,desc:'Ровный участок под строительство. Коммуникации рядом.',icon:'&#127807;',vip:false},
+{id:'11',title:'4-комнатная, элитный комплекс',city:'Тирасполь',dis:'Центр',type:'apartment',deal:'sale',price:89000,rooms:4,area:115,floor:3,floors:7,desc:'Престижный ЖК: консьерж, подземный паркинг, закрытая территория.',icon:'&#127970;',vip:true},
+{id:'12',title:'1-комнатная, Рыбница, новостройка',city:'Рыбница',dis:'',type:'apartment',deal:'sale',price:22000,rooms:1,area:42,floor:2,floors:5,desc:'Новостройка 2020 года, черновая отделка, свободная планировка.',icon:'&#127970;',vip:false},
+{id:'13',title:'Гараж в центре, 24м²',city:'Тирасполь',dis:'Центр',type:'garage',deal:'sale',price:7500,rooms:null,area:24,floor:null,floors:null,desc:'Кирпичный гараж, металлические ворота, смотровая яма.',icon:'&#128663;',vip:false},
+{id:'14',title:'Коммерция 120м², Кишинёв центр',city:'Кишинёв',dis:'Центр',type:'commercial',deal:'rent',price:1200,rooms:null,area:120,floor:1,floors:1,desc:'Витринные окна, высокий трафик. Под магазин/ресторан/офис.',icon:'&#127978;',vip:false}
 ];
+var TL={apartment:'Квартира',house:'Дом',land:'Участок',commercial:'Коммерция',garage:'Гараж'};
+var all=DB.slice(),filtered=DB.slice(),aiIds=new Set(),aiR={},PAGE=9,pg=1;
 
-// ═══════════════════════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════════════════════
-let allListings = [];
-let filteredListings = [];
-let currentPage = 1;
-const PER_PAGE = 9;
-let activeFilter = { deal:'', type:'', city:'', price:'' };
-let aiMatchIds = new Set();
-let aiMatchReasons = {};
-
-// ═══════════════════════════════════════════════════════════
-// LOAD DATA
-// ═══════════════════════════════════════════════════════════
-async function loadListings() {
-  try {
-    if (BACKEND_URL) {
-      const r = await fetch(`${BACKEND_URL}/api/v1/listings?per_page=100`);
-      const data = await r.json();
-      allListings = data.data?.items || data.items || [];
-    }
-    if (!allListings.length) allListings = SAMPLE_DATA;
-  } catch(e) {
-    allListings = SAMPLE_DATA;
-  }
-  filteredListings = [...allListings];
-  updateStats();
-  updateTypeCounts();
-  renderListings();
+function animN(id,n){
+  var el=document.getElementById(id);if(!el)return;
+  var c=0,s=Math.ceil(n/25),t=setInterval(function(){c=Math.min(c+s,n);el.textContent=c;if(c>=n)clearInterval(t)},35);
 }
-
-function updateStats() {
-  const sale = allListings.filter(l => l.deal_type === 'sale').length;
-  const rent = allListings.filter(l => l.deal_type === 'rent').length;
-  animateNum('statTotal', allListings.length);
-  animateNum('statSale', sale);
-  animateNum('statRent', rent);
-}
-
-function animateNum(id, target) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  let cur = 0;
-  const step = Math.ceil(target / 30);
-  const t = setInterval(() => {
-    cur = Math.min(cur + step, target);
-    el.textContent = cur;
-    if (cur >= target) clearInterval(t);
-  }, 40);
-}
-
-function updateTypeCounts() {
-  const types = ['apartment','house','land','commercial','garage'];
-  types.forEach(t => {
-    const el = document.getElementById('cnt-' + t);
-    if (el) el.textContent = allListings.filter(l => l.type === t).length + ' объектов';
+function init(){
+  animN('sTotal',all.length);
+  animN('sSale',all.filter(function(l){return l.deal==='sale'}).length);
+  animN('sRent',all.filter(function(l){return l.deal==='rent'}).length);
+  ['apartment','house','land','commercial','garage'].forEach(function(t){
+    var el=document.getElementById('tc-'+t);
+    if(el)el.textContent=all.filter(function(l){return l.type===t}).length+' объектов';
   });
-  const all = document.getElementById('cnt-all');
-  if (all) all.textContent = allListings.length + ' объектов';
+  var allEl=document.getElementById('tc-all');
+  if(allEl)allEl.textContent=all.length+' объектов';
+  render();
 }
 
-// ═══════════════════════════════════════════════════════════
-// RENDER CARDS
-// ═══════════════════════════════════════════════════════════
-function renderListings() {
-  const grid = document.getElementById('listingsGrid');
-  const count = document.getElementById('listingsCount');
-  currentPage = 1;
-
-  // Sort: promoted first
-  const sorted = [...filteredListings].sort((a,b) => (b.promoted?1:0) - (a.promoted?1:0));
-
-  // If AI search active — put AI matches first
-  if (aiMatchIds.size) {
-    sorted.sort((a,b) => {
-      const aM = aiMatchIds.has(a.id) ? 1 : 0;
-      const bM = aiMatchIds.has(b.id) ? 1 : 0;
-      return bM - aM;
-    });
-  }
-
-  if (!sorted.length) {
-    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
-      <div class="empty-icon">🔍</div>
-      <div class="empty-title">Ничего не найдено</div>
-      <div>Попробуйте изменить параметры поиска</div>
-    </div>`;
-    count.textContent = '';
-    document.getElementById('pagination').innerHTML = '';
-    return;
-  }
-
-  count.textContent = `${sorted.length} объектов`;
-  renderPage(sorted, 1);
+function sorted(){
+  return filtered.slice().sort(function(a,b){
+    return((aiIds.has(b.id)?2:0)+(b.vip?1:0))-((aiIds.has(a.id)?2:0)+(a.vip?1:0));
+  });
 }
 
-function renderPage(items, page) {
-  const grid = document.getElementById('listingsGrid');
-  const start = (page-1) * PER_PAGE;
-  const pageItems = items.slice(start, start + PER_PAGE);
+function render(){pg=1;showPg(sorted(),1)}
 
-  grid.innerHTML = pageItems.map((l,i) => {
-    const isAI = aiMatchIds.has(l.id);
-    const reason = aiMatchReasons[l.id] || '';
-    const priceStr = l.price >= 1000
-      ? `${(l.price/1000).toFixed(0)}K`
-      : l.price;
-    const currency = l.currency === 'EUR' ? '€' : '$';
-    const dealLabel = l.deal_type === 'rent' ? '/мес' : '';
-    const typeLabel = {apartment:'Квартира',house:'Дом',land:'Участок',commercial:'Коммерция',garage:'Гараж'}[l.type] || l.type;
-
-    return `<div class="property-card${isAI?' ai-match':''}" onclick="openModal('${l.id}')"
-      style="animation:fadeUp .4s ease ${i*0.05}s both">
-      <div class="card-img">
-        <div class="card-img-placeholder">${l.icon||'🏠'}</div>
-        <div class="card-badge ${l.deal_type==='rent'?'badge-rent':'badge-sale'}">${l.deal_type==='rent'?'Аренда':'Продажа'}</div>
-        ${l.promoted ? '<div class="badge-vip">★ ТОП</div>' : ''}
-      </div>
-      <div class="card-body">
-        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey2);margin-bottom:6px">${typeLabel}</div>
-        <div class="card-title">${l.title}</div>
-        <div class="card-location">📍 ${l.city}${l.district?', '+l.district:''}</div>
-        <div class="card-meta">
-          ${l.rooms ? `<span class="meta-item">🛏 ${l.rooms} комн.</span>` : ''}
-          ${l.area_m2 ? `<span class="meta-item">📐 ${l.area_m2} м²</span>` : ''}
-          ${l.floor ? `<span class="meta-item">🏗 ${l.floor}/${l.floors_total} эт.</span>` : ''}
-        </div>
-        <div class="card-footer">
-          <div class="card-price">${priceStr} ${currency}<span>${dealLabel}</span></div>
-        </div>
-        ${isAI && reason ? `<div class="card-match-reason"><span>💡 AI:</span> ${reason}</div>` : ''}
-      </div>
-    </div>`;
+function showPg(items,p){
+  var g=document.getElementById('lgrid'),cnt=document.getElementById('lcnt'),pag=document.getElementById('pag');
+  cnt.innerHTML='<strong>'+items.length+'</strong> объектов';
+  if(!items.length){
+    g.innerHTML='<div class="sempty"><div class="sempty-i">&#128269;</div><div class="sempty-t">Ничего не найдено</div><p style="font-size:13px;color:var(--grey2)">Попробуйте изменить параметры</p></div>';
+    pag.innerHTML='';return;
+  }
+  var chunk=items.slice((p-1)*PAGE,p*PAGE);
+  g.innerHTML=chunk.map(function(l,i){
+    var ai=aiIds.has(l.id),r=aiR[l.id]||'';
+    var sym='$',sfx=l.deal==='rent'?'/мес':'';
+    var ps=l.price>=1000?(l.price/1000).toFixed(0)+'K':l.price;
+    return '<div class="card'+(ai?' aip':'')+'" data-id="'+l.id+'" style="animation-delay:'+i*0.04+'s">'+
+      '<div class="cthumb">'+l.icon+
+        '<div class="cdeal '+(l.deal==='rent'?'dr':'ds')+'">'+(l.deal==='rent'?'Аренда':'Продажа')+'</div>'+
+        (l.vip?'<div class="cvip">&#9733; ТОП</div>':'')+
+        (ai?'<div class="caib">AI выбор</div>':'')+
+      '</div>'+
+      '<div class="cbody">'+
+        '<div class="ctl">'+(TL[l.type]||l.type)+'</div>'+
+        '<div class="ctitle">'+l.title+'</div>'+
+        '<div class="cloc">&#128205; '+l.city+(l.dis?', '+l.dis:'')+'</div>'+
+        '<div class="cmeta">'+
+          (l.rooms?'<span>&#128716; '+l.rooms+' комн.</span>':'')+
+          (l.area?'<span>&#128207; '+l.area+' м²</span>':'')+
+          (l.floor?'<span>&#127963; '+l.floor+'/'+l.floors+' эт.</span>':'')+
+        '</div>'+
+        '<div class="cfoot"><div class="cprice">'+ps+' '+sym+'<sub>'+sfx+'</sub></div></div>'+
+        (ai&&r?'<div class="creason"><b>&#128161; AI:</b> '+r+'</div>':'')+
+      '</div></div>';
   }).join('');
-
-  // Pagination
-  const total = items.length;
-  const pages = Math.ceil(total / PER_PAGE);
-  const pag = document.getElementById('pagination');
-  if (pages <= 1) { pag.innerHTML = ''; return; }
-
-  pag.innerHTML = Array.from({length:pages}, (_,i) =>
-    `<button class="page-btn${i+1===page?' active':''}" onclick="goPage(${i+1})">${i+1}</button>`
-  ).join('');
-
-  currentPage = page;
+  g.querySelectorAll('.card').forEach(function(c){
+    c.addEventListener('click',function(){openM(this.dataset.id)});
+  });
+  var pages=Math.ceil(items.length/PAGE);
+  if(pages<=1){pag.innerHTML='';return;}
+  var h='';for(var i=1;i<=pages;i++)h+='<button class="pb'+(i===p?' on':'')+'" data-p="'+i+'">'+i+'</button>';
+  pag.innerHTML=h;
+  pag.querySelectorAll('.pb').forEach(function(b){
+    b.addEventListener('click',function(){showPg(sorted(),+this.dataset.p);document.getElementById('listings').scrollIntoView({behavior:'smooth'})});
+  });
+  pg=p;
 }
 
-function goPage(p) {
-  const sorted = [...filteredListings].sort((a,b)=>(b.promoted?1:0)-(a.promoted?1:0));
-  renderPage(sorted, p);
+function applyF(){
+  aiIds.clear();aiR={};
+  document.getElementById('aiExp').classList.remove('on');
+  document.getElementById('icRow').innerHTML='';
+  var d=document.getElementById('fDeal').value,t=document.getElementById('fType').value,
+      c=document.getElementById('fCity').value,p=parseFloat(document.getElementById('fPrice').value)||0;
+  filtered=all.filter(function(l){
+    return(!d||l.deal===d)&&(!t||l.type===t)&&(!c||l.city===c)&&(!p||l.price<=p);
+  });
+  render();
   document.getElementById('listings').scrollIntoView({behavior:'smooth'});
 }
+document.getElementById('fbtn').addEventListener('click',applyF);
 
-// Fade animation
-const styleAnim = document.createElement('style');
-styleAnim.textContent = `@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}`;
-document.head.appendChild(styleAnim);
+document.querySelectorAll('.ttile').forEach(function(el){
+  el.addEventListener('click',function(){
+    document.querySelectorAll('.ttile').forEach(function(x){x.classList.remove('on')});
+    this.classList.add('on');
+    document.getElementById('fType').value=this.dataset.t;
+    applyF();
+  });
+});
+document.querySelectorAll('.cbtn').forEach(function(el){
+  el.addEventListener('click',function(){
+    document.querySelectorAll('.cbtn').forEach(function(x){x.classList.remove('on')});
+    this.classList.add('on');
+    document.getElementById('fCity').value=this.dataset.c;
+    applyF();
+  });
+});
 
-// ═══════════════════════════════════════════════════════════
-// FILTERS
-// ═══════════════════════════════════════════════════════════
-function applyFilters() {
-  aiMatchIds.clear();
-  aiMatchReasons = {};
-  hideAIResults();
+// AI
+function doAI(){
+  var q=(document.getElementById('aiQ').value||'').trim();
+  if(!q)return;
+  var lq=q.toLowerCase(),intent={};
+  var cm={'тирасполь':'Тирасполь','тирасполе':'Тирасполь','тирасполя':'Тирасполь','кишинёв':'Кишинёв','кишинев':'Кишинёв','кишинёве':'Кишинёв','кишиневе':'Кишинёв','бендер':'Бендеры','бендеры':'Бендеры','рыбниц':'Рыбница','дубоссар':'Дубоссары','слободзе':'Слободзея','бельц':'Бельцы'};
+  Object.keys(cm).forEach(function(k){if(!intent.city&&lq.indexOf(k)!==-1)intent.city=cm[k]});
+  var rm={'однокомнат':1,'1-комнат':1,'двухкомнат':2,'2-комнат':2,'трёхкомнат':3,'трехкомнат':3,'3-комнат':3,'четырёх':4,'4-комнат':4};
+  Object.keys(rm).forEach(function(k){if(!intent.rooms&&lq.indexOf(k)!==-1)intent.rooms=rm[k]});
+  var pm=lq.match(/до\s*(\d[\d\s]*)/);if(pm)intent.maxP=parseInt(pm[1].replace(/\s/g,''));
+  if(/квартир|апартамент/.test(lq))intent.type='apartment';
+  else if(/дом|дач|коттедж/.test(lq))intent.type='house';
+  else if(/участок|земл/.test(lq))intent.type='land';
+  else if(/офис|магазин|коммерц/.test(lq))intent.type='commercial';
+  else if(/гараж/.test(lq))intent.type='garage';
+  intent.deal=/аренд|снять|сниму/.test(lq)?'rent':'sale';
 
-  const deal = document.getElementById('fDeal').value;
-  const type = document.getElementById('fType').value;
-  const city = document.getElementById('fCity').value;
-  const price = parseFloat(document.getElementById('fPrice').value) || 0;
-
-  filteredListings = allListings.filter(l => {
-    if (deal && l.deal_type !== deal) return false;
-    if (type && l.type !== type) return false;
-    if (city && l.city !== city) return false;
-    if (price && l.price > price) return false;
-    return true;
+  filtered=all.filter(function(l){
+    return(!intent.city||l.city.indexOf(intent.city)!==-1)&&
+      (!intent.type||l.type===intent.type)&&
+      l.deal===intent.deal&&
+      (!intent.rooms||l.rooms===intent.rooms)&&
+      (!intent.maxP||l.price<=intent.maxP);
+  });
+  aiIds=new Set(filtered.map(function(l){return l.id}));
+  aiR={};
+  filtered.forEach(function(l){
+    var rs=[];
+    if(intent.city&&l.city===intent.city)rs.push('в '+l.city);
+    if(intent.rooms&&l.rooms===intent.rooms)rs.push(l.rooms+'-комн.');
+    if(intent.maxP&&l.price<=intent.maxP)rs.push(l.price.toLocaleString()+' $');
+    aiR[l.id]=rs.join(', ')||'подходит';
   });
 
-  renderListings();
+  var chips=[
+    intent.city&&'<span class="ic ic-city">&#128205; '+intent.city+'</span>',
+    intent.rooms&&'<span class="ic ic-rooms">'+intent.rooms+' комн.</span>',
+    intent.maxP&&'<span class="ic ic-price">до '+intent.maxP.toLocaleString()+'</span>',
+    intent.type&&'<span class="ic ic-type">'+(TL[intent.type]||intent.type)+'</span>',
+    '<span class="ic ic-deal">'+(intent.deal==='rent'?'Аренда':'Продажа')+'</span>'
+  ].filter(Boolean).join('');
+  document.getElementById('icRow').innerHTML=chips;
+  document.getElementById('aiExpTxt').textContent='Найдено '+filtered.length+' объектов по запросу «'+q+'».';
+  document.getElementById('aiExp').classList.add('on');
+  render();
   document.getElementById('listings').scrollIntoView({behavior:'smooth'});
 }
 
-function filterByType(type, el) {
-  document.querySelectorAll('.type-tile').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('fType').value = type;
-  applyFilters();
-}
+document.getElementById('aiBtn').addEventListener('click',doAI);
+document.getElementById('aiQ').addEventListener('keydown',function(e){if(e.key==='Enter')doAI()});
+document.querySelectorAll('.chip').forEach(function(c){
+  c.addEventListener('click',function(){document.getElementById('aiQ').value=this.textContent;doAI()});
+});
 
-function filterByCity(city, el) {
-  document.querySelectorAll('.city-btn').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('fCity').value = city;
-  applyFilters();
-}
-
-function hideAIResults() {
-  document.getElementById('aiExplain').style.display = 'none';
-  document.getElementById('aiIntentRow').innerHTML = '';
-}
-
-// ═══════════════════════════════════════════════════════════
-// ████ AI SEARCH — CLAUDE API ████
-// ═══════════════════════════════════════════════════════════
-
-// ⚠️ ВАЖНО: для продакшена вынеси API вызов на сервер (Vercel serverless)
-// Сейчас ключ читается из window.ESTA_AI_KEY
-// Установи его через: <script>window.ESTA_AI_KEY = '{{ENV_KEY}}'</script>
-// или используй Vercel Edge Functions
-
-const AI_KEY = window.ESTA_AI_KEY || '';
-
-function setAIQuery(text) {
-  document.getElementById('aiInput').value = text;
-  runAISearch();
-}
-
-async function runAISearch() {
-  const query = document.getElementById('aiInput').value.trim();
-  if (!query) return;
-
-  if (!AI_KEY) {
-    // Фолбэк: локальный NLU поиск без API
-    localAISearch(query);
-    return;
-  }
-
-  const btn = document.getElementById('aiBtn');
-  btn.disabled = true;
-  btn.textContent = '...';
-
-  const thinking = document.getElementById('aiThinking');
-  const thinkText = document.getElementById('aiThinkingText');
-  const errorEl = document.getElementById('aiError');
-
-  thinking.classList.add('show');
-  errorEl.classList.remove('show');
-  hideAIResults();
-  aiMatchIds.clear();
-  aiMatchReasons = {};
-
-  const dbSummary = allListings.map(l =>
-    `id:${l.id}|"${l.title}"|${l.city}|${l.type}|${l.deal_type}|${l.price}${l.currency}|${l.rooms||''}к|${l.area_m2||''}м²`
-  ).join('\n');
-
-  const systemPrompt = `Ты — AI-ассистент ESTA Realty (Молдова и Приднестровье).
-База объявлений:\n${dbSummary}
-Отвечай ТОЛЬКО JSON без markdown:
-{"intent":{"city":null,"type":null,"deal_type":"sale","rooms":null,"max_price":null,"min_price":null},"matched_ids":[],"explanation":"","match_reasons":{}}`;
-
-  try {
-    let fullText = '';
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json','anthropic-version':'2023-06-01','x-api-key':AI_KEY},
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: systemPrompt,
-        messages: [{role:'user', content: query}],
-        stream: true
-      })
-    });
-
-    const reader = res.body.getReader();
-    const dec = new TextDecoder();
-
-    while (true) {
-      const {done, value} = await reader.read();
-      if (done) break;
-      for (const line of dec.decode(value).split('\n')) {
-        if (!line.startsWith('data: ')) continue;
-        const raw = line.slice(6);
-        if (raw === '[DONE]') continue;
-        try {
-          const ev = JSON.parse(raw);
-          if (ev.type === 'content_block_delta' && ev.delta?.text) {
-            fullText += ev.delta.text;
-            thinkText.textContent = '...' + fullText.slice(-120);
-          }
-        } catch {}
-      }
-    }
-
-    const parsed = JSON.parse(fullText.replace(/```json|```/g,'').trim());
-    applyAIResults(parsed, query);
-
-  } catch(e) {
-    // API недоступен — используем локальный NLU
-    localAISearch(query);
-  } finally {
-    thinking.classList.remove('show');
-    btn.disabled = false;
-    btn.textContent = 'Найти с AI';
-  }
-}
-
-function applyAIResults(parsed, query) {
-  // Intent chips
-  const intent = parsed.intent || {};
-  const intentRow = document.getElementById('aiIntentRow');
-  intentRow.innerHTML = [
-    intent.city && `<span class="intent-chip chip-city">📍 ${intent.city}</span>`,
-    intent.rooms && `<span class="intent-chip chip-rooms">🛏 ${intent.rooms} комн.</span>`,
-    intent.max_price && `<span class="intent-chip chip-price">💰 до ${intent.max_price.toLocaleString()}</span>`,
-    intent.min_price && `<span class="intent-chip chip-price">💰 от ${intent.min_price.toLocaleString()}</span>`,
-    intent.type && `<span class="intent-chip chip-type">🏠 ${{apartment:'Квартира',house:'Дом',land:'Участок',commercial:'Коммерция'}[intent.type]||intent.type}</span>`,
-    intent.deal_type && `<span class="intent-chip chip-deal">${intent.deal_type==='rent'?'Аренда':'Продажа'}</span>`,
-  ].filter(Boolean).join('');
-
-  // Store AI matches
-  (parsed.matched_ids || []).forEach(id => aiMatchIds.add(id));
-  aiMatchReasons = parsed.match_reasons || {};
-
-  // Apply as filter
-  filteredListings = aiMatchIds.size
-    ? allListings.filter(l => aiMatchIds.has(l.id))
-    : allListings;
-
-  // Show explanation
-  if (parsed.explanation) {
-    document.getElementById('aiExplain').style.display = 'block';
-    document.getElementById('aiExplainText').textContent = parsed.explanation;
-  }
-
-  renderListings();
-  document.getElementById('listings').scrollIntoView({behavior:'smooth', block:'start'});
-}
-
-// ─── Local NLU fallback (без API ключа) ──────────────────
-function localAISearch(query) {
-  const q = query.toLowerCase();
-
-  const intent = {};
-
-  // City
-  const cityMap = {
-    'тирасполь':'Тирасполь','тирасполе':'Тирасполь','тирасполя':'Тирасполь',
-    'кишинёв':'Кишинёв','кишинев':'Кишинёв','кишинёве':'Кишинёв',
-    'бендер':'Бендеры','бендеры':'Бендеры',
-    'рыбниц':'Рыбница','дубоссар':'Дубоссары',
-    'слободзе':'Слободзея','бельц':'Бельцы',
-  };
-  for (const [k,v] of Object.entries(cityMap)) if (q.includes(k)) { intent.city=v; break; }
-
-  // Rooms
-  const roomsMap = {'однокомнат':1,'1-комнат':1,'двухкомнат':2,'2-комнат':2,'2к ':2,'трёхкомнат':3,'трехкомнат':3,'3-комнат':3,'3к ':3,'четырёх':4,'4-комнат':4,'4к ':4};
-  for (const [k,v] of Object.entries(roomsMap)) if (q.includes(k)) { intent.rooms=v; break; }
-
-  // Price
-  const priceMatch = q.match(/до\s*(\d[\d\s]*)/);
-  if (priceMatch) intent.max_price = parseInt(priceMatch[1].replace(/\s/g,''));
-
-  // Type
-  if (/квартир|апартамент/.test(q)) intent.type='apartment';
-  else if (/дом|дач|коттедж/.test(q)) intent.type='house';
-  else if (/участок|земл/.test(q)) intent.type='land';
-  else if (/офис|магазин|коммерц/.test(q)) intent.type='commercial';
-  else if (/гараж/.test(q)) intent.type='garage';
-
-  // Deal
-  intent.deal_type = /аренд|снять|сниму/.test(q) ? 'rent' : 'sale';
-
-  // Filter
-  filteredListings = allListings.filter(l => {
-    if (intent.city && !l.city.includes(intent.city)) return false;
-    if (intent.type && l.type !== intent.type) return false;
-    if (intent.deal_type && l.deal_type !== intent.deal_type) return false;
-    if (intent.rooms && l.rooms !== intent.rooms) return false;
-    if (intent.max_price && l.price > intent.max_price) return false;
-    return true;
-  });
-
-  // Show intent chips
-  const intentRow = document.getElementById('aiIntentRow');
-  intentRow.innerHTML = [
-    intent.city && `<span class="intent-chip chip-city">📍 ${intent.city}</span>`,
-    intent.rooms && `<span class="intent-chip chip-rooms">🛏 ${intent.rooms} комн.</span>`,
-    intent.max_price && `<span class="intent-chip chip-price">💰 до ${intent.max_price.toLocaleString()}</span>`,
-    intent.type && `<span class="intent-chip chip-type">🏠 ${{apartment:'Квартира',house:'Дом',land:'Участок',commercial:'Коммерция',garage:'Гараж'}[intent.type]}</span>`,
-    `<span class="intent-chip chip-deal">${intent.deal_type==='rent'?'Аренда':'Продажа'}</span>`,
-  ].filter(Boolean).join('');
-
-  document.getElementById('aiExplain').style.display = 'block';
-  document.getElementById('aiExplainText').textContent =
-    `Найдено ${filteredListings.length} объектов по запросу «${query}» (локальный поиск). Для полного AI-поиска подключи Claude API.`;
-
-  document.getElementById('aiThinking').classList.remove('show');
-  document.getElementById('aiBtn').disabled = false;
-  document.getElementById('aiBtn').textContent = 'Найти с AI';
-
-  renderListings();
-  document.getElementById('listings').scrollIntoView({behavior:'smooth'});
-}
-
-// ═══════════════════════════════════════════════════════════
-// MODAL
-// ═══════════════════════════════════════════════════════════
-function openModal(id) {
-  const l = allListings.find(x => x.id == id);
-  if (!l) return;
-
-  document.getElementById('modalImgs').innerHTML = `<div style="font-size:72px">${l.icon||'🏠'}</div>`;
-  document.getElementById('modalBadge').textContent = l.deal_type==='rent' ? 'Аренда' : 'Продажа';
-  document.getElementById('modalBadge').className = `modal-badge ${l.deal_type==='rent'?'badge-rent':'badge-sale'}`;
-  document.getElementById('modalTitle').textContent = l.title;
-  document.getElementById('modalLocation').textContent = `📍 ${l.city}${l.district?', '+l.district:''}`;
-
-  const specs = [
-    l.rooms && {v:l.rooms+' комн.',l:'Комнаты'},
-    l.area_m2 && {v:l.area_m2+' м²',l:'Площадь'},
-    l.floor && {v:`${l.floor}/${l.floors_total}`,l:'Этаж'},
-  ].filter(Boolean);
-
-  document.getElementById('modalSpecs').innerHTML = specs.map(s=>
-    `<div class="spec-item"><div class="spec-value">${s.v}</div><div class="spec-label">${s.l}</div></div>`
-  ).join('');
-
-  document.getElementById('modalDesc').textContent = l.description || '';
-  const sym = l.currency==='EUR'?'€':'$';
-  const sfx = l.deal_type==='rent'?' / мес':'';
-  document.getElementById('modalPrice').textContent = `${l.price.toLocaleString()} ${sym}${sfx}`;
-  document.getElementById('modalActions').innerHTML = `
-    <a href="https://t.me/esta_realty_bot" class="btn-gold" target="_blank">Написать агенту</a>
-    <button class="btn-outline" onclick="closeModal()">Закрыть</button>`;
-
+// Modal
+function openM(id){
+  var l=all.find(function(x){return x.id===id});if(!l)return;
+  document.getElementById('mth').innerHTML=l.icon||'&#127968;';
+  document.getElementById('mdeal').textContent=l.deal==='rent'?'Аренда':'Продажа';
+  document.getElementById('mdeal').className='mdeal '+(l.deal==='rent'?'dr':'ds');
+  document.getElementById('mtitle').textContent=l.title;
+  document.getElementById('mloc').textContent='&#128205; '+l.city+(l.dis?', '+l.dis:'');
+  var sp=[l.rooms&&{v:l.rooms+' комн.',l:'Комнаты'},l.area&&{v:l.area+' м²',l:'Площадь'},l.floor&&{v:l.floor+'/'+l.floors,l:'Этаж'}].filter(Boolean);
+  document.getElementById('mspecs').innerHTML=sp.map(function(s){return'<div class="ms"><div class="ms-v">'+s.v+'</div><div class="ms-l">'+s.l+'</div></div>'}).join('');
+  document.getElementById('mdesc').textContent=l.desc||'';
+  document.getElementById('mprice').textContent=l.price.toLocaleString()+' $'+(l.deal==='rent'?' / мес':'');
+  document.getElementById('mact').innerHTML='<a href="https://t.me/esta_realty_bot" class="btn-g" target="_blank">Написать агенту</a><button class="btn-o" id="mcloseBtn">Закрыть</button>';
+  document.getElementById('mcloseBtn').addEventListener('click',closeM);
   document.getElementById('modal').classList.add('open');
-  document.body.style.overflow = 'hidden';
+  document.body.style.overflow='hidden';
 }
+function closeM(){document.getElementById('modal').classList.remove('open');document.body.style.overflow=''}
+document.getElementById('mclose').addEventListener('click',closeM);
+document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeM()});
 
-function closeModal() {
-  document.getElementById('modal').classList.remove('open');
-  document.body.style.overflow = '';
-}
+// Nav scroll
+window.addEventListener('scroll',function(){document.getElementById('nav').classList.toggle('fx',window.scrollY>50)});
 
-document.getElementById('modal').addEventListener('click', e => {
-  if (e.target === document.getElementById('modal')) closeModal();
-});
-
-// ═══════════════════════════════════════════════════════════
-// NAV SCROLL
-// ═══════════════════════════════════════════════════════════
-window.addEventListener('scroll', () => {
-  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
-});
-
-// ═══════════════════════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════════════════════
-loadListings();
+init();
+})();
 </script>
 </body>
 </html>
